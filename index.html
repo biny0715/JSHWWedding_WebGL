@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | JSHWWedding</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
+      }
+
+      /* unity-container가 항상 뷰포트 전체를 차지 */
+      #unity-container {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #000;
+      }
+
+      /* 캔버스도 항상 꽉 차게 */
+      #unity-canvas {
+        display: block;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #000;
+        outline: none;
+      }
+
+      /* 필요 없으면 푸터 숨김(여백/UI 방지) */
+      #unity-footer { display: none !important; }
+
+      /* iOS 노치/홈바 영역까지 안전하게 */
+      @supports (padding: env(safe-area-inset-top)) {
+        #unity-container {
+          padding-top: env(safe-area-inset-top);
+          padding-bottom: env(safe-area-inset-bottom);
+          padding-left: env(safe-area-inset-left);
+          padding-right: env(safe-area-inset-right);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+
+      <div id="unity-warning"> </div>
+
+      <div id="unity-footer">
+        <div id="unity-logo-title-footer"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">JSHWWedding</div>
+      </div>
+    </div>
+
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/JSHWWedding.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/JSHWWedding.data.br",
+        frameworkUrl: buildUrl + "/JSHWWedding.framework.js.br",
+        codeUrl: buildUrl + "/JSHWWedding.wasm.br",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "JSHWWedding",
+        productVersion: "0.1.0",
+        showBanner: unityShowBanner,
+      };
+
+
+      (function setMobileLikeResolution() {
+        const dpr = window.devicePixelRatio || 1;
+        const capped = Math.min(dpr, 1.5); // 여기 숫자만 바꾸면 됨 (추천 1.25~1.5)
+        config.devicePixelRatio = capped;
+      })();
+
+      function fitToViewport() {
+        // DOM 사이즈는 CSS(100vw/100vh)가 담당하지만,
+        // 일부 브라우저에서 레이아웃 갱신 타이밍 때문에 다시 한번 보정
+        canvas.style.width = "100vw";
+        canvas.style.height = "100vh";
+      }
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      document.querySelector("#unity-container").className = "unity-mobile";
+      canvas.className = "unity-mobile";
+
+      // 최초 1회 + 리사이즈/회전 대응
+      fitToViewport();
+      window.addEventListener("resize", fitToViewport);
+      window.addEventListener("orientationchange", () => setTimeout(fitToViewport, 200));
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          document.querySelector("#unity-loading-bar").style.display = "none";
+
+          // 풀스크린 버튼은 숨겼지만, 혹시 쓰고 싶으면 footer 다시 켜고 사용
+          var fsBtn = document.querySelector("#unity-fullscreen-button");
+          if (fsBtn) {
+            fsBtn.onclick = () => unityInstance.SetFullscreen(1);
+          }
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
