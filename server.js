@@ -1,6 +1,6 @@
 // server.js
-// Unity WebGL 비압축 빌드를 Brotli로 on-the-fly 서빙
-// index.html 수정 없이 .data/.wasm/.js 요청을 .br 버전으로 자동 전환
+// Unity WebGL 압축 빌드(.gz / .br)를 올바른 헤더로 서빙
+// index.html 수정 없이 .data/.wasm/.js 요청을 압축 버전으로 자동 전환
 // 실행: node server.js
 
 const express = require("express");
@@ -11,39 +11,36 @@ const app = express();
 const root = __dirname;
 const buildDir = path.join(root, "Build");
 
-// Build 폴더 내 .data/.wasm/.framework.js 요청 → .br 버전 자동 서빙
+function getContentType(filename) {
+  if (filename.endsWith(".js"))   return "application/javascript";
+  if (filename.endsWith(".wasm")) return "application/wasm";
+  if (filename.endsWith(".data")) return "application/octet-stream";
+  return "application/octet-stream";
+}
+
+// Build 폴더 내 요청 → .gz 또는 .br 압축 버전 자동 서빙
 app.get("/Build/:filename", (req, res, next) => {
   const filename = req.params.filename;
 
-  // .br 이미 요청한 경우는 제외
-  if (filename.endsWith(".br")) return next();
+  // 이미 압축 파일 직접 요청 시 패스
+  if (filename.endsWith(".gz") || filename.endsWith(".br")) return next();
 
+  const gzPath = path.join(buildDir, filename + ".gz");
   const brPath = path.join(buildDir, filename + ".br");
 
-  // .br 파일이 존재하면 압축 버전 서빙
-  if (fs.existsSync(brPath)) {
-    res.setHeader("Content-Encoding", "br");
-
-    if (filename.endsWith(".js"))        res.type("application/javascript");
-    else if (filename.endsWith(".wasm")) res.type("application/wasm");
-    else if (filename.endsWith(".data")) res.type("application/octet-stream");
-    else                                 res.type("application/octet-stream");
-
-    res.sendFile(brPath);
+  if (fs.existsSync(gzPath)) {
+    res.setHeader("Content-Encoding", "gzip");
+    res.setHeader("Content-Type", getContentType(filename));
+    res.sendFile(gzPath);
     return;
   }
 
-  next();
-});
-
-// 기존 .br 파일 직접 요청 처리 (레거시)
-app.get(/\.br$/, (req, res, next) => {
-  res.setHeader("Content-Encoding", "br");
-
-  if (req.path.endsWith(".js.br"))   res.type("application/javascript");
-  else if (req.path.endsWith(".wasm.br")) res.type("application/wasm");
-  else if (req.path.endsWith(".data.br")) res.type("application/octet-stream");
-  else res.type("application/octet-stream");
+  if (fs.existsSync(brPath)) {
+    res.setHeader("Content-Encoding", "br");
+    res.setHeader("Content-Type", getContentType(filename));
+    res.sendFile(brPath);
+    return;
+  }
 
   next();
 });
