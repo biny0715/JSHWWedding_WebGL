@@ -1,18 +1,46 @@
 // server.js
-// Unity WebGL Brotli(.br) 파일을 올바른 헤더(Content-Encoding: br)로 서빙
-// 실행: (이 폴더에서) npm i express  /  node server.js
+// Unity WebGL 비압축 빌드를 Brotli로 on-the-fly 서빙
+// index.html 수정 없이 .data/.wasm/.js 요청을 .br 버전으로 자동 전환
+// 실행: node server.js
 
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
-const root = __dirname; // ✅ index.html이 있는 WebGL 빌드 폴더(=현재 폴더)
+const root = __dirname;
+const buildDir = path.join(root, "Build");
 
+// Build 폴더 내 .data/.wasm/.framework.js 요청 → .br 버전 자동 서빙
+app.get("/Build/:filename", (req, res, next) => {
+  const filename = req.params.filename;
+
+  // .br 이미 요청한 경우는 제외
+  if (filename.endsWith(".br")) return next();
+
+  const brPath = path.join(buildDir, filename + ".br");
+
+  // .br 파일이 존재하면 압축 버전 서빙
+  if (fs.existsSync(brPath)) {
+    res.setHeader("Content-Encoding", "br");
+
+    if (filename.endsWith(".js"))        res.type("application/javascript");
+    else if (filename.endsWith(".wasm")) res.type("application/wasm");
+    else if (filename.endsWith(".data")) res.type("application/octet-stream");
+    else                                 res.type("application/octet-stream");
+
+    res.sendFile(brPath);
+    return;
+  }
+
+  next();
+});
+
+// 기존 .br 파일 직접 요청 처리 (레거시)
 app.get(/\.br$/, (req, res, next) => {
   res.setHeader("Content-Encoding", "br");
 
-  // Content-Type 보정
-  if (req.path.endsWith(".js.br")) res.type("application/javascript");
+  if (req.path.endsWith(".js.br"))   res.type("application/javascript");
   else if (req.path.endsWith(".wasm.br")) res.type("application/wasm");
   else if (req.path.endsWith(".data.br")) res.type("application/octet-stream");
   else res.type("application/octet-stream");
