@@ -1,0 +1,405 @@
+/* =====================================================================
+ * style.css — 형원 ♥ 지수 모바일 청첩장
+ * 무드: 동물의 숲 + 바다 섬 + 한옥 / 부드러운 파스텔 자연톤
+ * 화면: 세로 9:16 고정 (PC도 세로 컬럼)
+ * ===================================================================== */
+
+/* ---- 제목용 폰트 (Gmarket Sans, 둥근 감성) ---- */
+@font-face {
+  font-family: "GmarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GmarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* ---- 디자인 토큰 ---- */
+:root {
+  /* 무드: 중성 크림 베이스 + 포인트만 더스티 핑크 (핑크 과하지 않게) */
+  --sky:    #f1e6ea;   /* 표지 상단 아주 옅은 핑크 */
+  --sea:    #d99fb3;   /* 메인 로즈 (버튼/점/포인트 배경) */
+  --sea-dk: #b06b86;   /* 진한 더스티 로즈 (제목/링크) */
+  --sand:   #f6efea;   /* 카드 — 따뜻한 크림(거의 무채) */
+  --grass:  #e7c4cd;   /* 보조 핑크 */
+  --wood:   #c4a3ad;   /* 보조 모브 */
+  --coral:  #d07f9b;   /* 포인트(하트) — 베리 로즈 */
+  --paper:  #fdfaf8;   /* 종이 배경(거의 화이트 크림) */
+  --ink:    #4d4248;   /* 본문(웜 모브 그레이) */
+  --ink-soft:#8a7d83;
+  --line:   #ece1e0;
+
+  --radius: 22px;
+  --radius-sm: 14px;
+  --shadow: 0 10px 30px rgba(176, 107, 134, .16);
+  --shadow-sm: 0 4px 14px rgba(176, 107, 134, .13);
+
+  --font-body: "Pretendard Variable", Pretendard, -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-head: "GmarketSans", var(--font-body);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(160deg, #faf5f3 0%, #f4ecee 100%) fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+/* ---- 9:16 종이 컬럼 (PC도 세로 고정) ---- */
+.paper {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--paper);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(176, 107, 134, .18);
+}
+
+/* ---- 공통 섹션 ---- */
+.section {
+  padding: 58px 28px;
+  text-align: center;
+}
+.title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: .01em;
+  margin: 0 0 26px;
+  color: var(--sea-dk);
+}
+.title::after {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 3px;
+  margin: 12px auto 0;
+  border-radius: 3px;
+  background: var(--coral);
+}
+.ko-sub {
+  font-family: var(--font-head);
+  font-size: .8rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 18px;
+}
+
+/* ---- 사진 / 지도 플레이스홀더 ---- */
+.ph-label {
+  font-size: .9rem;
+  color: #c39bac;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+}
+.ph-label small { font-weight: 500; opacity: .8; }
+
+[data-photo], .map-box {
+  background:
+    repeating-linear-gradient(45deg, #f2eae6 0 12px, #eae0db 12px 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+[data-photo].has-img, .map-box.has-img { background: none; }
+[data-photo] img, .map-box img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* =========================================================
+   1. 메인 표지
+   ========================================================= */
+.cover {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 28px;
+  text-align: center;
+  overflow: hidden;
+}
+.cover-sky {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 60% at 50% -10%, #fffaf8 0%, var(--sky) 50%, #efe2e6 100%);
+  z-index: 0;
+}
+.cover-sky::after { /* 바다 물결 느낌 */
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
+  background: radial-gradient(120% 100% at 50% 100%, var(--sea) 0%, transparent 70%);
+  opacity: .35;
+}
+.cover-photo {
+  position: relative;
+  z-index: 1;
+  width: 74%;
+  aspect-ratio: 3 / 4;
+  box-shadow: var(--shadow);
+  border: 6px solid #fff;
+  border-radius: var(--radius);
+}
+.cover-caption { position: relative; z-index: 1; margin-top: 30px; }
+.cover-eyebrow {
+  font-family: var(--font-head);
+  letter-spacing: .2em;
+  font-size: .82rem;
+  color: var(--sea-dk);
+  margin: 0 0 10px;
+}
+.cover-names {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 2.6rem;
+  margin: 0;
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.cover-names em { color: var(--coral); font-style: normal; font-size: 1.8rem; }
+.cover-date { margin: 16px 0 2px; font-weight: 600; }
+.cover-place { margin: 0; color: var(--ink-soft); }
+
+.scroll-hint {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  z-index: 2; width: 22px; height: 34px;
+  border: 2px solid var(--sea-dk); border-radius: 12px; opacity: .5;
+}
+.scroll-hint span {
+  position: absolute; top: 6px; left: 50%; width: 4px; height: 8px;
+  margin-left: -2px; border-radius: 2px; background: var(--sea-dk);
+  animation: scrollDot 1.5s infinite;
+}
+@keyframes scrollDot { 0%{opacity:0;transform:translateY(0)} 40%{opacity:1} 100%{opacity:0;transform:translateY(12px)} }
+
+/* =========================================================
+   인사말
+   ========================================================= */
+.greeting { background: #fff; }
+.greeting-text {
+  white-space: pre-line;
+  font-size: 1.02rem;
+  color: var(--ink);
+  margin: 0 0 26px;
+}
+.couple-line {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  font-family: var(--font-head); font-weight: 500; font-size: 1.1rem;
+}
+.couple-line i { font-style: normal; color: var(--ink-soft); font-size: .85rem; }
+
+/* =========================================================
+   2. 신랑 & 신부
+   ========================================================= */
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.profile-card {
+  background: #fff; border-radius: var(--radius);
+  padding: 16px 12px 18px; box-shadow: var(--shadow-sm);
+}
+.profile-photo { width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; margin-bottom: 12px; }
+.profile-role { font-size: .8rem; color: var(--sea-dk); margin: 0; font-weight: 600; }
+.profile-name { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; margin: 2px 0 6px; }
+.profile-desc { font-size: .86rem; color: var(--ink-soft); margin: 0 0 12px; min-height: 2.4em; }
+.profile-call {
+  display: inline-block; font-size: .82rem; text-decoration: none;
+  color: var(--sea-dk); border: 1px solid var(--sea); border-radius: 999px;
+  padding: 5px 16px; background: #fdeef3;
+}
+
+/* =========================================================
+   3. 예식 안내
+   ========================================================= */
+.when { background: #fff; }
+.when-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 26px 20px; background: var(--sand);
+}
+.when-date { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; margin: 0; }
+.when-time { margin: 6px 0 0; color: var(--ink-soft); }
+.when-card hr { border: none; border-top: 1px dashed #e3c6d2; margin: 18px 0; }
+.when-venue { font-family: var(--font-head); font-weight: 500; font-size: 1.05rem; margin: 0; }
+.when-detail { margin: 6px 0 0; color: var(--ink-soft); font-size: .9rem; }
+.countdown {
+  margin-top: 20px; font-family: var(--font-head); font-size: .95rem;
+  color: var(--sea-dk); letter-spacing: .02em;
+}
+
+/* =========================================================
+   4. 오시는 길
+   ========================================================= */
+.map-box { width: 100%; aspect-ratio: 4 / 3; margin-bottom: 14px; }
+.map-address {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: .92rem; color: var(--ink); margin: 0 0 16px; flex-wrap: wrap;
+}
+.mini-copy {
+  font-size: .74rem; border: 1px solid var(--line); background: #fff;
+  border-radius: 999px; padding: 3px 10px; color: var(--ink-soft); cursor: pointer;
+}
+.map-apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.map-app {
+  text-decoration: none; text-align: center; font-size: .88rem; font-weight: 600;
+  padding: 12px 0; border-radius: var(--radius-sm); color: var(--ink);
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+
+/* =========================================================
+   5. 혼주 정보
+   ========================================================= */
+.family-grid { display: grid; gap: 12px; }
+.family-card {
+  background: #fff; border-radius: var(--radius-sm); padding: 16px 18px;
+  box-shadow: var(--shadow-sm); text-align: left;
+}
+.family-side { font-size: .8rem; color: var(--sea-dk); font-weight: 600; margin: 0 0 6px; }
+.family-people { margin: 0; font-size: .98rem; }
+.family-people b { font-family: var(--font-head); font-weight: 500; }
+.family-people .rel { color: var(--ink-soft); font-size: .82rem; margin-right: 6px; }
+
+/* =========================================================
+   6. 마음 전하기 (아코디언)
+   ========================================================= */
+.accordion { display: grid; gap: 12px; }
+.acc-item { border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; overflow: hidden; }
+.acc-head {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 16px 18px; font-size: 1rem; font-weight: 600; color: var(--ink);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.acc-head .chev { transition: transform .25s; color: var(--sea-dk); }
+.acc-item.open .acc-head .chev { transform: rotate(180deg); }
+.acc-body { display: none; padding: 0 18px 16px; }
+.acc-item.open .acc-body { display: block; }
+.acc-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 0; border-top: 1px dashed var(--line); text-align: left;
+}
+.acc-row .who { font-size: .82rem; color: var(--ink-soft); }
+.acc-row .num { font-size: .92rem; }
+.acc-copy {
+  flex: none; font-size: .78rem; border: none; border-radius: 999px;
+  padding: 6px 14px; background: var(--sea); color: #fff; cursor: pointer; font-weight: 600;
+}
+
+/* =========================================================
+   7. 방명록
+   ========================================================= */
+.guestbook { background: #fff; }
+.gb-lead, .gift-lead { color: var(--ink-soft); font-size: .92rem; margin: -10px 0 22px; }
+.gb-form { display: grid; gap: 10px; margin-bottom: 22px; }
+.gb-form input, .gb-form textarea {
+  font-family: inherit; font-size: .95rem; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper);
+  resize: none; color: var(--ink);
+}
+.gb-form input:focus, .gb-form textarea:focus { outline: 2px solid var(--sea); border-color: transparent; }
+.gb-form button {
+  font-family: var(--font-head); font-weight: 500; font-size: .98rem;
+  padding: 13px; border: none; border-radius: var(--radius-sm);
+  background: var(--coral); color: #fff; cursor: pointer;
+}
+.gb-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; text-align: left; }
+.gb-card { background: var(--sand); border-radius: var(--radius-sm); padding: 14px 16px; position: relative; }
+.gb-card .gb-who { font-family: var(--font-head); font-weight: 500; font-size: .9rem; }
+.gb-card .gb-when { font-size: .72rem; color: var(--ink-soft); float: right; }
+.gb-card .gb-text { margin: 6px 0 0; font-size: .92rem; }
+.gb-del {
+  position: absolute; right: 10px; bottom: 8px; font-size: .7rem;
+  border: none; background: none; color: var(--ink-soft); cursor: pointer; opacity: .6;
+}
+.gb-empty { color: var(--ink-soft); font-size: .88rem; text-align: center; padding: 8px; }
+.gb-note { font-size: .74rem; color: #c39bac; margin-top: 16px; }
+
+/* =========================================================
+   8. 웨딩 갤러리
+   ========================================================= */
+.slider { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+.slides { display: flex; transition: transform .4s ease; }
+.slide { flex: 0 0 100%; aspect-ratio: 3 / 4; }
+.slide [data-photo] { width: 100%; height: 100%; border-radius: 0; }
+.slider-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(255,255,255,.85); color: var(--sea-dk); font-size: 1.5rem; line-height: 1;
+  box-shadow: var(--shadow-sm);
+}
+.slider-nav.prev { left: 10px; } .slider-nav.next { right: 10px; }
+.dots { display: flex; gap: 7px; justify-content: center; margin-top: 14px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); border: none; padding: 0; cursor: pointer; }
+.dot.active { background: var(--sea); width: 20px; border-radius: 4px; }
+
+/* =========================================================
+   9. 모바일 예식장 입장
+   ========================================================= */
+.enter-venue { padding-top: 30px; }
+.enter-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius);
+  padding: 40px 26px;
+  color: #fff;
+  background: linear-gradient(165deg, var(--sea) 0%, var(--sea-dk) 55%, #8a4f68 100%);
+  box-shadow: var(--shadow);
+}
+.enter-card::before { /* 섬/모래 느낌 */
+  content: ""; position: absolute; left: -10%; right: -10%; bottom: -40%; height: 80%;
+  background: radial-gradient(60% 100% at 50% 100%, var(--sand) 0%, transparent 70%);
+  opacity: .5;
+}
+.enter-eyebrow { position: relative; font-family: var(--font-head); letter-spacing: .15em; font-size: .78rem; margin: 0 0 8px; opacity: .9; }
+.enter-title { position: relative; font-family: var(--font-head); font-weight: 700; font-size: 1.5rem; margin: 0 0 10px; }
+.enter-desc { position: relative; font-size: .95rem; margin: 0 0 24px; opacity: .95; }
+.enter-btn {
+  position: relative; display: inline-block; text-decoration: none;
+  background: #fff; color: var(--sea-dk); font-family: var(--font-head); font-weight: 500;
+  padding: 14px 28px; border-radius: 999px; box-shadow: var(--shadow-sm);
+}
+
+/* =========================================================
+   10. 제작자
+   ========================================================= */
+.makers { background: var(--ink); color: #d9d2c8; padding: 40px 28px 48px; }
+.makers-list { display: grid; gap: 8px; margin-bottom: 18px; }
+.maker { font-size: .9rem; }
+.maker .m-role { color: #9a9287; margin-right: 10px; font-size: .8rem; }
+.maker a { color: #f3c6d6; text-decoration: none; }
+.copyright { font-family: var(--font-head); font-size: .82rem; color: #8a8378; margin: 0; }
+
+/* =========================================================
+   토스트
+   ========================================================= */
+.toast {
+  position: fixed; left: 50%; bottom: 40px; transform: translate(-50%, 20px);
+  background: rgba(74,68,61,.95); color: #fff; padding: 11px 20px; border-radius: 999px;
+  font-size: .86rem; opacity: 0; pointer-events: none; transition: all .25s; z-index: 100;
+  max-width: 88vw;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* =========================================================
+   스크롤 등장 애니메이션
+   ========================================================= */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.cover.reveal { opacity: 1; transform: none; } /* 표지는 즉시 */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .scroll-hint span { animation: none; }
+}

@@ -1,0 +1,132 @@
+/* =====================================================================
+ * venue.css — 모바일 예식장 (Unity 위 HTML UI 오버레이)
+ * Unity 캔버스: 전체화면 배경 레이어
+ * #ui-overlay: 투명 배경, 그 위에 로비 UI
+ * pointer-events 로 터치 이벤트 레이어 분리
+ * ===================================================================== */
+
+@font-face {
+  font-family: "GmarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  font-weight: 700; font-display: swap;
+}
+@font-face {
+  font-family: "GmarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight: 500; font-display: swap;
+}
+
+:root {
+  --sea: #8fc5d6; --sea-dk: #5b9fb3; --sand: #f6ecd8;
+  --coral: #e9a39c; --ink: #4a443d; --paper: #fbf7ef;
+}
+
+html, body {
+  width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+  background: #2a3b40;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif;
+}
+
+/* Unity 전체화면 (배경 레이어) */
+#unity-container { position: fixed; inset: 0; width: 100vw; height: 100vh; margin: 0; padding: 0; background: #2a3b40; }
+#unity-canvas { display: block; width: 100vw; height: 100vh; background: #2a3b40; outline: none; }
+#unity-footer { display: none !important; }
+
+@supports (padding: env(safe-area-inset-top)) {
+  #ui-overlay { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+}
+
+/* =========================================================
+   UI 오버레이 — 기본은 클릭 통과(Unity로 전달),
+   실제 컨트롤(.lobby-card, 버튼)만 pointer-events 회수
+   ========================================================= */
+#ui-overlay {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+#ui-overlay button,
+#ui-overlay a,
+#ui-overlay input,
+#ui-overlay .lobby-card { pointer-events: auto; }
+
+/* 나가기 (좌상단) */
+.venue-exit {
+  position: fixed; top: 14px; left: 14px; z-index: 20;
+  pointer-events: auto; text-decoration: none;
+  background: rgba(255,255,255,.9); color: var(--sea-dk);
+  font-size: .85rem; font-weight: 600; padding: 8px 14px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+}
+
+/* =========================================================
+   로비 카드 (스플래시 + 폼)
+   ========================================================= */
+.lobby { width: 100%; max-width: 480px; padding: 24px; display: flex; justify-content: center; }
+.lobby--hidden { display: none; }
+
+.lobby-card {
+  width: 100%;
+  background: rgba(251, 247, 239, .94);
+  backdrop-filter: blur(6px);
+  border-radius: 26px;
+  padding: 32px 26px;
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  animation: lobbyIn .5s ease;
+}
+@keyframes lobbyIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.lobby-splash-label {
+  font-family: "GmarketSans", sans-serif; letter-spacing: .18em;
+  font-size: .78rem; color: var(--sea-dk); margin: 0 0 14px;
+}
+.lobby-title {
+  font-family: "GmarketSans", sans-serif; font-weight: 700; font-size: 2.2rem;
+  margin: 0; color: var(--ink);
+}
+.lobby-title span { color: var(--coral); font-size: 1.5rem; }
+.lobby-sub { margin: 10px 0 26px; color: #7d756b; font-size: .9rem; }
+
+.lobby-form { display: grid; gap: 18px; text-align: left; margin-bottom: 26px; }
+.field-label { display: block; font-size: .82rem; color: #7d756b; margin-bottom: 8px; font-weight: 600; }
+.field input {
+  width: 100%; font-family: inherit; font-size: 1rem; padding: 13px 15px;
+  border: 1px solid #e8dfce; border-radius: 14px; background: #fff; color: var(--ink);
+}
+.field input:focus { outline: 2px solid var(--sea); border-color: transparent; }
+
+.gender-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gender-btn {
+  font-family: inherit; font-size: 1rem; padding: 13px 0; cursor: pointer;
+  border: 1px solid #e8dfce; border-radius: 14px; background: #fff; color: var(--ink);
+  transition: all .15s;
+}
+.gender-btn[aria-pressed="true"] { background: var(--sea); border-color: var(--sea); color: #fff; font-weight: 700; }
+
+.lobby-next, .lobby-enter, .lobby-prev {
+  font-family: "GmarketSans", sans-serif; font-weight: 500; font-size: 1rem;
+  border: none; border-radius: 16px; padding: 15px; cursor: pointer;
+}
+.lobby-next, .lobby-enter { width: 100%; background: var(--coral); color: #fff; }
+.lobby-next:disabled { background: #d9d2c8; cursor: not-allowed; }
+
+.lobby-actions { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+.lobby-prev { background: #fff; border: 1px solid #e8dfce; color: var(--ink); }
+
+/* =========================================================
+   캐릭터 커스텀
+   ========================================================= */
+.lobby-card--custom { padding-top: 26px; }
+.char-preview {
+  width: 100%; aspect-ratio: 1 / 1; max-height: 38vh;
+  border-radius: 18px; margin: 0 auto 20px;
+  background: repeating-linear-gradient(45deg, rgba(143,197,214,.18) 0 12px, rgba(143,197,214,.28) 12px 24px);
+  display: flex; align-items: center; justify-content: center;
+}
+.char-preview-hint { color: var(--sea-dk); font-size: .85rem; text-align: center; opacity: .8; }
+
+/* =========================================================
+   예식장 씬 플레이어 UI (입장 후) — 미니맵 등은 Unity에서 구현
+   ========================================================= */
+.play-ui--hidden { display: none; }
