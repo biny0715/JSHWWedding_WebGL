@@ -21,6 +21,8 @@
   --coral: #e9a39c; --ink: #4a443d; --paper: #fbf7ef;
 }
 
+*, *::before, *::after { box-sizing: border-box; }  /* 입력칸 등 width:100% overflow 방지 */
+
 html, body {
   width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
   background: #2a3b40;
@@ -127,6 +129,36 @@ html, body {
 .char-preview-hint { color: var(--sea-dk); font-size: .85rem; text-align: center; opacity: .8; }
 
 /* =========================================================
+   불투명 배경 커튼 — Wedding 3D 씬이 열리기 전까지 Unity 화면을 가린다
+   (로딩/로비 동안 Unity 로비가 배경에 비치지 않도록 웹 배경색으로 덮음)
+   ========================================================= */
+#venue-curtain {
+  position: fixed; inset: 0; z-index: 1;     /* Unity 캔버스 위, 로비 카드 아래 */
+  pointer-events: auto;                      /* 그 뒤 Unity로 클릭 안 넘어가게 */
+  background: linear-gradient(165deg, #cfe6ec 0%, #eef0ea 55%, #f6e7ec 100%);
+}
+#venue-curtain.curtain--hidden { display: none; }  /* 입장(Wedding 로드) 후 제거 → 3D 드러남 */
+
+/* =========================================================
+   로딩 화면 (Unity 로비 준비 / 입장 처리 대기)
+   ========================================================= */
+.loading-card { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.spinner {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 4px solid rgba(91,159,179,.25);
+  border-top-color: var(--sea-dk);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text {
+  font-family: "GmarketSans", sans-serif; font-weight: 500;
+  font-size: 1.05rem; color: var(--ink); margin: 4px 0 0;
+}
+.loading-sub { font-size: .85rem; color: #7d756b; margin: 0; }
+
+/* =========================================================
    예식장 씬 플레이어 UI (입장 후) — 미니맵 등은 Unity에서 구현
    ========================================================= */
 .play-ui--hidden { display: none; }
+
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
