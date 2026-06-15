@@ -12,29 +12,29 @@ window.WEDDING = {
     name: "김형원",
     short: "형원",
     role: "신랑",
-    desc: "목포 출신, 바다를 닮은 사람",      // TODO: 소개 문구 다듬기
-    phone: "010-0000-0000",                  // TODO
+    desc: "목포 출신, 바다를 닮은 신랑", // TODO: 소개 문구 다듬기
+    phone: "010-0000-0000", // TODO
   },
   bride: {
     name: "박지수",
     short: "지수",
     role: "신부",
-    desc: "동물의 숲을 좋아하는 사람",        // TODO: 소개 문구 다듬기
-    phone: "010-0000-0000",                  // TODO
+    desc: "누구보다 따뜻한 마음을 가진 신부", // TODO: 소개 문구 다듬기
+    phone: "010-0000-0000", // TODO
   },
 
   date: {
-    iso: "2026-11-08T11:00:00+09:00",        // TODO: 정확한 예식 시간
+    iso: "2026-11-08T11:00:00+09:00", // TODO: 정확한 예식 시간
     text: "2026년 11월 8일 일요일",
-    timeText: "오전 11시",                    // TODO
+    timeText: "오전 11시", // TODO
   },
 
   venue: {
     name: "운림제",
     detail: "광주광역시 운림제 · 야외 한옥 예식장",
-    address: "광주광역시 동구 ○○로 ○○",      // TODO: 정확한 주소
-    lat: 35.1366,                            // TODO: 정확한 위도
-    lng: 126.9215,                           // TODO: 정확한 경도
+    address: "광주광역시 동구 ○○로 ○○", // TODO: 정확한 주소
+    lat: 35.1366, // TODO: 정확한 위도
+    lng: 126.9215, // TODO: 정확한 경도
     // 길찾기 버튼이 검색할 장소명
     mapQuery: "운림제 광주",
   },
@@ -42,19 +42,39 @@ window.WEDDING = {
   /* ---- 혼주 정보 ---- */
   parents: {
     groom: { father: "김○○", mother: "○○○" }, // TODO
-    bride: { father: "박○○", mother: "○○○" }, // TODO
+    bride: { father: "○○○", mother: "김경미" }, // TODO
   },
 
   /* ---- 마음 전하기 (계좌) ---- */
   // TODO: 실제 계좌번호로 교체
   accounts: {
     groom: [
-      { label: "신랑 김형원", bank: "○○은행", number: "000-0000-0000-00", holder: "김형원" },
-      { label: "신랑 측 혼주", bank: "○○은행", number: "000-0000-0000-00", holder: "김○○" },
+      {
+        label: "신랑 김형원",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "김형원",
+      },
+      {
+        label: "신랑 측 혼주",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "김○○",
+      },
     ],
     bride: [
-      { label: "신부 박지수", bank: "○○은행", number: "000-0000-0000-00", holder: "박지수" },
-      { label: "신부 측 혼주", bank: "○○은행", number: "000-0000-0000-00", holder: "박○○" },
+      {
+        label: "신부 박지수",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "박지수",
+      },
+      {
+        label: "신부 측 혼주",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "김경미",
+      },
     ],
   },
 
@@ -84,7 +104,11 @@ window.WEDDING = {
   /* ---- 제작자 ---- */
   makers: [
     { role: "개발", name: "어경빈", contact: "" },
-    { role: "문의", name: "aa0715@naver.com", contact: "mailto:aa0715@naver.com" },
+    {
+      role: "문의",
+      name: "aa0715@naver.com",
+      contact: "mailto:aa0715@naver.com",
+    },
   ],
 
   /* ---- 인사말 ---- */
