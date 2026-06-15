@@ -64,7 +64,8 @@ html, body {
 /* =========================================================
    로비 카드 (스플래시 + 폼)
    ========================================================= */
-.lobby { width: 100%; max-width: 480px; padding: 24px; display: flex; justify-content: center; }
+.lobby { width: 100%; max-width: 480px; padding: 24px; display: flex; justify-content: center;
+  position: relative; z-index: 2;  /* 커튼(z-index:1) 위에 카드가 보이도록 */ }
 .lobby--hidden { display: none; }
 
 .lobby-card {
