@@ -143,14 +143,28 @@ html, body {
 /* =========================================================
    로딩 화면 (Unity 로비 준비 / 입장 처리 대기)
    ========================================================= */
-.loading-card { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.loading-card { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+/* 역동적 로딩 스피너: 바깥 코멧 링 + 반대로 도는 안쪽 아크 + 펄스 */
 .spinner {
-  width: 46px; height: 46px; border-radius: 50%;
-  border: 4px solid rgba(91,159,179,.25);
-  border-top-color: var(--sea-dk);
-  animation: spin 0.9s linear infinite;
+  position: relative; width: 58px; height: 58px;
+  animation: spinnerPulse 1.5s ease-in-out infinite;
+}
+.spinner::before {           /* 바깥 코멧 링 (가속/감속하며 빠르게) */
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(143,197,214,0) 8%, var(--sea) 65%, var(--sea-dk) 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
+  animation: spin 0.8s cubic-bezier(.66,.13,.34,.87) infinite;
+}
+.spinner::after {            /* 안쪽 아크 (반대 방향) */
+  content: ""; position: absolute; inset: 11px; border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--coral); border-right-color: var(--coral);
+  animation: spin 1.15s linear infinite reverse;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spinnerPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
 .loading-text {
   font-family: "GmarketSans", sans-serif; font-weight: 500;
   font-size: 1.05rem; color: var(--ink); margin: 4px 0 0;
@@ -162,4 +176,6 @@ html, body {
    ========================================================= */
 .play-ui--hidden { display: none; }
 
-@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .spinner, .spinner::before, .spinner::after { animation: none; }
+}
