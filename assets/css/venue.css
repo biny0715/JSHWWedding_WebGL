@@ -172,3 +172,65 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .spinner { animation: none; }
 }
+
+/* =========================================================
+   방명록 / 사진앨범 오버레이 (유니티 FlowerDecoZone / PictureZone → 웹)
+   ========================================================= */
+.venue-modal {
+  position: fixed; inset: 0; z-index: 60; padding: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(35, 28, 32, .55); pointer-events: auto;
+}
+.venue-modal[hidden] { display: none; }
+.venue-modal-card {
+  width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto;
+  background: #fff; border-radius: 16px; padding: 22px 18px 24px; position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+.venue-modal-close {
+  position: absolute; top: 10px; right: 12px; width: 32px; height: 32px;
+  border: none; border-radius: 50%; background: #f0e3e8; color: #8a4d63;
+  font-size: 1rem; line-height: 1; cursor: pointer;
+}
+.venue-modal-title {
+  text-align: center; font-family: "GmarketSans", sans-serif; font-weight: 700;
+  font-size: 1.2rem; color: var(--coral); margin: 2px 0 16px;
+}
+
+/* 사진 앨범 그리드 */
+#venue-album { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.album-item {
+  aspect-ratio: 3 / 4; border-radius: 10px; overflow: hidden;
+  background: repeating-linear-gradient(45deg, #f2eae6 0 12px, #eae0db 12px 24px);
+  display: flex; align-items: center; justify-content: center;
+}
+.album-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.album-item--empty span { color: #b29aa4; font-size: .85rem; }
+.album-empty { text-align: center; color: #b29aa4; padding: 24px 0; margin: 0; }
+
+/* 방명록 위젯 (guestbook.js — 청첩장과 동일한 룩) */
+.venue-modal .gb-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; text-align: left; }
+.venue-modal .gb-card { background: var(--sand); border-radius: 12px; padding: 12px 14px; cursor: pointer; min-width: 0; position: relative; }
+.venue-modal .gb-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.venue-modal .gb-who { font-weight: 700; font-size: .9rem; color: var(--ink); }
+.venue-modal .gb-meta { display: inline-flex; align-items: center; gap: 6px; color: #9b9089; }
+.venue-modal .gb-when { font-size: .72rem; color: #9b9089; }
+.venue-modal .gb-more { font-size: .7rem; color: #9b9089; transition: transform .2s; }
+.venue-modal .gb-card.open .gb-more { transform: rotate(180deg); }
+.venue-modal .gb-text { margin: 6px 0 0; font-size: .9rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: anywhere; }
+.venue-modal .gb-card.open .gb-text { white-space: normal; }
+.venue-modal .gb-pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 12px 0 4px; }
+.venue-modal .gb-pg { width: 34px; height: 34px; border: 1px solid #e4d8d0; background: var(--paper); border-radius: 50%; cursor: pointer; font-size: 1.05rem; line-height: 1; color: var(--ink); }
+.venue-modal .gb-pg:disabled { opacity: .35; cursor: default; }
+.venue-modal .gb-page { font-size: .85rem; color: #9b9089; min-width: 54px; text-align: center; }
+.venue-modal .gb-form { display: grid; gap: 10px; margin: 16px 0 0; }
+.venue-modal .gb-form input, .venue-modal .gb-form textarea {
+  font-family: inherit; font-size: .95rem; padding: 11px 13px; border: 1px solid #e4d8d0;
+  border-radius: 10px; background: var(--paper); color: var(--ink); resize: none; width: 100%;
+}
+.venue-modal .gb-name[readonly] { background: #f1ece9; color: #9b9089; cursor: not-allowed; }
+.venue-modal .gb-form button {
+  font-family: "GmarketSans", sans-serif; font-weight: 700; font-size: .98rem; padding: 12px;
+  border: none; border-radius: 10px; background: var(--coral); color: #fff; cursor: pointer;
+}
+.venue-modal .gb-empty { color: #9b9089; font-size: .88rem; text-align: center; padding: 10px; }

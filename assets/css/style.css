@@ -259,6 +259,21 @@ html, body {
   padding: 12px 0; border-radius: var(--radius-sm); color: var(--ink);
   background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
 }
+.transit-info {
+  margin-top: 18px; text-align: left; background: #fff;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 16px 18px; box-shadow: var(--shadow-sm);
+}
+.transit-title { font-size: .82rem; color: var(--sea-dk); font-weight: 700; margin: 0 0 12px; }
+.transit-line { margin: 0 0 9px; font-size: .9rem; line-height: 1.55; color: var(--ink); }
+.transit-line:last-child { margin-bottom: 0; }
+.transit-tag {
+  display: inline-block; min-width: 40px; text-align: center; margin-right: 9px;
+  font-size: .72rem; font-weight: 600; color: var(--sea-dk);
+  border: 1px solid var(--sea); border-radius: 999px; padding: 2px 9px;
+  vertical-align: middle;
+}
+.transit-line b { font-weight: 600; color: var(--sea-dk); }
 
 /* =========================================================
    5. 혼주 정보

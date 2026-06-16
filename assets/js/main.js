@@ -105,7 +105,7 @@
       var s = document.createElement("script");
       s.id = "naver-maps-sdk";
       s.src = "https://oapi.map.naver.com/openapi/v3/maps.js?" + params[idx] +
-        "=" + encodeURIComponent(v.naverClientId) + "&submodules=geocoder";
+        "=" + encodeURIComponent(v.naverClientId);
       s.onload = onReady;
       s.onerror = next;
       document.head.appendChild(s);
@@ -113,23 +113,9 @@
     function onReady() {
       if (!window.naver || !window.naver.maps) { next(); return; }
       el.innerHTML = "";
-      var lat = v.lat || 35.1366, lng = v.lng || 126.9215;
-      var map = new naver.maps.Map(el, { center: new naver.maps.LatLng(lat, lng), zoom: 16 });
-      function mark(la, ln) {
-        var p = new naver.maps.LatLng(la, ln);
-        map.setCenter(p);
-        new naver.maps.Marker({ position: p, map: map, title: v.name || "" });
-      }
-      if (naver.maps.Service && naver.maps.Service.geocode && v.address) {
-        naver.maps.Service.geocode({ query: v.address }, function (status, res) {
-          try {
-            var arr = res && res.v2 && res.v2.addresses;
-            if (status === naver.maps.Service.Status.OK && arr && arr.length)
-              mark(parseFloat(arr[0].y), parseFloat(arr[0].x));
-            else mark(lat, lng);
-          } catch (e) { mark(lat, lng); }
-        });
-      } else { mark(lat, lng); }
+      var p = new naver.maps.LatLng(v.lat || 35.1308, v.lng || 126.9483);
+      var map = new naver.maps.Map(el, { center: p, zoom: 17 });
+      new naver.maps.Marker({ position: p, map: map, title: v.name || "" });
     }
     loadSdk();
   })();
