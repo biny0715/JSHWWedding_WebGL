@@ -12,14 +12,14 @@ window.WEDDING = {
     name: "김형원",
     short: "형원",
     role: "신랑",
-    desc: "목포 출신, 바다를 닮은 신랑", // TODO: 소개 문구 다듬기
-    phone: "010-0000-0000", // TODO
+    desc: "목포 바다처럼 넓은 마음을 가진", // TODO: 소개 문구 다듬기
+    phone: "010-2820-2131", // TODO
   },
   bride: {
     name: "박지수",
     short: "지수",
     role: "신부",
-    desc: "누구보다 따뜻한 마음을 가진 신부", // TODO: 소개 문구 다듬기
+    desc: "누구보다 따뜻한 마음을 가진", // TODO: 소개 문구 다듬기
     phone: "010-0000-0000", // TODO
   },
 
@@ -32,11 +32,18 @@ window.WEDDING = {
   venue: {
     name: "운림제",
     detail: "광주광역시 운림제 · 야외 한옥 예식장",
-    address: "광주광역시 동구 ○○로 ○○", // TODO: 정확한 주소
-    lat: 35.1366, // TODO: 정확한 위도
-    lng: 126.9215, // TODO: 정확한 경도
-    // 길찾기 버튼이 검색할 장소명
+    address: "광주 동구 동산길 29",
+    lat: 35.1366,
+    lng: 126.9215,
     mapQuery: "운림제 광주",
+    // 모바일에서 각 앱으로 바로 열리는 공유 링크 (앱 미설치 시 웹으로 폴백)
+    mapLinks: {
+      kakao: "https://place.map.kakao.com/9308441",
+      naver: "https://naver.me/xSFCVLXf",
+      tmap: "https://tmap.life/d868f2fa",
+    },
+    // 네이버 지도(Web Dynamic Map) Client ID — NCP 발급. 공개돼도 안전(등록 도메인에서만 동작)
+    naverClientId: "84o8zgwogu",
   },
 
   /* ---- 혼주 정보 ---- */

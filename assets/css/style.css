@@ -214,9 +214,9 @@ html, body {
   padding: 16px 12px 18px; box-shadow: var(--shadow-sm);
 }
 .profile-photo { width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; margin-bottom: 12px; }
-.profile-role { font-size: .8rem; color: var(--sea-dk); margin: 0; font-weight: 600; }
-.profile-name { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; margin: 2px 0 6px; }
-.profile-desc { font-size: .86rem; color: var(--ink-soft); margin: 0 0 12px; min-height: 2.4em; }
+.profile-role { font-size: .8rem; color: var(--sea-dk); margin: 0 0 6px; font-weight: 600; }
+.profile-desc { font-size: .86rem; color: var(--ink-soft); margin: 0 0 2px; }
+.profile-name { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; margin: 0 0 10px; }
 .profile-call {
   display: inline-block; font-size: .82rem; text-decoration: none;
   color: var(--sea-dk); border: 1px solid var(--sea); border-radius: 999px;
@@ -315,11 +315,51 @@ html, body {
   padding: 13px; border: none; border-radius: var(--radius-sm);
   background: var(--coral); color: #fff; cursor: pointer;
 }
-.gb-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; text-align: left; }
-.gb-card { background: var(--sand); border-radius: var(--radius-sm); padding: 14px 16px; position: relative; }
+.gb-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; text-align: left; }
+.gb-card { background: var(--sand); border-radius: var(--radius-sm); padding: 14px 16px; cursor: pointer; min-width: 0; }
+.gb-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .gb-card .gb-who { font-family: var(--font-head); font-weight: 500; font-size: .9rem; }
-.gb-card .gb-when { font-size: .72rem; color: var(--ink-soft); float: right; }
-.gb-card .gb-text { margin: 6px 0 0; font-size: .92rem; }
+.gb-meta { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-soft); flex: none; }
+.gb-card .gb-when { font-size: .72rem; color: var(--ink-soft); }
+.gb-more { font-size: .7rem; transition: transform .2s; }
+.gb-card.open .gb-more { transform: rotate(180deg); }
+.gb-card .gb-text { margin: 6px 0 0; font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: anywhere; }
+.gb-card.open .gb-text { white-space: normal; }
+/* 페이저 */
+.gb-pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 14px 0 4px; }
+.gb-pg { width: 34px; height: 34px; border: 1px solid var(--line); background: var(--paper); border-radius: 50%; cursor: pointer; font-size: 1.05rem; line-height: 1; color: var(--ink); }
+.gb-pg:disabled { opacity: .35; cursor: default; }
+.gb-page { font-size: .85rem; color: var(--ink-soft); min-width: 54px; text-align: center; }
+/* 글쓰기 폼: 목록 아래에 배치 */
+.gb-widget .gb-form { margin: 18px 0 0; }
+/* 유니티 예식장: 이름 자동입력 + 수정불가 */
+.gb-name[readonly] { background: #f1ece9; color: var(--ink-soft); cursor: not-allowed; }
+/* 관리자: 삭제(X) 버튼 */
+.gb-card { position: relative; }
+.gb-x {
+  position: absolute; top: 8px; right: 10px; width: 24px; height: 24px;
+  border: none; border-radius: 50%; background: #e9d6dc; color: #8a4d63;
+  font-size: .78rem; line-height: 1; cursor: pointer; padding: 0;
+}
+.gb-x:hover { background: #e0bccb; }
+/* 관리자 로그인 게이트 */
+.admin-gate {
+  position: fixed; inset: 0; z-index: 9999; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--paper);
+}
+.admin-gate[hidden] { display: none; }
+.admin-login { width: 100%; max-width: 320px; display: grid; gap: 12px; text-align: center; }
+.admin-login h1 { font-family: var(--font-head); font-size: 1.2rem; margin: 0 0 6px; }
+.admin-login input {
+  font-family: inherit; font-size: .95rem; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; color: var(--ink);
+}
+.admin-login button {
+  font-family: var(--font-head); padding: 13px; border: none;
+  border-radius: var(--radius-sm); background: var(--coral); color: #fff; cursor: pointer;
+}
+.admin-err { color: #c0392b; font-size: .82rem; min-height: 1em; margin: 0; }
 .gb-del {
   position: absolute; right: 10px; bottom: 8px; font-size: .7rem;
   border: none; background: none; color: var(--ink-soft); cursor: pointer; opacity: .6;

@@ -73,7 +73,8 @@
   /* ---- 오시는 길: 길찾기 앱 링크 ---- */
   (function () {
     var v = W.venue, q = encodeURIComponent(v.mapQuery || v.name);
-    var links = {
+    // config 에 직접 링크(mapLinks)가 있으면 그걸 우선 사용 (모바일에서 앱으로 바로 열림)
+    var links = v.mapLinks || {
       kakao: "https://map.kakao.com/?q=" + q,
       naver: "https://map.naver.com/v5/search/" + q,
       tmap: "https://tmap.life/route?goalname=" + q + "&goalx=" + v.lng + "&goaly=" + v.lat,
@@ -82,6 +83,55 @@
       var key = a.getAttribute("data-map");
       if (links[key]) a.href = links[key];
     });
+  })();
+
+  /* ---- 오시는 길: 네이버 지도 임베드 (NCP Web Dynamic Map) ---- */
+  (function () {
+    var el = document.getElementById("map-box");
+    if (!el) return;
+    var v = W.venue || {};
+    if (!v.naverClientId) return;
+    var params = ["ncpKeyId", "ncpClientId"], idx = 0; // 신/구 파라미터 자동 폴백
+
+    window.navermap_authFailure = function () { next(); };
+
+    function next() {
+      var old = document.getElementById("naver-maps-sdk");
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      idx++;
+      if (idx < params.length) loadSdk();
+    }
+    function loadSdk() {
+      var s = document.createElement("script");
+      s.id = "naver-maps-sdk";
+      s.src = "https://oapi.map.naver.com/openapi/v3/maps.js?" + params[idx] +
+        "=" + encodeURIComponent(v.naverClientId) + "&submodules=geocoder";
+      s.onload = onReady;
+      s.onerror = next;
+      document.head.appendChild(s);
+    }
+    function onReady() {
+      if (!window.naver || !window.naver.maps) { next(); return; }
+      el.innerHTML = "";
+      var lat = v.lat || 35.1366, lng = v.lng || 126.9215;
+      var map = new naver.maps.Map(el, { center: new naver.maps.LatLng(lat, lng), zoom: 16 });
+      function mark(la, ln) {
+        var p = new naver.maps.LatLng(la, ln);
+        map.setCenter(p);
+        new naver.maps.Marker({ position: p, map: map, title: v.name || "" });
+      }
+      if (naver.maps.Service && naver.maps.Service.geocode && v.address) {
+        naver.maps.Service.geocode({ query: v.address }, function (status, res) {
+          try {
+            var arr = res && res.v2 && res.v2.addresses;
+            if (status === naver.maps.Service.Status.OK && arr && arr.length)
+              mark(parseFloat(arr[0].y), parseFloat(arr[0].x));
+            else mark(lat, lng);
+          } catch (e) { mark(lat, lng); }
+        });
+      } else { mark(lat, lng); }
+    }
+    loadSdk();
   })();
 
   /* ---- 복사 바인딩 (주소 등) ---- */
@@ -138,47 +188,7 @@
     });
   })();
 
-  /* ---- 방명록 (localStorage 임시 저장) ---- */
-  (function () {
-    var KEY = "jshw_guestbook";
-    var form = $("#gb-form"), listEl = $("#gb-list");
-    if (!form || !listEl) return;
-
-    function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
-    function save(arr) { localStorage.setItem(KEY, JSON.stringify(arr)); }
-    function fmt(ts) {
-      var d = new Date(ts);
-      return d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate();
-    }
-    function render() {
-      var arr = load();
-      if (!arr.length) { listEl.innerHTML = '<li class="gb-empty">첫 번째 축하 메시지를 남겨주세요 🌿</li>'; return; }
-      listEl.innerHTML = arr.map(function (m) {
-        return '<li class="gb-card" data-id="' + m.id + '">' +
-          '<span class="gb-when">' + fmt(m.id) + '</span>' +
-          '<div class="gb-who">' + esc(m.name) + '</div>' +
-          '<p class="gb-text">' + esc(m.text) + '</p>' +
-          '<button class="gb-del" data-del="' + m.id + '">삭제</button>' +
-          '</li>';
-      }).join("");
-    }
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var name = $("#gb-name").value.trim(), text = $("#gb-msg").value.trim();
-      if (!name || !text) return;
-      var arr = load();
-      arr.unshift({ id: Date.now(), name: name, text: text });
-      save(arr); render(); form.reset(); toast("메시지를 남겼습니다 💌");
-    });
-    listEl.addEventListener("click", function (e) {
-      var del = e.target.closest("[data-del]"); if (!del) return;
-      if (!confirm("이 메시지를 삭제할까요?")) return;
-      var id = Number(del.getAttribute("data-del"));
-      save(load().filter(function (m) { return m.id !== id; }));
-      render();
-    });
-    render();
-  })();
+  /* ---- 방명록: assets/js/guestbook.js (Firestore) 로 이전됨 (index.html 모듈에서 마운트) ---- */
 
   /* ---- 웨딩 갤러리 슬라이더 ---- */
   (function () {

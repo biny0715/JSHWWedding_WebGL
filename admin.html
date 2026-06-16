@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="format-detection" content="telephone=no">
-  <title>형원 ♥ 지수 결혼식에 초대합니다</title>
+  <title>방명록 관리자 · 형원 ♥ 지수</title>
+  <meta name="robots" content="noindex">
+  <meta name="googlebot" content="noindex">
 
   <!-- OG (카카오톡 공유용) -->
   <meta property="og:type" content="website">
@@ -21,6 +23,17 @@
 </head>
 
 <body>
+  <!-- 관리자 로그인 게이트 (Firebase 인증 전까지 화면 가림) -->
+  <div class="admin-gate" id="admin-gate">
+    <form class="admin-login" id="admin-login-form">
+      <h1>방명록 관리자</h1>
+      <input type="email" id="admin-email" placeholder="관리자 이메일" autocomplete="username" required>
+      <input type="password" id="admin-pw" placeholder="비밀번호" autocomplete="current-password" required>
+      <button type="submit">로그인</button>
+      <p class="admin-err" id="admin-err"></p>
+    </form>
+  </div>
+
   <!-- 세로 9:16 고정 컬럼 -->
   <main class="paper">
 
@@ -92,7 +105,7 @@
     <section class="section direction reveal">
       <h2 class="title">오시는 길</h2>
       <div class="map-box" id="map-box">
-        <span class="ph-label">지도<br><small>네이버 지도 연동 예정</small></span>
+        <span class="ph-label">지도 자리<br><small>카카오맵 임베드 예정</small></span>
       </div>
       <p class="map-address">
         <span data-bind="venue.address"></span>
@@ -160,9 +173,35 @@
   <script src="assets/js/config.js"></script>
   <script src="assets/js/main.js"></script>
   <script type="module">
-    import { mountGuestbook } from "./assets/js/guestbook.js";
-    const el = document.getElementById("gb-widget");
-    if (el) mountGuestbook(el, { write: true });
+    import { mountGuestbook, adminLogin, onAdmin } from "./assets/js/guestbook.js";
+    const gate = document.getElementById("admin-gate");
+    const form = document.getElementById("admin-login-form");
+    const errEl = document.getElementById("admin-err");
+    let mounted = false;
+
+    onAdmin((user) => {
+      if (user) {
+        gate.hidden = true;
+        if (!mounted) {
+          mountGuestbook(document.getElementById("gb-widget"), { write: true, admin: true });
+          mounted = true;
+        }
+      } else {
+        gate.hidden = false;
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errEl.textContent = "";
+      try {
+        await adminLogin(document.getElementById("admin-email").value.trim(),
+                         document.getElementById("admin-pw").value);
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = "로그인 실패: 이메일/비밀번호를 확인하세요.";
+      }
+    });
   </script>
 </body>
 </html>
