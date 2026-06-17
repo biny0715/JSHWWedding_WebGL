@@ -163,6 +163,11 @@ html, body {
   font-size: 1.05rem; color: var(--ink); margin: 4px 0 0;
 }
 .loading-sub { font-size: .85rem; color: #7d756b; margin: 0; }
+.link-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: "GmarketSans", sans-serif; font-size: .85rem;
+  color: #7d756b; text-decoration: underline; padding: 4px; margin-top: 2px;
+}
 
 /* =========================================================
    예식장 씬 플레이어 UI (입장 후) — 미니맵 등은 Unity에서 구현
