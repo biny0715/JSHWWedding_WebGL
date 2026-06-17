@@ -168,6 +168,10 @@ html, body {
   font-family: "GmarketSans", sans-serif; font-size: .85rem;
   color: #7d756b; text-decoration: underline; padding: 4px; margin-top: 2px;
 }
+.lobby-notice {
+  font-size: .82rem; color: #a85; background: #fbf3e8;
+  border: 1px solid #efddc4; border-radius: 10px; padding: 8px 10px; margin: 10px 0 0;
+}
 
 /* =========================================================
    예식장 씬 플레이어 UI (입장 후) — 미니맵 등은 Unity에서 구현

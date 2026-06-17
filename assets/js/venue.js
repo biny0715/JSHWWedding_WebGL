@@ -35,6 +35,7 @@
   var loadingSub = document.getElementById("loading-sub");
   var retryBtn = document.getElementById("loading-retry");
   var changeNameLink = document.getElementById("change-name-link");
+  var lobbyNotice = document.getElementById("lobby-notice");
   var step1 = document.getElementById("lobby-step1");
   var step2 = document.getElementById("lobby-step2");
   var playUI = document.getElementById("play-ui");
@@ -51,6 +52,8 @@
 
   var lobbyReady = false;
   var autoEnter = false;
+  var hasAttemptedAuto = false;   // 자동입장은 첫 진입에만(끊김→재진입 루프 방지)
+  var pendingNotice = "";         // 끊김 등 안내문(다음 입력화면에 표시)
   var lobbyFallbackTimer, sceneFallbackTimer, slowTimer;
 
   /* ===== 상태 전환 ===== */
@@ -59,13 +62,27 @@
     if (loadingSub) loadingSub.textContent = sub != null ? sub : "잠시만 기다려 주세요";
     show(loading); hide(step1); hide(step2);
   }
-  function showLobby() {        // Unity 로비 준비 완료 → 입력(또는 자동 입장)
-    if (state.entered) return;
+  function showLobby() {        // Unity 로비 (재)진입 → 입력(또는 자동 입장)
     lobbyReady = true;
     clearTimeout(lobbyFallbackTimer);
-    if (autoEnter && state.name.trim()) { doEnter(); return; }   // 기억된 이름 → 바로 입장
+    state.entered = false;       // 로비로 (재)진입 → 입장 상태 리셋(재입장 가능)
+
+    if (autoEnter && state.name.trim() && !hasAttemptedAuto) {
+      hasAttemptedAuto = true;   // 기억된 이름 → 첫 진입엔 자동 입장
+      doEnter();
+      return;
+    }
+
+    // 입력 화면: 재진입이면 3D 커튼 복원 + 플레이 UI 숨김
+    if (curtain) curtain.classList.remove("curtain--hidden");
+    if (playUI) playUI.classList.add("play-ui--hidden");
     setDisplay(retryBtn, "none");
     setDisplay(changeNameLink, "none");
+    if (lobbyNotice) {
+      lobbyNotice.textContent = pendingNotice;
+      lobbyNotice.style.display = pendingNotice ? "" : "none";
+    }
+    pendingNotice = "";
     hide(loading); show(step1); hide(step2);
   }
   function reveal() {           // Wedding 씬 로드 완료 → 3D 노출
@@ -80,6 +97,12 @@
   window.OnWeddingLobbyReady = function () { console.log("[venue] Unity 로비 준비 완료"); showLobby(); };
   window.OnWeddingEntering = function () { console.log("[venue] Unity 입장(접속) 시작"); };
   window.OnWeddingSceneReady = function () { console.log("[venue] Wedding 씬 로드 완료"); reveal(); };
+  window.OnWeddingDisconnected = function (cause) {
+    console.warn("[venue] Photon 끊김:", cause);
+    window.__lastDisconnect = cause;   // 콘솔에서 확인용
+    // 끊기면 Unity가 곧 로비로 되돌리고 OnWeddingLobbyReady 가 와서 입력칸이 다시 뜸.
+    pendingNotice = "연결이 끊겨 로비로 돌아왔어요 (사유: " + cause + "). 다시 입장해 주세요.";
+  };
 
   /* ===== 웹 → 유니티 ===== */
   function sendEnterToUnity() {
