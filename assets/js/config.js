@@ -106,7 +106,7 @@ window.WEDDING = {
    * 무거운 WebGL 빌드는 GitHub Pages(100MB 제한) 대신 외부 호스트(Netlify 등)에 올립니다.
    * 배포 후 받은 주소로 교체하세요. (비워두면 같은 사이트의 venue.html 로 이동)
    */
-  venueUrl: "https://soft-mermaid-cf7c33.netlify.app/", // Netlify 외부 호스트
+  venueUrl: "https://pub-e2f0473c1db44b0ea4d9059179c8ff75.r2.dev/index.html", // Cloudflare R2 (무료 무제한 트래픽)
 
   /* ---- 제작자 ---- */
   makers: [
