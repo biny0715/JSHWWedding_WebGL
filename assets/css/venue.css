@@ -182,13 +182,17 @@ html, body {
    방명록 / 사진앨범 오버레이 (유니티 FlowerDecoZone / PictureZone → 웹)
    ========================================================= */
 .venue-modal {
-  position: fixed; inset: 0; z-index: 60; padding: 18px;
+  position: fixed; left: 0; right: 0; top: 0;
+  height: 100vh; height: 100dvh;   /* dvh: 브라우저 URL바 제외한 실제 보이는 높이 */
+  z-index: 60;
+  /* safe-area(노치/홈바) + 위아래 여백 → 상단 X버튼이 URL바/노치에 안 가림 */
+  padding: calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
   display: flex; align-items: center; justify-content: center;
   background: rgba(35, 28, 32, .55); pointer-events: auto;
 }
 .venue-modal[hidden] { display: none; }
 .venue-modal-card {
-  width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto;
+  width: 100%; max-width: 420px; max-height: 100%; overflow-y: auto;
   background: #fff; border-radius: 16px; padding: 22px 18px 24px; position: relative;
   -webkit-overflow-scrolling: touch;
 }
