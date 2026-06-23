@@ -5,3 +5,5 @@ dist/
 # 무거운 Unity WebGL 빌드는 외부 호스트(Netlify 등)로 분리 — Pages(100MB 제한)에 커밋 안 함
 /Build/
 /venue.html
+# R2 배포 스크립트(로컬 전용)
+/deploy-venue.ps1

@@ -39,6 +39,7 @@
   var step1 = document.getElementById("lobby-step1");
   var step2 = document.getElementById("lobby-step2");
   var playUI = document.getElementById("play-ui");
+  var menuBtn = document.getElementById("venue-menu-btn");
 
   var nameInput = document.getElementById("visitor-name");
   var nextBtn = document.getElementById("lobby-next-btn");
@@ -50,6 +51,18 @@
   function show(el) { if (el) el.classList.remove("lobby--hidden"); }
   function setDisplay(el, v) { if (el) el.style.display = v; }
 
+  // 우상단 햄버거 메뉴 버튼: 예식장 입장(playing) 후에만 노출. 로비/로딩 복귀 시 닫고 숨김.
+  function setMenuVisible(v) {
+    if (menuBtn) menuBtn.hidden = !v;
+    if (!v) {
+      var m = document.getElementById("venue-menu");
+      var b = document.getElementById("venue-menu-backdrop");
+      if (m) m.hidden = true;
+      if (b) b.hidden = true;
+      if (menuBtn) { menuBtn.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
+    }
+  }
+
   var lobbyReady = false;
   var autoEnter = false;
   var hasAttemptedAuto = false;   // 자동입장은 첫 진입에만(끊김→재진입 루프 방지)
@@ -60,6 +73,7 @@
   function showLoading(text, sub) {
     if (loadingText && text) loadingText.textContent = text;
     if (loadingSub) loadingSub.textContent = sub != null ? sub : "잠시만 기다려 주세요";
+    setMenuVisible(false);
     show(loading); hide(step1); hide(step2);
   }
   function showLobby() {        // Unity 로비 (재)진입 → 입력(또는 자동 입장)
@@ -73,9 +87,10 @@
       return;
     }
 
-    // 입력 화면: 재진입이면 3D 커튼 복원 + 플레이 UI 숨김
+    // 입력 화면: 재진입이면 3D 커튼 복원 + 플레이 UI/메뉴 숨김
     if (curtain) curtain.classList.remove("curtain--hidden");
     if (playUI) playUI.classList.add("play-ui--hidden");
+    setMenuVisible(false);
     setDisplay(retryBtn, "none");
     setDisplay(changeNameLink, "none");
     if (lobbyNotice) {
@@ -91,6 +106,7 @@
     hide(loading); hide(step1); hide(step2);
     if (curtain) curtain.classList.add("curtain--hidden");
     playUI.classList.remove("play-ui--hidden");
+    setMenuVisible(true);   // 입장 완료 → 우상단 메뉴 노출
   }
 
   /* ===== 유니티 → 웹 콜백 ===== */

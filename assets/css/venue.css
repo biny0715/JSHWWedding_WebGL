@@ -52,15 +52,6 @@ html, body {
 #ui-overlay input,
 #ui-overlay .lobby-card { pointer-events: auto; }
 
-/* 나가기 (좌상단) */
-.venue-exit {
-  position: fixed; top: 14px; left: 14px; z-index: 20;
-  pointer-events: auto; text-decoration: none;
-  background: rgba(255,255,255,.9); color: var(--sea-dk);
-  font-size: .85rem; font-weight: 600; padding: 8px 14px; border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.18);
-}
-
 /* =========================================================
    로비 카드 (스플래시 + 폼)
    ========================================================= */
@@ -247,3 +238,60 @@ html, body {
   border: none; border-radius: 10px; background: var(--coral); color: #fff; cursor: pointer;
 }
 .venue-modal .gb-empty { color: #9b9089; font-size: .88rem; text-align: center; padding: 10px; }
+
+/* =========================================================
+   우상단 햄버거 메뉴 (도움말 / 미니맵 / 방명록)
+   ========================================================= */
+.venue-menu-btn {
+  position: fixed; top: 14px; left: 14px; z-index: 31;
+  width: 44px; height: 44px; padding: 0; pointer-events: auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  background: rgba(255,255,255,.92); border: none; border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18); cursor: pointer;
+}
+.venue-menu-btn[hidden] { display: none; }
+.venue-menu-btn span {
+  display: block; width: 20px; height: 2.5px; border-radius: 2px;
+  background: var(--sea-dk); transition: transform .2s, opacity .2s;
+}
+.venue-menu-btn.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.venue-menu-btn.open span:nth-child(2) { opacity: 0; }
+.venue-menu-btn.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* 메뉴 열렸을 때 바깥 탭으로 닫기 (탭이 Unity로 새어가 캐릭터가 움직이지 않게 가림) */
+.venue-menu-backdrop { position: fixed; inset: 0; z-index: 29; pointer-events: auto; background: transparent; }
+.venue-menu-backdrop[hidden] { display: none; }
+
+.venue-menu {
+  position: fixed; top: 64px; left: 14px; z-index: 31;
+  width: 180px; padding: 8px; pointer-events: auto;
+  background: rgba(251,247,239,.97); backdrop-filter: blur(6px);
+  border-radius: 16px; box-shadow: 0 12px 34px rgba(0,0,0,.28);
+  display: grid; gap: 4px; animation: menuIn .16s ease;
+}
+.venue-menu[hidden] { display: none; }
+@keyframes menuIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.venue-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  font-family: "GmarketSans", sans-serif; font-size: .98rem; font-weight: 500;
+  text-align: left; padding: 12px 14px; border: none; border-radius: 11px;
+  background: transparent; color: var(--ink); cursor: pointer; text-decoration: none;
+}
+.venue-menu-item:hover, .venue-menu-item:active { background: rgba(143,197,214,.18); }
+.venue-menu-ic { font-size: 1.1rem; line-height: 1; }
+
+/* =========================================================
+   도움말 (조작 방법) 본문
+   ========================================================= */
+.help-body { display: grid; gap: 4px; text-align: left; }
+.help-step { display: flex; gap: 12px; align-items: flex-start; margin-top: 8px; }
+.help-num {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--coral); color: #fff; font-weight: 700; font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.help-h { margin: 2px 0 4px; font-size: 1rem; color: var(--ink); font-weight: 700; }
+.help-p { margin: 0; font-size: .9rem; line-height: 1.5; color: #6b635a; }
+.help-p b { color: var(--sea-dk); }
+.help-illust { background: #f7faf6; border-radius: 14px; padding: 10px 8px; margin: 4px 0 2px; }
+.help-svg { width: 100%; height: auto; display: block; }
