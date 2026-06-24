@@ -21,6 +21,7 @@
 
   var NAME_KEY = "jshw_visitor_name";
   var GENDER_KEY = "jshw_visitor_gender";
+  var LOOK_KEY = "jshw_visitor_look";   // 캐릭터 커스텀(룩) CSV "g,skin,..,hats"
 
   function lsGet(k) { try { return window.localStorage.getItem(k) || ""; } catch (e) { return ""; } }
   function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
@@ -126,6 +127,7 @@
     if (!u) return;
     try {
       u.SendMessage("WebBridge", "SetPlayerName", state.name.trim() || "하객");
+      if (cz.look) u.SendMessage("WebBridge", "ApplyLook", cz.look.join(","));   // 커스텀 룩 전달
       u.SendMessage("WebBridge", "EnterVenue");
     } catch (e) {
       console.warn("[venue] Unity SendMessage 실패:", e);
@@ -136,6 +138,7 @@
   function doEnter() {
     if (state.entered) return;
     state.entered = true;
+    if (curtain) curtain.classList.remove("curtain--hidden");  // 입장 로딩은 커튼 위(프리뷰 가림)
 
     // 이름/성별 기억 (다음 방문/복귀 시 자동 입장)
     lsSet(NAME_KEY, state.name.trim());
@@ -167,18 +170,136 @@
       state.gender = btn.getAttribute("data-gender");
       genderBtns.forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
       refreshNext();
+      initLookForGender();   // 성별 기본 룩으로 프리뷰 갱신
     });
   });
 
-  nextBtn.addEventListener("click", function () { hide(step1); show(step2); });
-  prevBtn.addEventListener("click", function () { hide(step2); show(step1); });
+  nextBtn.addEventListener("click", function () {
+    hide(step1); show(step2);
+    if (curtain) curtain.classList.add("curtain--hidden");   // Unity 프리뷰 노출
+    initLookForGender();                                     // 프리뷰 성별 룩 보장
+  });
+  prevBtn.addEventListener("click", function () {
+    hide(step2); show(step1);
+    if (curtain) curtain.classList.remove("curtain--hidden"); // 커튼 복원
+  });
   enterBtn.addEventListener("click", doEnter);
 
   if (retryBtn) retryBtn.addEventListener("click", function () { location.reload(); });
   if (changeNameLink) changeNameLink.addEventListener("click", function () {
-    lsDel(NAME_KEY); lsDel(GENDER_KEY);   // 기억 삭제 후 새로고침 → 이름 입력부터
+    lsDel(NAME_KEY); lsDel(GENDER_KEY); lsDel(LOOK_KEY);  // 기억 삭제 후 새로고침
     location.reload();
   });
+
+  /* =====================================================================
+   * 캐릭터 커스텀 (step2)
+   *  - 룩 상태는 웹이 소유: cz.look = [gender, p1..p11] (-1=없음)
+   *  - Unity OnPreviewReady 로 카테고리 개수 + 성별 기본값을 받아 버튼/기본룩 구성
+   *  - 변경 시 SendMessage 로 Unity 프리뷰 갱신, localStorage 저장
+   *  - 입장 시 ApplyLook(csv) → Wedding 플레이어에 적용 + Photon 동기화
+   * ===================================================================== */
+  var CATS = [
+    { slot: 1, key: "skin", label: "피부", opt: false },
+    { slot: 2, key: "eyes", label: "눈", opt: false },
+    { slot: 3, key: "hair", label: "머리", opt: false },
+    { slot: 4, key: "upper", label: "상의", opt: false },
+    { slot: 5, key: "pants", label: "하의", opt: false },
+    { slot: 6, key: "brows", label: "눈썹", opt: false },
+    { slot: 7, key: "boots", label: "신발", opt: true },
+    { slot: 8, key: "backpack", label: "가방", opt: true },
+    { slot: 9, key: "beard", label: "수염", opt: true },
+    { slot: 10, key: "glasses", label: "안경", opt: true },
+    { slot: 11, key: "hats", label: "모자", opt: true },
+  ];
+  var cz = { counts: null, defaults: null, look: null, activeCat: 1, ready: false };
+
+  var tabsEl = document.getElementById("custom-tabs");
+  var csPrev = document.getElementById("cs-prev");
+  var csNext = document.getElementById("cs-next");
+  var csLabel = document.getElementById("cs-label");
+
+  function czSend(method, arg) {
+    var u = window.unityInstance;
+    if (!u) return;
+    try { u.SendMessage("WebBridge", method, arg); } catch (e) {}
+  }
+  function genderIndex() { return state.gender === "male" ? 0 : 1; }
+  function setGenderUI(g) {
+    state.gender = g;
+    genderBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-gender") === g ? "true" : "false"); });
+    refreshNext();
+  }
+  function catBySlot(slot) { for (var i = 0; i < CATS.length; i++) if (CATS[i].slot === slot) return CATS[i]; return CATS[0]; }
+  function countOf(slot) { var c = catBySlot(slot); return (cz.counts && cz.counts[c.key]) || 0; }
+  function saveLook() { if (cz.look) lsSet(LOOK_KEY, cz.look.join(",")); }
+
+  // Unity → 웹: 프리뷰 준비 + 카테고리 개수 + 성별 기본값
+  window.OnPreviewReady = function (json) {
+    try { var d = JSON.parse(json); cz.counts = d.counts; cz.defaults = { 0: d.male, 1: d.female }; }
+    catch (e) { console.warn("[venue] OnPreviewReady parse fail", e); return; }
+    cz.ready = true;
+    buildTabs();
+    // 저장된 룩 있으면 복원
+    if (cz.look) {
+      if (state.gender === "") setGenderUI(cz.look[0] === 0 ? "male" : "female");
+      czSend("ApplyLook", cz.look.join(","));
+    }
+    renderSelector();
+  };
+
+  function buildTabs() {
+    if (!tabsEl || !cz.counts) return;
+    tabsEl.innerHTML = "";
+    CATS.forEach(function (c) {
+      if (countOf(c.slot) <= 0) return;   // 부위가 0개인 카테고리(예: 모자 전체 제거)는 탭 숨김
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cs-tab";
+      b.textContent = c.label;
+      b.setAttribute("data-slot", c.slot);
+      b.addEventListener("click", function () { cz.activeCat = c.slot; renderSelector(); });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  // 성별 확정 시 룩 초기화(같은 성별 저장룩 있으면 유지) + 프리뷰 반영
+  function initLookForGender() {
+    if (!cz.ready || !cz.defaults) return;
+    var gi = genderIndex();
+    if (!(cz.look && cz.look[0] === gi)) cz.look = [gi].concat(cz.defaults[gi].slice());
+    czSend("ApplyLook", cz.look.join(","));
+    saveLook();
+    renderSelector();
+  }
+
+  function renderSelector() {
+    if (!cz.ready || !cz.look) return;
+    var cat = catBySlot(cz.activeCat);
+    if (tabsEl) Array.prototype.forEach.call(tabsEl.children, function (b) {
+      b.classList.toggle("active", +b.getAttribute("data-slot") === cz.activeCat);
+    });
+    var idx = cz.look[cz.activeCat];
+    var n = countOf(cz.activeCat);
+    if (csLabel) csLabel.textContent = (idx < 0) ? "없음" : (cat.label + " " + (idx + 1));
+    if (csPrev) csPrev.disabled = n <= 0;
+    if (csNext) csNext.disabled = n <= 0;
+  }
+
+  function cycle(dir) {
+    if (!cz.look) return;
+    var slot = cz.activeCat, cat = catBySlot(slot), n = countOf(slot);
+    if (n <= 0) return;
+    var idx = cz.look[slot];
+    if (cat.opt) { idx += dir; if (idx < -1) idx = n - 1; if (idx > n - 1) idx = -1; }
+    else { idx = (idx + dir + n) % n; }
+    cz.look[slot] = idx;
+    czSend("SetPreviewPart", slot + ":" + idx);
+    saveLook();
+    renderSelector();
+  }
+
+  if (csPrev) csPrev.addEventListener("click", function () { cycle(-1); });
+  if (csNext) csNext.addEventListener("click", function () { cycle(1); });
 
   /* ===== 초기 상태 ===== */
   // 기억된 이름 복원 → 있으면 자동 입장 모드
@@ -192,6 +313,13 @@
     }
     autoEnter = true;
     refreshNext();
+  }
+
+  // 저장된 커스텀 룩 미리 로드(프리뷰 준비 전/자동입장에도 사용)
+  var savedLook = lsGet(LOOK_KEY);
+  if (savedLook) {
+    var la = savedLook.split(",").map(Number);
+    if (la.length === 12 && !la.some(isNaN)) cz.look = la;
   }
 
   showLoading("예식장을 불러오는 중…");
