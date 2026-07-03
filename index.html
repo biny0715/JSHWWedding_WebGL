@@ -166,6 +166,24 @@
     <span class="fab-main">입장</span>
   </a>
 
+  <!-- 모바일 예식장 입장 안내 모달 — 입장 버튼(섹션/FAB) 클릭 시 표시, "입장하기"를 눌러야 이동 -->
+  <div class="notice-modal" id="venue-notice" hidden>
+    <div class="notice-card" role="dialog" aria-modal="true" aria-label="모바일 예식장 입장 안내">
+      <button type="button" class="notice-close" id="venue-notice-close" aria-label="닫기">✕</button>
+      <p class="notice-eyebrow">모바일 예식장</p>
+      <p class="notice-text">
+        실제로 다른 하객들을 마주치실 수 있습니다.<br>
+        모바일 예식장은 스마트폰 환경에 최적화 되어 있습니다.<br>
+        구글 크롬, 사파리, 삼성 인터넷과 같은 웹 브라우저를 권장드립니다.
+      </p>
+      <p class="notice-small">
+        절전모드를 Off, Ram 6GB 이상 스마트폰에서 원활하게 작동합니다.<br>
+        일부 스마트폰에서는 원활하게 동작하지 않을 수 있습니다
+      </p>
+      <a class="notice-enter" id="venue-notice-enter" href="venue.html">입장하기</a>
+    </div>
+  </div>
+
   <!-- 복사 알림 토스트 -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

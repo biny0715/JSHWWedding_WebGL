@@ -222,6 +222,23 @@
       btns.forEach(function (b) { b.href = W.venueUrl; });
     }
     // venueUrl 미설정 시 기본값(venue.html)은 HTML 의 href 그대로 사용
+
+    // 입장 안내 모달: 바로 이동하지 않고 안내 문구 → "입장하기" 를 눌러야 이동.
+    // 모달 마크업이 없는 페이지는 기존처럼 바로 이동.
+    var modal = $("#venue-notice");
+    if (!modal) return;
+    var enterLink = $("#venue-notice-enter");
+    function closeNotice() { modal.hidden = true; document.body.style.overflow = ""; }
+    btns.forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.preventDefault();
+        enterLink.href = b.href;               // 클릭한 버튼의 목적지(venueUrl) 그대로 사용
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";   // 모달 뒤 배경 스크롤 잠금
+      });
+    });
+    $("#venue-notice-close").addEventListener("click", closeNotice);
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeNotice(); });
   })();
 
   /* ---- 제작자 ---- */

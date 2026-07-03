@@ -486,6 +486,40 @@ html, body {
 @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @media (prefers-reduced-motion: reduce) { .venue-fab { animation: none; } }
 
+/* ---- 입장 안내 모달 (입장 버튼 → 안내 문구 → 입장하기) ---- */
+.notice-modal {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(74, 66, 72, .5);
+}
+.notice-modal[hidden] { display: none; }
+.notice-card {
+  position: relative; width: 100%; max-width: 340px;
+  background: var(--paper); border-radius: var(--radius);
+  padding: 32px 24px 24px; text-align: center; box-shadow: var(--shadow);
+  animation: noticeIn .22s ease;
+}
+@keyframes noticeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.notice-close {
+  position: absolute; top: 10px; right: 12px; width: 30px; height: 30px;
+  border: none; border-radius: 50%; background: #f0e3e8; color: #8a4d63;
+  font-size: .9rem; line-height: 1; cursor: pointer;
+}
+.notice-eyebrow {
+  font-family: var(--font-head); letter-spacing: .15em;
+  font-size: .75rem; color: var(--sea-dk); margin: 0 0 12px;
+}
+.notice-text { font-size: .93rem; line-height: 1.8; color: var(--ink); margin: 0 0 14px; }
+.notice-small { font-size: .76rem; line-height: 1.65; color: var(--ink-soft); margin: 0 0 20px; }
+.notice-enter {
+  display: block; text-decoration: none;
+  font-family: var(--font-head); font-weight: 700; font-size: 1rem;
+  background: var(--coral); color: #fff; border-radius: 999px; padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+@media (prefers-reduced-motion: reduce) { .notice-card { animation: none; } }
+
 /* =========================================================
    10. 제작자
    ========================================================= */
