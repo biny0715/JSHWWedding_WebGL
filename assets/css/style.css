@@ -383,6 +383,45 @@ html, body {
 .gb-note { font-size: .74rem; color: #c39bac; margin-top: 16px; }
 
 /* =========================================================
+   관리자 페이지 공통 (admin.html / admin-wreaths.html)
+   ========================================================= */
+/* 우측 상단 고정 페이지 이동 버튼 (로그인 게이트 z-9999 아래 → 로그인 후에만 보임) */
+.admin-nav {
+  position: fixed; top: 14px; right: 14px; z-index: 500;
+  font-family: var(--font-head); font-weight: 500; font-size: .82rem;
+  color: #fff; text-decoration: none;
+  background: var(--sea-dk); border-radius: 999px; padding: 9px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- 모바일 화환 관리 테이블 ---- */
+.wreath-admin .section { padding-top: 72px; min-height: 100vh; }
+.wa-lead { color: var(--ink-soft); font-size: .88rem; margin: -10px 0 16px; }
+.wa-count { font-family: var(--font-head); font-size: .92rem; color: var(--sea-dk); margin: 0 0 14px; }
+.wa-table-wrap { overflow-x: auto; }
+.wa-table {
+  width: 100%; border-collapse: collapse; font-size: .86rem;
+  background: #fff; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.wa-table th {
+  background: var(--sand); color: var(--sea-dk); font-size: .76rem; font-weight: 700;
+  padding: 10px 8px; white-space: nowrap;
+}
+.wa-table td { border-top: 1px solid var(--line); padding: 10px 8px; text-align: left; vertical-align: top; }
+.wa-slot { white-space: nowrap; text-align: center; color: var(--sea-dk); font-weight: 700; }
+.wa-slot--wait { color: var(--ink-soft); font-weight: 500; }
+.wa-who { white-space: nowrap; font-weight: 600; }
+.wa-msg { overflow-wrap: anywhere; min-width: 120px; }
+.wa-when { white-space: nowrap; color: var(--ink-soft); font-size: .8rem; }
+.wa-del {
+  border: none; border-radius: 999px; background: #e9d6dc; color: #8a4d63;
+  font-size: .76rem; font-weight: 600; padding: 5px 11px; cursor: pointer; white-space: nowrap;
+}
+.wa-del:hover { background: #e0bccb; }
+.wa-del:disabled { opacity: .5; cursor: default; }
+.wa-empty td { text-align: center; color: var(--ink-soft); padding: 22px 8px; }
+
+/* =========================================================
    8. 웨딩 갤러리
    ========================================================= */
 .slider { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }

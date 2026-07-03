@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <title>모바일 화환 관리 · 형원 ♥ 지수</title>
+  <meta name="robots" content="noindex">
+  <meta name="googlebot" content="noindex">
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- 폰트: Pretendard(본문) + Gmarket Sans(제목) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <!-- 관리자 로그인 게이트 (admin.html 과 동일 — Firebase 인증 전까지 화면 가림) -->
+  <div class="admin-gate" id="admin-gate">
+    <form class="admin-login" id="admin-login-form">
+      <h1>모바일 화환 관리</h1>
+      <input type="email" id="admin-email" placeholder="관리자 이메일" autocomplete="username" required>
+      <input type="password" id="admin-pw" placeholder="비밀번호" autocomplete="current-password" required>
+      <button type="submit">로그인</button>
+      <p class="admin-err" id="admin-err"></p>
+    </form>
+  </div>
+
+  <!-- 우측 상단: 방명록 관리자로 돌아가기 -->
+  <a class="admin-nav" href="admin.html">← 방명록 관리</a>
+
+  <main class="paper wreath-admin">
+    <section class="section">
+      <h2 class="title">모바일 화환 관리</h2>
+      <p class="wa-lead">예식장에는 작성순으로 앞의 15개만 세워집니다.<br>삭제하면 뒤의 화환이 한 칸씩 앞으로 당겨져요.</p>
+      <p class="wa-count" id="wa-count">불러오는 중…</p>
+      <div class="wa-table-wrap">
+        <table class="wa-table">
+          <thead>
+            <tr><th>슬롯</th><th>작성자</th><th>축하 문구</th><th>작성일</th><th></th></tr>
+          </thead>
+          <tbody id="wa-body">
+            <tr class="wa-empty"><td colspan="5">불러오는 중…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    // guestbook.js 를 먼저 import — 무가드 initializeApp 이 첫 초기화를 담당하고
+    // wreaths.js 는 getApps() 가드로 재사용한다 (WebHost index.html 과 동일한 순서 규약).
+    import { adminLogin, onAdmin } from "./assets/js/guestbook.js";
+    import { subscribeWreaths, deleteWreath } from "./assets/js/wreaths.js";
+
+    const gate = document.getElementById("admin-gate");
+    const form = document.getElementById("admin-login-form");
+    const errEl = document.getElementById("admin-err");
+    const bodyEl = document.getElementById("wa-body");
+    const countEl = document.getElementById("wa-count");
+    let started = false;
+    let wreaths = [];
+
+    function esc(s) {
+      return (s || "").replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+    function fmt(d) {
+      if (!d) return "방금";
+      return d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate();
+    }
+
+    function render(list) {
+      wreaths = list;
+      countEl.textContent = "총 " + list.length + "개 · 예식장 표시 " + Math.min(list.length, 15) + " / 15";
+      if (!list.length) {
+        bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">아직 등록된 화환이 없어요 💐</td></tr>';
+        return;
+      }
+      bodyEl.innerHTML = list.map((w, i) =>
+        "<tr>" +
+          '<td class="wa-slot' + (i < 15 ? "" : " wa-slot--wait") + '">' + (i < 15 ? (i + 1) + "번" : "대기") + "</td>" +
+          '<td class="wa-who">' + esc(w.author) + "</td>" +
+          '<td class="wa-msg">' + esc(w.message) + "</td>" +
+          '<td class="wa-when">' + fmt(w.at) + "</td>" +
+          '<td><button type="button" class="wa-del" data-del="' + w.id + '">삭제</button></td>' +
+        "</tr>").join("");
+    }
+
+    // 삭제 → onSnapshot 이 자동으로 목록을 다시 그림(수동 갱신 불필요)
+    bodyEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".wa-del");
+      if (!btn) return;
+      const id = btn.getAttribute("data-del");
+      const w = wreaths.find((x) => x.id === id);
+      if (!confirm("'" + ((w && w.author) || "하객") + "'님의 화환을 삭제하시겠습니까?\n뒤의 화환이 한 칸씩 앞으로 당겨집니다.")) return;
+      btn.disabled = true;
+      deleteWreath(id).catch((err) => {
+        console.error(err);
+        btn.disabled = false;
+        alert("삭제에 실패했어요. (로그인/권한 확인)");
+      });
+    });
+
+    onAdmin((user) => {
+      if (user) {
+        gate.hidden = true;
+        if (!started) { started = true; subscribeWreaths(render); }
+      } else {
+        gate.hidden = false;
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errEl.textContent = "";
+      try {
+        await adminLogin(document.getElementById("admin-email").value.trim(),
+                         document.getElementById("admin-pw").value);
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = "로그인 실패: 이메일/비밀번호를 확인하세요.";
+      }
+    });
+  </script>
+</body>
+</html>
