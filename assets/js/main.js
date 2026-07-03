@@ -215,11 +215,11 @@
     });
   })();
 
-  /* ---- 모바일 예식장 입장 버튼 (외부 호스트 URL) ---- */
+  /* ---- 모바일 예식장 입장 버튼 (섹션 버튼 + 떠다니는 FAB, 외부 호스트 URL) ---- */
   (function () {
-    var btn = $(".enter-btn"); if (!btn) return;
+    var btns = $all(".enter-btn, .venue-fab"); if (!btns.length) return;
     if (W.venueUrl && W.venueUrl.indexOf("YOUR-SITE") === -1) {
-      btn.href = W.venueUrl;
+      btns.forEach(function (b) { b.href = W.venueUrl; });
     }
     // venueUrl 미설정 시 기본값(venue.html)은 HTML 의 href 그대로 사용
   })();

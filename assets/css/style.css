@@ -426,6 +426,27 @@ html, body {
   padding: 14px 28px; border-radius: 999px; box-shadow: var(--shadow-sm);
 }
 
+/* ---- 떠다니는 입장 버튼 (FAB) — 스크롤해도 좌측 하단 고정 ---- */
+.venue-fab {
+  position: fixed;
+  left: 16px;   /* max() 미지원 브라우저 폴백 */
+  left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 224px)); /* PC에선 종이 컬럼 안쪽에 */
+  bottom: 16px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  z-index: 90;
+  width: 84px; height: 84px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  text-decoration: none; text-align: center;
+  font-family: var(--font-head); color: #fff;
+  background: linear-gradient(165deg, var(--sea) 0%, var(--sea-dk) 75%);
+  box-shadow: 0 8px 22px rgba(176, 107, 134, .38);
+  animation: fabFloat 3s ease-in-out infinite;
+}
+.venue-fab .fab-sub { font-size: .64rem; font-weight: 500; line-height: 1.2; opacity: .92; }
+.venue-fab .fab-main { font-size: 1.05rem; font-weight: 700; line-height: 1.15; }
+@keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@media (prefers-reduced-motion: reduce) { .venue-fab { animation: none; } }
+
 /* =========================================================
    10. 제작자
    ========================================================= */
