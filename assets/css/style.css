@@ -480,7 +480,11 @@ html, body {
   background: linear-gradient(165deg, var(--sea) 0%, var(--sea-dk) 75%);
   box-shadow: 0 8px 22px rgba(176, 107, 134, .38);
   animation: fabFloat 3s ease-in-out infinite;
+  /* 기본은 숨김 — 표지(스크롤 아이콘)가 화면에서 벗어나면 main.js 가 .is-visible 로 노출 */
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .3s ease, visibility .3s ease;
 }
+.venue-fab.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
 .venue-fab .fab-sub { font-size: .64rem; font-weight: 500; line-height: 1.2; opacity: .92; }
 .venue-fab .fab-main { font-size: 1.05rem; font-weight: 700; line-height: 1.15; }
 @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }

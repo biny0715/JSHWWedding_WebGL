@@ -223,6 +223,17 @@
     }
     // venueUrl 미설정 시 기본값(venue.html)은 HTML 의 href 그대로 사용
 
+    // 리모컨(FAB) 노출 제어: 표지의 스크롤 아이콘(.scroll-hint)이 화면에 보이는 동안(=첫 표지)엔 숨기고,
+    // 아래로 스크롤해 아이콘이 뷰포트를 벗어나면(=인사말 이후) 노출. 위로 올려 표지로 돌아오면 다시 숨김.
+    var fab = $(".venue-fab"), scrollHint = $(".scroll-hint");
+    if (fab && scrollHint && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { fab.classList.toggle("is-visible", !en.isIntersecting); });
+      }, { threshold: 0 }).observe(scrollHint);
+    } else if (fab) {
+      fab.classList.add("is-visible");   // IO 미지원 폴백: 항상 노출
+    }
+
     // 입장 안내 모달: 바로 이동하지 않고 안내 문구 → "입장하기" 를 눌러야 이동.
     // 모달 마크업이 없는 페이지는 기존처럼 바로 이동.
     var modal = $("#venue-notice");
