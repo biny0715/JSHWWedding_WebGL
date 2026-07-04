@@ -226,17 +226,20 @@
     // 리모컨(FAB) 노출 제어: 표지의 스크롤 아이콘(.scroll-hint)이 화면에 보이는 동안(=첫 표지)엔 숨기고,
     // 아래로 스크롤해 아이콘이 뷰포트를 벗어나면(=인사말 이후) 노출. 위로 올려 표지로 돌아오면 다시 숨김.
     var fab = $(".venue-fab"), scrollHint = $(".scroll-hint");
-    if (fab && scrollHint && "IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          // 아이콘이 "위로" 벗어났을 때(아래로 스크롤=인사말 이후)만 노출.
-          // 맨 위에서 당김(고무줄 오버스크롤)으로 아이콘이 뷰포트 아래로 밀려나는 경우(top>0)는 숨김 유지.
-          var goneUp = en.boundingClientRect.top < 0;
-          fab.classList.toggle("is-visible", !en.isIntersecting && goneUp);
-        });
-      }, { threshold: 0 }).observe(scrollHint);
-    } else if (fab) {
-      fab.classList.add("is-visible");   // IO 미지원 폴백: 항상 노출
+    if (fab && scrollHint) {
+      // 스크롤 아이콘이 뷰포트 상단 위로 "완전히" 벗어났을 때(bottom<=0)만 노출.
+      // → 아이콘 및 그 위쪽(표지) 전부 숨김. 인사말 이후부터 노출.
+      //   맨 위 고무줄 오버스크롤(아이콘이 아래로 밀림)도 bottom>0 이라 숨김 유지.
+      var fabTick = false;
+      function updateFab() {
+        fabTick = false;
+        fab.classList.toggle("is-visible", scrollHint.getBoundingClientRect().bottom <= 0);
+      }
+      window.addEventListener("scroll", function () {
+        if (!fabTick) { fabTick = true; window.requestAnimationFrame(updateFab); }
+      }, { passive: true });
+      window.addEventListener("resize", updateFab);
+      updateFab();   // 로드 시 초기 상태(표지 → 숨김)
     }
 
     // 입장 안내 모달: 바로 이동하지 않고 안내 문구 → "입장하기" 를 눌러야 이동.
