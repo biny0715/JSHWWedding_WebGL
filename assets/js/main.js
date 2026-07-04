@@ -228,7 +228,12 @@
     var fab = $(".venue-fab"), scrollHint = $(".scroll-hint");
     if (fab && scrollHint && "IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { fab.classList.toggle("is-visible", !en.isIntersecting); });
+        entries.forEach(function (en) {
+          // 아이콘이 "위로" 벗어났을 때(아래로 스크롤=인사말 이후)만 노출.
+          // 맨 위에서 당김(고무줄 오버스크롤)으로 아이콘이 뷰포트 아래로 밀려나는 경우(top>0)는 숨김 유지.
+          var goneUp = en.boundingClientRect.top < 0;
+          fab.classList.toggle("is-visible", !en.isIntersecting && goneUp);
+        });
       }, { threshold: 0 }).observe(scrollHint);
     } else if (fab) {
       fab.classList.add("is-visible");   // IO 미지원 폴백: 항상 노출
