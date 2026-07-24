@@ -260,6 +260,32 @@
     modal.addEventListener("click", function (e) { if (e.target === modal) closeNotice(); });
   })();
 
+  /* ---- 메인 사진 라이트박스 ---- */
+  (function () {
+    var coverPhoto = $('[data-photo="main"]');
+    var modal = $("#photo-modal");
+    var wrap = $("#photo-modal-wrap");
+    if (!coverPhoto || !modal || !wrap) return;
+
+    function openModal() {
+      var src = coverPhoto.querySelector("img");
+      if (!src) return;
+      wrap.innerHTML = '<img class="photo-modal-img" src="' + esc(src.src) + '" alt="' + esc(src.alt || "웨딩 사진") + '">';
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      wrap.innerHTML = "";
+    }
+
+    coverPhoto.addEventListener("click", openModal);
+    $("#photo-modal-close").addEventListener("click", closeModal);
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+  })();
+
   /* ---- 제작자 ---- */
   (function () {
     var box = $("#makers"); if (!box) return;
