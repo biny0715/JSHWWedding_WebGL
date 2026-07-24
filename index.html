@@ -184,10 +184,19 @@
     </div>
   </div>
 
-  <!-- 메인 사진 확대 모달 (라이트박스) -->
+  <!-- 사진 확대 모달 (커버·프로필 공용) -->
   <div class="photo-modal" id="photo-modal" hidden>
     <button type="button" class="photo-modal-close" id="photo-modal-close" aria-label="닫기">✕</button>
     <div class="photo-modal-img-wrap" id="photo-modal-wrap"></div>
+  </div>
+
+  <!-- 갤러리 라이트박스 모달 -->
+  <div class="gallery-modal" id="gallery-modal" hidden>
+    <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="닫기">✕</button>
+    <button type="button" class="gallery-modal-nav prev" id="gallery-modal-prev" aria-label="이전 사진">‹</button>
+    <div class="gallery-modal-wrap" id="gallery-modal-wrap"></div>
+    <button type="button" class="gallery-modal-nav next" id="gallery-modal-next" aria-label="다음 사진">›</button>
+    <div class="gallery-modal-dots" id="gallery-modal-dots"></div>
   </div>
 
   <!-- 복사 알림 토스트 -->

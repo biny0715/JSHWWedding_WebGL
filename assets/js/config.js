@@ -91,8 +91,8 @@ window.WEDDING = {
    * 예: src: "assets/images/main.jpg"
    */
   mainPhoto: { src: "", alt: "메인 웨딩 사진", ratio: "3 / 4" },
-  groomPhoto: { src: "", alt: "신랑 사진", ratio: "1 / 1" },
-  bridePhoto: { src: "", alt: "신부 사진", ratio: "1 / 1" },
+  groomPhoto: { src: "", alt: "신랑 프로필", ratio: "1 / 1", fullSrc: "", fullAlt: "신랑 전체 사진" },
+  bridePhoto: { src: "", alt: "신부 프로필", ratio: "1 / 1", fullSrc: "", fullAlt: "신부 전체 사진" },
 
   gallery: [
     { src: "", alt: "웨딩 사진 1", ratio: "3 / 4" },

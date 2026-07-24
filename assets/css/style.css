@@ -535,10 +535,13 @@ html, body {
 .copyright { font-family: var(--font-head); font-size: .82rem; color: #8a8378; margin: 0; }
 
 /* =========================================================
-   메인 사진 확대 모달 (라이트박스)
+   사진 확대 모달 (커버·프로필) + 갤러리 라이트박스
    ========================================================= */
-.cover-photo.has-img { cursor: zoom-in; }
+.cover-photo.has-img,
+.profile-photo.has-img { cursor: zoom-in; }
+.slide [data-photo].has-img { cursor: zoom-in; }
 
+/* ---- 커버·프로필 공용 단일 사진 모달 ---- */
 .photo-modal {
   position: fixed; inset: 0; z-index: 300;
   display: flex; align-items: center; justify-content: center;
@@ -562,12 +565,61 @@ html, body {
 }
 .photo-modal-img-wrap img {
   max-width: 100%; max-height: 90vh;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
+  object-fit: contain; border-radius: var(--radius-sm);
   box-shadow: 0 20px 60px rgba(0,0,0,.5);
   animation: photoIn .22s ease;
 }
 @keyframes photoIn { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+
+/* ---- 갤러리 라이트박스 ---- */
+.gallery-modal {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, .92);
+}
+.gallery-modal[hidden] { display: none; }
+.gallery-modal-close {
+  position: fixed; top: 16px; right: 16px;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,.18); color: #fff;
+  font-size: 1.1rem; cursor: pointer; z-index: 301;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: background .2s;
+}
+.gallery-modal-close:hover { background: rgba(255,255,255,.3); }
+.gallery-modal-wrap {
+  width: 100%; max-width: 480px; max-height: 80vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 56px;
+}
+.gallery-modal-wrap img {
+  max-width: 100%; max-height: 80vh;
+  object-fit: contain; border-radius: var(--radius-sm);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  animation: photoIn .18s ease;
+}
+.gallery-modal-nav {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.18); color: #fff;
+  font-size: 1.6rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: background .2s; z-index: 301;
+}
+.gallery-modal-nav:hover { background: rgba(255,255,255,.3); }
+.gallery-modal-nav.prev { left: 14px; }
+.gallery-modal-nav.next { right: 14px; }
+.gallery-modal-dots {
+  display: flex; gap: 7px; margin-top: 16px;
+}
+.gallery-modal-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,.35); transition: background .2s, width .2s;
+}
+.gallery-modal-dot.active { background: #fff; width: 18px; border-radius: 4px; }
 
 /* =========================================================
    토스트

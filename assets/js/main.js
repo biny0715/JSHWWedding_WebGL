@@ -260,17 +260,15 @@
     modal.addEventListener("click", function (e) { if (e.target === modal) closeNotice(); });
   })();
 
-  /* ---- 메인 사진 라이트박스 ---- */
+  /* ---- 사진 라이트박스 (커버·프로필 공용) ---- */
   (function () {
-    var coverPhoto = $('[data-photo="main"]');
     var modal = $("#photo-modal");
-    var wrap = $("#photo-modal-wrap");
-    if (!coverPhoto || !modal || !wrap) return;
+    var wrap  = $("#photo-modal-wrap");
+    if (!modal || !wrap) return;
 
-    function openModal() {
-      var src = coverPhoto.querySelector("img");
+    function openModal(src, alt) {
       if (!src) return;
-      wrap.innerHTML = '<img class="photo-modal-img" src="' + esc(src.src) + '" alt="' + esc(src.alt || "웨딩 사진") + '">';
+      wrap.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt || "") + '">';
       modal.hidden = false;
       document.body.style.overflow = "hidden";
     }
@@ -280,10 +278,112 @@
       wrap.innerHTML = "";
     }
 
-    coverPhoto.addEventListener("click", openModal);
+    // 커버 메인 사진
+    var coverEl = $('[data-photo="main"]');
+    if (coverEl) {
+      coverEl.addEventListener("click", function () {
+        var img = coverEl.querySelector("img");
+        if (img) openModal(img.src, img.alt);
+      });
+    }
+
+    // 신랑·신부 프로필 (fullSrc 있으면 전체샷, 없으면 프로필 원본)
+    [
+      { key: "groom", photo: W.groomPhoto },
+      { key: "bride", photo: W.bridePhoto },
+    ].forEach(function (item) {
+      var el = $('[data-photo="' + item.key + '"]');
+      if (!el || !item.photo) return;
+      el.addEventListener("click", function () {
+        var p = item.photo;
+        var src = p.fullSrc || p.src;
+        var alt = p.fullAlt || p.alt;
+        openModal(src, alt);
+      });
+    });
+
     $("#photo-modal-close").addEventListener("click", closeModal);
     modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+  })();
+
+  /* ---- 갤러리 라이트박스 ---- */
+  (function () {
+    var modal  = $("#gallery-modal");
+    var wrap   = $("#gallery-modal-wrap");
+    var dotsEl = $("#gallery-modal-dots");
+    if (!modal || !wrap) return;
+
+    var items = W.gallery || [];
+    var cur   = 0;
+
+    function renderDots() {
+      if (!dotsEl) return;
+      dotsEl.innerHTML = items.map(function (_, i) {
+        return '<span class="gallery-modal-dot' + (i === cur ? " active" : "") + '"></span>';
+      }).join("");
+    }
+
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      var p = items[cur];
+      wrap.innerHTML = p && p.src
+        ? '<img src="' + esc(p.src) + '" alt="' + esc(p.alt || "") + '">'
+        : '<span style="color:#fff;font-size:.9rem">사진 준비 중</span>';
+      if (dotsEl) {
+        Array.prototype.forEach.call(dotsEl.children, function (d, i) {
+          d.classList.toggle("active", i === cur);
+        });
+      }
+    }
+
+    function openGallery(startIdx) {
+      renderDots();
+      show(startIdx);
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeGallery() {
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      wrap.innerHTML = "";
+    }
+
+    // 갤러리 슬라이드 클릭
+    var track = $("#gallery-track");
+    if (track) {
+      track.addEventListener("click", function (e) {
+        var slide = e.target.closest(".slide");
+        if (!slide) return;
+        var slides = Array.prototype.slice.call(track.querySelectorAll(".slide"));
+        var i = slides.indexOf(slide);
+        if (i >= 0) openGallery(i);
+      });
+    }
+
+    $("#gallery-modal-close").addEventListener("click", closeGallery);
+    $("#gallery-modal-prev").addEventListener("click", function () { show(cur - 1); });
+    $("#gallery-modal-next").addEventListener("click", function () { show(cur + 1); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeGallery(); });
+
+    // 키보드 네비게이션
+    document.addEventListener("keydown", function (e) {
+      if (modal.hidden) return;
+      if (e.key === "Escape")     closeGallery();
+      if (e.key === "ArrowLeft")  show(cur - 1);
+      if (e.key === "ArrowRight") show(cur + 1);
+    });
+
+    // 터치 스와이프
+    var x0 = null;
+    wrap.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener("touchend",   function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
   })();
 
   /* ---- 제작자 ---- */
