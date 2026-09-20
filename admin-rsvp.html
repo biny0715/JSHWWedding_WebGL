@@ -39,10 +39,26 @@
       <h2 class="title">참석 여부 관리</h2>
       <p class="wa-lead">하객이 전달한 참석 의사 목록입니다.</p>
       <p class="wa-count" id="wa-count">불러오는 중…</p>
+      <div class="wa-toolbar">
+        <label class="wa-filter">
+          구분 필터
+          <select id="wa-filter-side">
+            <option value="all">전체</option>
+            <option value="groom">신랑측</option>
+            <option value="bride">신부측</option>
+          </select>
+        </label>
+      </div>
       <div class="wa-table-wrap">
         <table class="wa-table">
           <thead>
-            <tr><th>이름</th><th>구분</th><th>인원</th><th>작성일</th><th></th></tr>
+            <tr>
+              <th class="wa-sort" data-sort="name">이름<span class="wa-sort-ic"></span></th>
+              <th class="wa-sort" data-sort="side">구분<span class="wa-sort-ic"></span></th>
+              <th class="wa-sort" data-sort="count">인원<span class="wa-sort-ic"></span></th>
+              <th class="wa-sort" data-sort="at">작성일<span class="wa-sort-ic"></span></th>
+              <th></th>
+            </tr>
           </thead>
           <tbody id="wa-body">
             <tr class="wa-empty"><td colspan="5">불러오는 중…</td></tr>
@@ -63,8 +79,12 @@
     const errEl = document.getElementById("admin-err");
     const bodyEl = document.getElementById("wa-body");
     const countEl = document.getElementById("wa-count");
+    const filterSel = document.getElementById("wa-filter-side");
     let started = false;
-    let rsvps = [];
+    let allRsvps = [];       // Firestore 전체 목록(항상 최신순으로 들어옴)
+    let sortKey = "at";      // 필터/정렬 안 건드리면 작성일 최신순 기본값
+    let sortDir = "desc";
+    let filterSide = "all";
 
     function esc(s) {
       return (s || "").replace(/[&<>"']/g, (c) =>
@@ -76,32 +96,76 @@
     }
     function sideLabel(side) { return side === "groom" ? "신랑측" : side === "bride" ? "신부측" : "-"; }
 
-    function render(list) {
-      rsvps = list;
-      const totalGuests = list.reduce((sum, r) => sum + (r.count || 0), 0);
-      const groomGuests = list.filter((r) => r.side === "groom").reduce((sum, r) => sum + (r.count || 0), 0);
-      const brideGuests = list.filter((r) => r.side === "bride").reduce((sum, r) => sum + (r.count || 0), 0);
-      countEl.textContent = "총 " + list.length + "건 · " + totalGuests + "명 (신랑측 " + groomGuests + "명 · 신부측 " + brideGuests + "명)";
-      if (!list.length) {
-        bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">아직 전달된 참석 의사가 없어요</td></tr>';
-        return;
-      }
-      bodyEl.innerHTML = list.map((r) =>
-        "<tr>" +
-          '<td class="wa-who">' + esc(r.name) + "</td>" +
-          '<td>' + sideLabel(r.side) + "</td>" +
-          '<td>' + r.count + "명</td>" +
-          '<td class="wa-when">' + fmt(r.at) + "</td>" +
-          '<td><button type="button" class="wa-del" data-del="' + r.id + '">삭제</button></td>' +
-        "</tr>").join("");
+    function sortValue(r, key) {
+      if (key === "name") return r.name || "";
+      if (key === "side") return sideLabel(r.side);
+      if (key === "count") return r.count || 0;
+      return r.at ? r.at.getTime() : 0; // at
     }
+
+    function updateSortIndicators() {
+      document.querySelectorAll(".wa-sort").forEach((th) => {
+        const ic = th.querySelector(".wa-sort-ic");
+        if (th.getAttribute("data-sort") === sortKey) {
+          th.classList.add("active");
+          ic.textContent = sortDir === "asc" ? "▲" : "▼";
+        } else {
+          th.classList.remove("active");
+          ic.textContent = "";
+        }
+      });
+    }
+
+    function applyAndRender() {
+      // 요약(총 건수/인원)은 필터와 무관하게 항상 전체 기준
+      const totalGuests = allRsvps.reduce((sum, r) => sum + (r.count || 0), 0);
+      const groomGuests = allRsvps.filter((r) => r.side === "groom").reduce((sum, r) => sum + (r.count || 0), 0);
+      const brideGuests = allRsvps.filter((r) => r.side === "bride").reduce((sum, r) => sum + (r.count || 0), 0);
+      countEl.textContent = "총 " + allRsvps.length + "건 · " + totalGuests + "명 (신랑측 " + groomGuests + "명 · 신부측 " + brideGuests + "명)";
+
+      let list = filterSide === "all" ? allRsvps.slice() : allRsvps.filter((r) => r.side === filterSide);
+      list.sort((a, b) => {
+        const av = sortValue(a, sortKey), bv = sortValue(b, sortKey);
+        const cmp = typeof av === "string" ? av.localeCompare(bv, "ko") : av - bv;
+        return sortDir === "asc" ? cmp : -cmp;
+      });
+
+      if (!list.length) {
+        bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">' +
+          (allRsvps.length ? "이 조건에 해당하는 참석 의사가 없어요" : "아직 전달된 참석 의사가 없어요") + "</td></tr>";
+      } else {
+        bodyEl.innerHTML = list.map((r) =>
+          "<tr>" +
+            '<td class="wa-who">' + esc(r.name) + "</td>" +
+            '<td>' + sideLabel(r.side) + "</td>" +
+            '<td>' + r.count + "명</td>" +
+            '<td class="wa-when">' + fmt(r.at) + "</td>" +
+            '<td><button type="button" class="wa-del" data-del="' + r.id + '">삭제</button></td>' +
+          "</tr>").join("");
+      }
+      updateSortIndicators();
+    }
+
+    document.querySelectorAll(".wa-sort").forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.getAttribute("data-sort");
+        if (sortKey === key) { sortDir = sortDir === "asc" ? "desc" : "asc"; }
+        else { sortKey = key; sortDir = key === "at" ? "desc" : "asc"; }
+        applyAndRender();
+      });
+    });
+
+    filterSel.addEventListener("change", () => {
+      filterSide = filterSel.value;
+      applyAndRender();
+    });
 
     // 삭제 → onSnapshot 이 자동으로 목록을 다시 그림(수동 갱신 불필요)
     bodyEl.addEventListener("click", (e) => {
       const btn = e.target.closest(".wa-del");
       if (!btn) return;
       const id = btn.getAttribute("data-del");
-      const r = rsvps.find((x) => x.id === id);
+      const r = allRsvps.find((x) => x.id === id);
       if (!confirm("'" + ((r && r.name) || "하객") + "'님의 참석 의사를 삭제하시겠습니까?")) return;
       btn.disabled = true;
       deleteRsvp(id).catch((err) => {
@@ -114,7 +178,10 @@
     onAdmin((user) => {
       if (user) {
         gate.hidden = true;
-        if (!started) { started = true; subscribeRsvps(render); }
+        if (!started) {
+          started = true;
+          subscribeRsvps((list) => { allRsvps = list; applyAndRender(); });
+        }
       } else {
         gate.hidden = false;
       }
