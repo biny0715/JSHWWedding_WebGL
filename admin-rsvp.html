@@ -57,11 +57,10 @@
               <th class="wa-sort" data-sort="side">구분<span class="wa-sort-ic"></span></th>
               <th class="wa-sort" data-sort="count">인원<span class="wa-sort-ic"></span></th>
               <th class="wa-sort" data-sort="at">작성일<span class="wa-sort-ic"></span></th>
-              <th></th>
             </tr>
           </thead>
           <tbody id="wa-body">
-            <tr class="wa-empty"><td colspan="5">불러오는 중…</td></tr>
+            <tr class="wa-empty"><td colspan="4">불러오는 중…</td></tr>
           </tbody>
         </table>
       </div>
@@ -131,7 +130,7 @@
       });
 
       if (!list.length) {
-        bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">' +
+        bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="4">' +
           (allRsvps.length ? "이 조건에 해당하는 참석 의사가 없어요" : "아직 전달된 참석 의사가 없어요") + "</td></tr>";
       } else {
         bodyEl.innerHTML = list.map((r) =>
@@ -139,8 +138,8 @@
             '<td class="wa-who">' + esc(r.name) + "</td>" +
             '<td>' + sideLabel(r.side) + "</td>" +
             '<td>' + r.count + "명</td>" +
-            '<td class="wa-when">' + fmt(r.at) + "</td>" +
-            '<td><button type="button" class="wa-del" data-del="' + r.id + '">삭제</button></td>' +
+            '<td class="wa-when">' + fmt(r.at) +
+              ' <button type="button" class="wa-del" data-del="' + r.id + '">삭제</button></td>' +
           "</tr>").join("");
       }
       updateSortIndicators();

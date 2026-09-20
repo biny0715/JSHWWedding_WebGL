@@ -223,9 +223,13 @@
     }).join("");
     var dots = $all(".dot", dotsEl);
 
+    function setTrack(px, withTransition) {
+      track.style.transition = withTransition ? "transform .35s ease" : "none";
+      track.style.transform = "translateX(calc(" + (-idx * 100) + "% + " + px + "px))";
+    }
     function go(i) {
       idx = (i + n) % n;
-      track.style.transform = "translateX(" + (-idx * 100) + "%)";
+      setTrack(0, true);
       dots.forEach(function (d, di) { d.classList.toggle("active", di === idx); });
     }
     $("#g-prev").addEventListener("click", function () { go(idx - 1); });
@@ -233,14 +237,23 @@
     dotsEl.addEventListener("click", function (e) {
       var d = e.target.closest(".dot"); if (d) go(Number(d.getAttribute("data-i")));
     });
-    // 터치 스와이프
-    var x0 = null;
-    track.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅
+    var x0 = null, dragging = false;
+    track.addEventListener("touchstart", function (e) {
+      x0 = e.touches[0].clientX;
+      dragging = true;
+    }, { passive: true });
+    track.addEventListener("touchmove", function (e) {
+      if (!dragging) return;
+      setTrack(e.touches[0].clientX - x0, false);
+    }, { passive: true });
     track.addEventListener("touchend", function (e) {
-      if (x0 === null) return;
+      if (!dragging) return;
+      dragging = false;
       var dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
       x0 = null;
+      if (Math.abs(dx) > track.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
+      else go(idx);
     });
   })();
 
