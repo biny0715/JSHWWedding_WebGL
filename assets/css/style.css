@@ -160,13 +160,13 @@ html, body {
 .cover-sky {
   position: absolute; inset: 0;
   background:
-    radial-gradient(120% 60% at 50% -10%, #fffaf8 0%, var(--sky) 50%, #efe2e6 100%);
+    radial-gradient(120% 60% at 50% -10%, #fffaf8 0%, #f8d7e0 50%, #f3cbd7 100%);
   z-index: 0;
 }
 .cover-sky::after { /* 바다 물결 느낌 */
   content: "";
   position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
-  background: radial-gradient(120% 100% at 50% 100%, var(--sea) 0%, transparent 70%);
+  background: radial-gradient(120% 100% at 50% 100%, #e8a9bf 0%, transparent 70%);
   opacity: .35;
 }
 .cover-photo {
