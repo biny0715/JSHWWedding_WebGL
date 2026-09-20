@@ -483,6 +483,14 @@ html, body {
 .wa-table th.wa-sort:hover { background: var(--grass); }
 .wa-table th.wa-sort.active { color: var(--ink); }
 .wa-sort-ic { display: inline-block; margin-left: 4px; font-size: .7rem; }
+/* 참석여부 테이블: 칼럼 폭 고정(삭제 버튼 칼럼이 남는 공간을 먹어 밀리는 문제 방지) */
+.wa-table--rsvp { table-layout: fixed; }
+.wa-table--rsvp th:nth-child(1), .wa-table--rsvp td:nth-child(1) { width: 26%; }
+.wa-table--rsvp th:nth-child(2), .wa-table--rsvp td:nth-child(2) { width: 16%; }
+.wa-table--rsvp th:nth-child(3), .wa-table--rsvp td:nth-child(3) { width: 14%; }
+.wa-table--rsvp th:nth-child(4), .wa-table--rsvp td:nth-child(4) { width: 24%; }
+.wa-table--rsvp th:nth-child(5), .wa-table--rsvp td:nth-child(5) { width: 64px; }
+.wa-table--rsvp .wa-who, .wa-table--rsvp .wa-when { white-space: normal; overflow-wrap: anywhere; }
 .wa-table td { border-top: 1px solid var(--line); padding: 10px 8px; text-align: left; vertical-align: top; }
 .wa-slot { white-space: nowrap; text-align: center; color: var(--sea-dk); font-weight: 700; }
 .wa-slot--wait { color: var(--ink-soft); font-weight: 500; }
