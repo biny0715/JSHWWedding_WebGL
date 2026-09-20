@@ -78,6 +78,27 @@
     else el.style.display = "none";
   });
 
+  /* ---- 예식장 TEL: 바로 걸리지 않도록 확인 모달 거쳐서 연결 ---- */
+  (function () {
+    var telLink = $("#venue-tel-link");
+    var modal = $("#tel-notice");
+    if (!telLink || !modal) return;
+    var textEl = $("#tel-notice-text");
+    var callBtn = $("#tel-notice-call");
+    function closeTelNotice() { modal.hidden = true; document.body.style.overflow = ""; }
+    telLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      var number = telLink.textContent.replace(/^TEL\s*/, "").trim();
+      textEl.textContent = (get("venue.name") || "") + "(" + number + ")로 전화를 거시겠습니까?";
+      callBtn.href = telLink.href;
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+    });
+    callBtn.addEventListener("click", closeTelNotice);
+    $("#tel-notice-close").addEventListener("click", closeTelNotice);
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeTelNotice(); });
+  })();
+
   /* ---- 오시는 길: 길찾기 앱 링크 ---- */
   (function () {
     var v = W.venue, q = encodeURIComponent(v.mapQuery || v.name);

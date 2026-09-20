@@ -122,7 +122,7 @@
         <span data-bind="venue.address"></span>
         <button class="mini-copy" data-copy-bind="venue.address">복사</button>
       </p>
-      <p class="map-tel"><a data-call="venue.tel" href="#">TEL <span data-bind="venue.tel">062-226-5900</span></a></p>
+      <p class="map-tel"><a id="venue-tel-link" data-call="venue.tel" href="#">TEL <span data-bind="venue.tel">062-226-5900</span></a></p>
       <div class="map-apps">
         <a class="map-app" data-map="kakao" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">카카오맵</a>
         <a class="map-app" data-map="naver" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">네이버지도</a>
@@ -223,6 +223,16 @@
         일부 스마트폰에서는 원활하게 동작하지 않을 수 있습니다
       </p>
       <a class="notice-enter" id="venue-notice-enter" href="venue.html">입장하기</a>
+    </div>
+  </div>
+
+  <!-- 전화 연결 확인 모달 — 예식장 TEL 클릭 시 표시, "전화 걸기"를 눌러야 다이얼 연결 -->
+  <div class="notice-modal" id="tel-notice" hidden>
+    <div class="notice-card" role="dialog" aria-modal="true" aria-label="전화 연결 확인">
+      <button type="button" class="notice-close" id="tel-notice-close" aria-label="닫기">✕</button>
+      <p class="notice-eyebrow">전화 연결</p>
+      <p class="notice-text" id="tel-notice-text">전화를 거시겠습니까?</p>
+      <a class="notice-enter" id="tel-notice-call" href="#">전화 걸기</a>
     </div>
   </div>
 
