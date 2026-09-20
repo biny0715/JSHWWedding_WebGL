@@ -11,6 +11,7 @@ window.WEDDING = {
   groom: {
     name: "김형원",
     short: "형원",
+    eng: "Hyungwon",
     role: "신랑",
     desc: "목포 바다처럼 넓은 마음을 가진", // TODO: 소개 문구 다듬기
     phone: "010-2820-2131", // TODO
@@ -18,21 +19,23 @@ window.WEDDING = {
   bride: {
     name: "박지수",
     short: "지수",
+    eng: "Jisoo",
     role: "신부",
     desc: "누구보다 따뜻한 마음을 가진", // TODO: 소개 문구 다듬기
     phone: "010-0000-0000", // TODO
   },
 
   date: {
-    iso: "2026-11-08T11:00:00+09:00", // TODO: 정확한 예식 시간
+    iso: "2026-11-08T13:00:00+09:00",
     text: "2026년 11월 8일 일요일",
-    timeText: "오전 11시", // TODO
+    timeText: "오후 1시",
   },
 
   venue: {
     name: "운림제",
     detail: "광주광역시 운림제 · 야외 한옥 예식장",
-    address: "광주 동구 동산길 29",
+    address: "광주 동구 운림동 455",
+    tel: "062-226-5900",
     lat: 35.1308,
     lng: 126.9483,
     mapQuery: "운림제 광주",
@@ -48,8 +51,8 @@ window.WEDDING = {
 
   /* ---- 혼주 정보 ---- */
   parents: {
-    groom: { father: "김○○", mother: "○○○" }, // TODO
-    bride: { father: "○○○", mother: "김경미" }, // TODO
+    groom: { father: "김종성", mother: "오현희" },
+    bride: { father: "박세용", mother: "김경미" },
   },
 
   /* ---- 마음 전하기 (계좌) ---- */
@@ -63,10 +66,16 @@ window.WEDDING = {
         holder: "김형원",
       },
       {
-        label: "신랑 측 혼주",
+        label: "신랑 측 아버지",
         bank: "○○은행",
         number: "000-0000-0000-00",
-        holder: "김○○",
+        holder: "김종성",
+      },
+      {
+        label: "신랑 측 어머니",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "오현희",
       },
     ],
     bride: [
@@ -77,7 +86,13 @@ window.WEDDING = {
         holder: "박지수",
       },
       {
-        label: "신부 측 혼주",
+        label: "신부 측 아버지",
+        bank: "○○은행",
+        number: "000-0000-0000-00",
+        holder: "박세용",
+      },
+      {
+        label: "신부 측 어머니",
         bank: "○○은행",
         number: "000-0000-0000-00",
         holder: "김경미",
@@ -90,7 +105,11 @@ window.WEDDING = {
    * 실제 사진을 assets/images/ 에 넣고 경로를 채우면 자동으로 사진이 나옵니다.
    * 예: src: "assets/images/main.jpg"
    */
-  mainPhoto: { src: "", alt: "메인 웨딩 사진", ratio: "3 / 4" },
+  mainPhoto: {
+    srcs: ["assets/images/main-1.jpg", "assets/images/main-2.jpg"], // 랜덤으로 하나 표시 (main.js)
+    alt: "메인 웨딩 사진",
+    ratio: "3 / 4",
+  },
   groomPhoto: { src: "", alt: "신랑 사진", ratio: "1 / 1" },
   bridePhoto: { src: "", alt: "신부 사진", ratio: "1 / 1" },
 
@@ -108,6 +127,9 @@ window.WEDDING = {
    */
   venueUrl: "https://pub-e2f0473c1db44b0ea4d9059179c8ff75.r2.dev/index.html", // Cloudflare R2 (무료 무제한 트래픽)
 
+  /* ---- 축하화환 업체 주문 링크 ---- */
+  wreathUrl: "", // TODO: 화환 업체 링크 확정되면 채우기
+
   /* ---- 제작자 ---- */
   makers: [
     { role: "개발", name: "어경빈", contact: "" },
@@ -120,8 +142,12 @@ window.WEDDING = {
 
   /* ---- 인사말 ---- */
   greeting:
-    "바다 건너 섬 하나,\n" +
-    "그 위에 작은 한옥 마당을 지었습니다.\n" +
-    "두 사람이 함께 걷기로 한 첫날,\n" +
-    "귀한 걸음으로 축복해 주세요.",
+    "만화 같은 신랑과\n" +
+    "동화같은 신부가 만나\n" +
+    "\n" +
+    "드라마를 만들며 만난 두 사람이\n" +
+    "이번에는 우리의 이야기를 써 내려갑니다.\n" +
+    "\n" +
+    "푸른 하늘 아래 시작되는\n" +
+    "저희의 첫 장면을 함께해 주세요.",
 };

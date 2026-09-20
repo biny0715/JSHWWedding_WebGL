@@ -57,11 +57,37 @@
       img.onload = function () { el.innerHTML = ""; el.appendChild(img); el.classList.add("has-img"); };
     }
   }
-  var photoMap = { main: W.mainPhoto, groom: W.groomPhoto, bride: W.bridePhoto };
+  // 메인 표지 사진: srcs 배열이 있으면 그중 하나를 랜덤으로 선택
+  function pickMain(photo) {
+    if (photo && photo.srcs && photo.srcs.length) {
+      var src = photo.srcs[Math.floor(Math.random() * photo.srcs.length)];
+      return { src: src, alt: photo.alt, ratio: photo.ratio };
+    }
+    return photo;
+  }
+  var photoMap = { main: pickMain(W.mainPhoto), groom: W.groomPhoto, bride: W.bridePhoto };
   $all("[data-photo]").forEach(function (el) {
     var key = el.getAttribute("data-photo");
     if (photoMap[key]) fillPhoto(el, photoMap[key]);
   });
+
+  /* ---- 표지 사진 확대보기 (라이트박스) ---- */
+  (function () {
+    var photoEl = $(".cover-photo");
+    var lb = $("#photo-lightbox"), lbImg = $("#lightbox-img"), lbClose = $("#lightbox-close");
+    if (!photoEl || !lb) return;
+    photoEl.addEventListener("click", function () {
+      var img = photoEl.querySelector("img");
+      if (!img) return;
+      lbImg.src = img.src;
+      lbImg.alt = img.alt || "";
+      lb.hidden = false;
+      document.body.style.overflow = "hidden";
+    });
+    function closeLightbox() { lb.hidden = true; document.body.style.overflow = ""; }
+    lbClose.addEventListener("click", closeLightbox);
+    lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
+  })();
 
   /* ---- 전화 버튼 ---- */
   $all("[data-call]").forEach(function (el) {
@@ -133,15 +159,15 @@
     var box = $("#family-grid"); if (!box) return;
     var p = W.parents;
     var sides = [
-      { label: "신랑 측", who: p.groom, child: W.groom.name },
-      { label: "신부 측", who: p.bride, child: W.bride.name },
+      { label: "신랑 측", who: p.groom, childLabel: "신랑", child: W.groom.name },
+      { label: "신부 측", who: p.bride, childLabel: "신부", child: W.bride.name },
     ];
     box.innerHTML = sides.map(function (s) {
       return '<div class="family-card">' +
         '<p class="family-side">' + esc(s.label) + '</p>' +
         '<p class="family-people"><span class="rel">아버지</span><b>' + esc(s.who.father) + '</b></p>' +
         '<p class="family-people"><span class="rel">어머니</span><b>' + esc(s.who.mother) + '</b></p>' +
-        '<p class="family-people"><span class="rel">자녀</span><b>' + esc(s.child) + '</b></p>' +
+        '<p class="family-people"><span class="rel">' + esc(s.childLabel) + '</span><b>' + esc(s.child) + '</b></p>' +
         '</div>';
     }).join("");
   })();
@@ -258,6 +284,47 @@
     });
     $("#venue-notice-close").addEventListener("click", closeNotice);
     modal.addEventListener("click", function (e) { if (e.target === modal) closeNotice(); });
+  })();
+
+  /* ---- 축하화환 보내기 링크 ---- */
+  (function () {
+    var a = $("#wreath-link"); if (!a) return;
+    if (W.wreathUrl) {
+      a.href = W.wreathUrl;
+    } else {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        toast("화환 주문 링크는 준비 중입니다");
+      });
+    }
+  })();
+
+  /* ---- 참석 여부 확인 (양식만 — 제출은 추후 Firebase 연동) ---- */
+  (function () {
+    var form = $("#rsvp-form"); if (!form) return;
+
+    // 토글 버튼(신랑측/신부측, 식사 여부): 그룹 내 단일 선택
+    $all(".rsvp-toggle", form).forEach(function (group) {
+      $all(".rsvp-opt", group).forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          $all(".rsvp-opt", group).forEach(function (b) { b.classList.remove("active"); });
+          btn.classList.add("active");
+        });
+      });
+    });
+
+    // 참석 인원 카운터
+    var countEl = $("#rsvp-count", form);
+    var count = 1;
+    function renderCount() { countEl.textContent = count + "명"; }
+    $("#rsvp-minus", form).addEventListener("click", function () { if (count > 1) { count--; renderCount(); } });
+    $("#rsvp-plus", form).addEventListener("click", function () { if (count < 20) { count++; renderCount(); } });
+
+    // 제출: Firebase 연동 전까지는 임시 안내만
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      toast("참석 의사 전달 기능은 곧 연결될 예정입니다");
+    });
   })();
 
   /* ---- 제작자 ---- */

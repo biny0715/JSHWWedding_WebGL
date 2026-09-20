@@ -17,6 +17,27 @@
   font-weight: 500;
   font-display: swap;
 }
+/* ---- 이름(형원♥지수) 필기체 ---- */
+@font-face {
+  font-family: "PlaylistScript";
+  src: url("../fonts/PlaylistScript.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+/* ---- CAST 문구 손글씨 (나눔손글씨 암스테르담) ---- */
+@font-face {
+  font-family: "NanumAmsterdam";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_01@1.0/Amsterdam.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+/* ---- 날짜/장소 손글씨 (나눔손글씨 신혼부부) ---- */
+@font-face {
+  font-family: "NanumSinHonBuBu";
+  src: url("https://cdn.jsdelivr.net/gh/fonts-archive/NanumSinHonBuBu/NanumSinHonBuBu.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
 
 /* ---- 디자인 토큰 ---- */
 :root {
@@ -154,8 +175,17 @@ html, body {
   width: 74%;
   aspect-ratio: 3 / 4;
   box-shadow: var(--shadow);
-  border: 6px solid #fff;
-  border-radius: var(--radius);
+  border: 6px solid #ad8d87;
+  border-radius: 50%; /* 타원형 프레임 */
+  cursor: pointer;
+}
+.cover-eng-title {
+  position: relative; z-index: 1;
+  font-family: "Allura", cursive;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--sea-dk);
+  margin: 0 0 22px;
 }
 .cover-caption { position: relative; z-index: 1; margin-top: 30px; }
 .cover-eyebrow {
@@ -166,16 +196,16 @@ html, body {
   margin: 0 0 10px;
 }
 .cover-names {
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 2.6rem;
+  font-family: "PlaylistScript", cursive;
+  font-weight: 400;
+  font-size: 3.2rem;
   margin: 0;
   color: var(--ink);
   display: flex; align-items: center; justify-content: center; gap: 14px;
 }
 .cover-names em { color: var(--coral); font-style: normal; font-size: 1.8rem; }
-.cover-date { margin: 16px 0 2px; font-weight: 600; }
-.cover-place { margin: 0; color: var(--ink-soft); }
+.cover-date { margin: 16px 0 2px; font-weight: 600; font-family: "NanumSinHonBuBu", var(--font-head); font-size: 1.2rem; }
+.cover-place { margin: 4px 0 0; color: var(--sea-dk); font-family: "NanumSinHonBuBu", var(--font-head); font-weight: 700; font-size: 1.5rem; }
 
 .scroll-hint {
   position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
@@ -189,21 +219,43 @@ html, body {
 }
 @keyframes scrollDot { 0%{opacity:0;transform:translateY(0)} 40%{opacity:1} 100%{opacity:0;transform:translateY(12px)} }
 
+/* ---- 표지 첫 등장 애니메이션 (순차적으로 하나씩 나타남) ---- */
+@keyframes coverFadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes coverPhotoIn  { from { opacity: 0; transform: scale(.92); }        to { opacity: 1; transform: scale(1); } }
+@keyframes coverFadeUp   { from { opacity: 0; transform: translateY(18px); }  to { opacity: 1; transform: none; } }
+
+.cover-eng-title { opacity: 0; animation: coverFadeDown .8s ease .1s forwards; }
+.cover-photo     { opacity: 0; animation: coverPhotoIn .9s cubic-bezier(.22,.8,.32,1) .35s forwards; }
+.cover-names     { opacity: 0; animation: coverFadeUp .8s ease .9s forwards; }
+.cover-date      { opacity: 0; animation: coverFadeUp .8s ease 1.1s forwards; }
+.cover-place     { opacity: 0; animation: coverFadeUp .8s ease 1.25s forwards; }
+.cover .scroll-hint { opacity: 0; animation: scrollHintIn .8s ease 1.55s forwards; }
+@keyframes scrollHintIn { from { opacity: 0; transform: translateY(18px); } to { opacity: .5; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-eng-title, .cover-photo, .cover-names, .cover-date, .cover-place, .cover .scroll-hint {
+    opacity: 1; animation: none; transform: none;
+  }
+}
+
 /* =========================================================
    인사말
    ========================================================= */
-.greeting { background: #fff; }
+.greeting { background: var(--paper); }
 .greeting-text {
   white-space: pre-line;
-  font-size: 1.02rem;
+  font-family: "Nanum Pen Script", var(--font-body);
+  font-size: 1.35rem;
+  line-height: 1.6;
   color: var(--ink);
   margin: 0 0 26px;
 }
 .couple-line {
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  font-family: var(--font-head); font-weight: 500; font-size: 1.1rem;
+  font-family: "NanumAmsterdam", var(--font-head); font-weight: 400; font-size: 1.3rem;
 }
 .couple-line i { font-style: normal; color: var(--ink-soft); font-size: .85rem; }
+.couple-cast { color: var(--ink-soft); font-size: 1rem; }
 
 /* =========================================================
    2. 신랑 & 신부
@@ -226,7 +278,7 @@ html, body {
 /* =========================================================
    3. 예식 안내
    ========================================================= */
-.when { background: #fff; }
+.when { background: var(--paper); }
 .when-card {
   border: 1px solid var(--line); border-radius: var(--radius);
   padding: 26px 20px; background: var(--sand);
@@ -249,6 +301,8 @@ html, body {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   font-size: .92rem; color: var(--ink); margin: 0 0 16px; flex-wrap: wrap;
 }
+.map-tel { margin: -10px 0 16px; font-size: .9rem; color: var(--ink-soft); }
+.map-tel a { color: var(--sea-dk); font-weight: 700; text-decoration: none; }
 .mini-copy {
   font-size: .74rem; border: 1px solid var(--line); background: #fff;
   border-radius: 999px; padding: 3px 10px; color: var(--ink-soft); cursor: pointer;
@@ -523,6 +577,74 @@ html, body {
   box-shadow: var(--shadow-sm);
 }
 @media (prefers-reduced-motion: reduce) { .notice-card { animation: none; } }
+
+/* ---- 사진 확대보기 (라이트박스) ---- */
+.photo-lightbox {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(20, 16, 18, .88);
+}
+.photo-lightbox[hidden] { display: none; }
+.lightbox-img {
+  max-width: 100%; max-height: 100%;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  animation: noticeIn .22s ease;
+}
+.lightbox-close {
+  position: fixed; top: 18px; right: 18px; z-index: 301;
+  width: 38px; height: 38px; border: none; border-radius: 50%;
+  background: rgba(255,255,255,.92); color: var(--ink);
+  font-size: 1rem; line-height: 1; cursor: pointer;
+}
+
+/* =========================================================
+   7. 축하화환 보내기
+   ========================================================= */
+.wreath-card {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px; box-shadow: var(--shadow-sm);
+}
+.wreath-ico { font-size: 1.8rem; line-height: 1; flex: none; }
+.wreath-desc { flex: 1; font-size: .96rem; }
+.wreath-arrow { font-size: 1.4rem; color: var(--sea-dk); flex: none; }
+
+/* =========================================================
+   8. 참석 여부 확인
+   ========================================================= */
+.rsvp-lead { color: var(--ink-soft); font-size: .92rem; margin: -10px 0 22px; }
+.rsvp-form { display: grid; gap: 18px; text-align: left; }
+.rsvp-field { display: grid; gap: 8px; }
+.rsvp-label { font-size: .86rem; font-weight: 600; color: var(--ink); }
+.rsvp-label em { color: var(--coral); font-style: normal; }
+.rsvp-label small { font-weight: 500; color: var(--ink-soft); }
+.rsvp-field input[type="text"], .rsvp-field textarea {
+  font-family: inherit; font-size: .95rem; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper);
+  resize: none; color: var(--ink);
+}
+.rsvp-field input:focus, .rsvp-field textarea:focus { outline: 2px solid var(--sea); border-color: transparent; }
+.rsvp-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rsvp-opt {
+  font-family: inherit; font-size: .92rem; font-weight: 600; padding: 12px 0; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; color: var(--ink-soft);
+  transition: all .15s;
+}
+.rsvp-opt.active { background: var(--sea); border-color: var(--sea); color: #fff; }
+.rsvp-counter { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.rsvp-count-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #fff;
+  color: var(--sea-dk); font-size: 1.2rem; line-height: 1; cursor: pointer;
+}
+.rsvp-count { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; min-width: 48px; text-align: center; }
+.rsvp-submit {
+  font-family: var(--font-head); font-weight: 500; font-size: .98rem;
+  padding: 15px; border: none; border-radius: var(--radius-sm);
+  background: var(--coral); color: #fff; cursor: pointer; margin-top: 4px;
+}
 
 /* =========================================================
    10. 제작자

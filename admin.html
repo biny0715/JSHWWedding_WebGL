@@ -16,9 +16,12 @@
 
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 
-  <!-- 폰트: Pretendard(본문) + Gmarket Sans(제목) -->
+  <!-- 폰트: Pretendard(본문) + Gmarket Sans(제목) + 나눔펜글씨(인사말) -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -53,7 +56,7 @@
           <em>♥</em>
           <span data-bind="bride.short">지수</span>
         </h1>
-        <p class="cover-date" data-bind="date.text">2026년 11월 8일 일요일</p>
+        <p class="cover-date"><span data-bind="date.text">2026년 11월 8일 일요일</span> <span data-bind="date.timeText">오후 1시</span></p>
         <p class="cover-place" data-bind="venue.name">운림제</p>
       </div>
       <div class="scroll-hint" aria-hidden="true"><span></span></div>
@@ -64,6 +67,7 @@
       <p class="ko-sub">invitation</p>
       <p class="greeting-text" data-bind="greeting"></p>
       <div class="couple-line">
+        <span class="couple-cast">CAST.</span>
         <span data-bind="groom.name">김형원</span>
         <i>그리고</i>
         <span data-bind="bride.name">박지수</span>
@@ -91,12 +95,32 @@
       </div>
     </section>
 
+    <!-- 모바일 예식장 입장 -->
+    <section class="section enter-venue reveal">
+      <div class="enter-card">
+        <h2 class="enter-title">'모바일 예식장'에서<br>축하해주세요</h2>
+        <p class="enter-desc">운림제를 옮겨 담은 작은 섬<br>3D 예식장에서 우리의 결혼식장을 만나보세요.<br><br>나만의 캐릭터로 예식장, 웨딩사진, 방명록을<br>다른 하객들과 만날 수 있습니다.<br><br>숨겨진 이벤트까지 놓치지 마세요!</p>
+        <a class="enter-btn" href="venue.html">모바일 예식장 입장 →</a>
+      </div>
+    </section>
+
+    <!-- 웨딩 갤러리 -->
+    <section class="section gallery reveal">
+      <h2 class="title">웨딩 갤러리</h2>
+      <div class="slider" id="gallery-slider">
+        <div class="slides" id="gallery-track"><!-- main.js --></div>
+        <button class="slider-nav prev" id="g-prev" aria-label="이전 사진">‹</button>
+        <button class="slider-nav next" id="g-next" aria-label="다음 사진">›</button>
+      </div>
+      <div class="dots" id="gallery-dots"></div>
+    </section>
+
     <!-- 3. 예식 일시 · 장소 -->
     <section class="section when reveal">
       <h2 class="title">예식 안내</h2>
       <div class="when-card">
         <p class="when-date" data-bind="date.text">2026년 11월 8일 일요일</p>
-        <p class="when-time" data-bind="date.timeText">오전 11시</p>
+        <p class="when-time" data-bind="date.timeText">오후 1시</p>
         <hr>
         <p class="when-venue" data-bind="venue.name">운림제</p>
         <p class="when-detail" data-bind="venue.detail"></p>
@@ -114,6 +138,7 @@
         <span data-bind="venue.address"></span>
         <button class="mini-copy" data-copy-bind="venue.address">복사</button>
       </p>
+      <p class="map-tel"><a data-call="venue.tel" href="#">TEL <span data-bind="venue.tel">062-226-5900</span></a></p>
       <div class="map-apps">
         <a class="map-app" data-map="kakao" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">카카오맵</a>
         <a class="map-app" data-map="naver" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">네이버지도</a>
@@ -124,6 +149,7 @@
         <p class="transit-line"><span class="transit-tag">지하철</span>광주 도시철도 1호선 <b>학동·증심사입구역</b> 하차</p>
         <p class="transit-line"><span class="transit-tag">버스</span>인근 정류장에서 <b>운림 54번</b>(학2마을아파트 방면) 승차 후 <b>학운초교</b>에서 하차</p>
         <p class="transit-line"><span class="transit-tag">도보</span>학운초교 정류장에서 운림제까지 약 <b>7분</b></p>
+        <p class="transit-line"><span class="transit-tag">주차장</span><b>운림제 주차장</b> 주차 가능</p>
       </div>
     </section>
 
@@ -140,32 +166,52 @@
       <div class="accordion" id="accounts"><!-- main.js --></div>
     </section>
 
-    <!-- 모바일 예식장 입장 -->
-    <section class="section enter-venue reveal">
-      <div class="enter-card">
-        <p class="enter-eyebrow">모바일 예식장</p>
-        <h2 class="enter-title">모바일 예식장에서<br>축하해주세요</h2>
-        <p class="enter-desc">운림제를 옮겨 담은 작은 섬,<br>3D 예식장에서 다른 하객들과 함께 축하해주세요.<br>온라인 상에서 다른 하객들과 만날 수 있습니다.</p>
-        <a class="enter-btn" href="venue.html">모바일 예식장 입장 →</a>
-      </div>
+    <!-- 7. 축하화환 보내기 -->
+    <section class="section wreath reveal">
+      <h2 class="title">축하화환 보내기</h2>
+      <a class="wreath-card" id="wreath-link" href="#" target="_blank" rel="noopener noreferrer">
+        <span class="wreath-ico" aria-hidden="true">💐</span>
+        <span class="wreath-desc">축하의 마음을 담아 전해보세요.</span>
+        <span class="wreath-arrow" aria-hidden="true">›</span>
+      </a>
     </section>
 
-    <!-- 방명록 -->
+    <!-- 8. 참석 여부 확인 (양식만 — Firebase 연동 추후) -->
+    <section class="section rsvp reveal">
+      <h2 class="title">참석 여부 확인</h2>
+      <p class="rsvp-lead">소중한 분들과 함께하고 싶습니다.<br>참석 여부를 알려주시면 감사하겠습니다.</p>
+      <form class="rsvp-form" id="rsvp-form">
+        <label class="rsvp-field">
+          <span class="rsvp-label">참석자 이름 <em>*</em></span>
+          <input type="text" id="rsvp-name" placeholder="이름을 입력해주세요" required>
+        </label>
+
+        <div class="rsvp-field">
+          <span class="rsvp-label">어느 분 측으로 오시나요? <em>*</em></span>
+          <div class="rsvp-toggle" data-toggle="side">
+            <button type="button" class="rsvp-opt" data-value="groom">신랑측</button>
+            <button type="button" class="rsvp-opt" data-value="bride">신부측</button>
+          </div>
+        </div>
+
+        <div class="rsvp-field">
+          <span class="rsvp-label">참석 인원 <em>*</em></span>
+          <div class="rsvp-counter">
+            <button type="button" class="rsvp-count-btn" id="rsvp-minus" aria-label="인원 감소">−</button>
+            <span class="rsvp-count" id="rsvp-count">1명</span>
+            <button type="button" class="rsvp-count-btn" id="rsvp-plus" aria-label="인원 증가">+</button>
+          </div>
+        </div>
+
+        <button type="submit" class="rsvp-submit">참석 의사 전달하기</button>
+      </form>
+    </section>
+
+    <!-- 방명록 (관리자 전용: 삭제 가능, 맨 마지막) -->
     <section class="section guestbook reveal">
       <h2 class="title">방명록</h2>
       <p class="gb-lead">두 사람에게 따뜻한 한마디를 남겨주세요.</p>
       <div id="gb-widget"><!-- guestbook.js: 목록(5개·페이징·펼침) + 글쓰기 폼 --></div>
-    </section>
-
-    <!-- 웨딩 갤러리 -->
-    <section class="section gallery reveal">
-      <h2 class="title">웨딩 갤러리</h2>
-      <div class="slider" id="gallery-slider">
-        <div class="slides" id="gallery-track"><!-- main.js --></div>
-        <button class="slider-nav prev" id="g-prev" aria-label="이전 사진">‹</button>
-        <button class="slider-nav next" id="g-next" aria-label="다음 사진">›</button>
-      </div>
-      <div class="dots" id="gallery-dots"></div>
     </section>
 
     <!-- 제작자 연락처 -->
