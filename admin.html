@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Nanum+Pen+Script&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -49,15 +49,15 @@
     <!-- 1. 메인 표지 -->
     <section class="cover reveal" id="cover">
       <div class="cover-sky"></div>
+      <p class="cover-eng-title">Wedding Day</p>
       <div class="cover-photo" data-photo="main">
         <span class="ph-label">웨딩 사진 자리</span>
       </div>
       <div class="cover-caption">
-        <p class="cover-eyebrow">우리 결혼합니다</p>
         <h1 class="cover-names">
-          <span data-bind="groom.short">형원</span>
+          <span data-bind="groom.eng">Hyungwon</span>
           <em>♥</em>
-          <span data-bind="bride.short">지수</span>
+          <span data-bind="bride.eng">Jisoo</span>
         </h1>
         <p class="cover-date"><span data-bind="date.text">2026년 11월 8일 일요일</span> <span data-bind="date.timeText">오후 1시</span></p>
         <p class="cover-place" data-bind="venue.name">운림제</p>
@@ -261,6 +261,21 @@
       <p class="notice-text" id="tel-notice-text">전화를 거시겠습니까?</p>
       <a class="notice-enter" id="tel-notice-call" href="#">전화 걸기</a>
     </div>
+  </div>
+
+  <!-- 사진 확대 모달 (커버·프로필 공용) -->
+  <div class="photo-modal" id="photo-modal" hidden>
+    <button type="button" class="photo-modal-close" id="photo-modal-close" aria-label="닫기">✕</button>
+    <div class="photo-modal-img-wrap" id="photo-modal-wrap"></div>
+  </div>
+
+  <!-- 갤러리 라이트박스 모달 -->
+  <div class="gallery-modal" id="gallery-modal" hidden>
+    <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="닫기">✕</button>
+    <button type="button" class="gallery-modal-nav prev" id="gallery-modal-prev" aria-label="이전 사진">‹</button>
+    <div class="gallery-modal-wrap" id="gallery-modal-wrap"></div>
+    <button type="button" class="gallery-modal-nav next" id="gallery-modal-next" aria-label="다음 사진">›</button>
+    <div class="gallery-modal-dots" id="gallery-modal-dots"></div>
   </div>
 
   <!-- 복사 알림 토스트 -->
