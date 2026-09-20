@@ -451,6 +451,9 @@ html, body {
 /* 우측 상단 고정 페이지 이동 버튼 (로그인 게이트 z-9999 아래 → 로그인 후에만 보임) */
 .admin-nav {
   position: fixed; top: 14px; right: 14px; z-index: 500;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+}
+.admin-nav a {
   font-family: var(--font-head); font-weight: 500; font-size: .82rem;
   color: #fff; text-decoration: none;
   background: var(--sea-dk); border-radius: 999px; padding: 9px 16px;

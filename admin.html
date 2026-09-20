@@ -38,7 +38,10 @@
   </div>
 
   <!-- 우측 상단: 모바일 화환 관리 페이지 진입 (로그인 게이트가 열린 뒤 보임) -->
-  <a class="admin-nav" href="admin-wreaths.html">모바일 화환 관리 →</a>
+  <nav class="admin-nav">
+    <a href="admin-wreaths.html">모바일 화환 관리 →</a>
+    <a href="admin-rsvp.html">참석 여부 관리 →</a>
+  </nav>
 
   <!-- 세로 9:16 고정 컬럼 -->
   <main class="paper">
@@ -265,6 +268,38 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/main.js"></script>
+  <script type="module">
+    import { addRsvp } from "./assets/js/rsvp.js";
+    (() => {
+      const form = document.getElementById("rsvp-form");
+      if (!form) return;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("rsvp-name").value.trim();
+        const sideBtn = form.querySelector('[data-toggle="side"] .rsvp-opt.active');
+        const count = parseInt(document.getElementById("rsvp-count").textContent, 10) || 1;
+        const submitBtn = form.querySelector(".rsvp-submit");
+        if (!name) { window.toast("이름을 입력해주세요"); return; }
+        if (!sideBtn) { window.toast("신랑측/신부측을 선택해주세요"); return; }
+        const label = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "전달하는 중…";
+        try {
+          await addRsvp(name, sideBtn.getAttribute("data-value"), count);
+          form.reset();
+          document.getElementById("rsvp-count").textContent = "1명";
+          form.querySelectorAll(".rsvp-opt.active").forEach((b) => b.classList.remove("active"));
+          window.toast("참석 의사가 전달되었습니다. 감사합니다!");
+        } catch (err) {
+          console.error(err);
+          window.toast(err.message || "전달에 실패했어요. 다시 시도해주세요.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = label;
+        }
+      });
+    })();
+  </script>
   <script type="module">
     import { mountGuestbook, adminLogin, onAdmin } from "./assets/js/guestbook.js";
     const gate = document.getElementById("admin-gate");

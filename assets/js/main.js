@@ -302,11 +302,11 @@
     }
   })();
 
-  /* ---- 참석 여부 확인 (양식만 — 제출은 추후 Firebase 연동) ---- */
+  /* ---- 참석 여부 확인: 토글/카운터 UI (제출 자체는 index.html의 module 스크립트가 처리) ---- */
   (function () {
     var form = $("#rsvp-form"); if (!form) return;
 
-    // 토글 버튼(신랑측/신부측, 식사 여부): 그룹 내 단일 선택
+    // 토글 버튼(신랑측/신부측): 그룹 내 단일 선택
     $all(".rsvp-toggle", form).forEach(function (group) {
       $all(".rsvp-opt", group).forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -322,13 +322,9 @@
     function renderCount() { countEl.textContent = count + "명"; }
     $("#rsvp-minus", form).addEventListener("click", function () { if (count > 1) { count--; renderCount(); } });
     $("#rsvp-plus", form).addEventListener("click", function () { if (count < 20) { count++; renderCount(); } });
-
-    // 제출: Firebase 연동 전까지는 임시 안내만
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      toast("참석 의사 전달 기능은 곧 연결될 예정입니다");
-    });
   })();
+
+  window.toast = toast; // rsvp 제출(module 스크립트)에서 동일한 토스트 UI 사용
 
   /* ---- 사진 라이트박스 (커버·프로필 공용) ---- */
   (function () {
