@@ -160,13 +160,13 @@ html, body {
 .cover-sky {
   position: absolute; inset: 0;
   background:
-    radial-gradient(120% 60% at 50% -10%, #fffaf8 0%, #f9bcc6 50%, #f5a8b6 100%);
+    radial-gradient(120% 60% at 50% -10%, #fffaf8 0%, #fcc7c8 50%, #f7b3b5 100%);
   z-index: 0;
 }
 .cover-sky::after { /* 바다 물결 느낌 */
   content: "";
   position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
-  background: radial-gradient(120% 100% at 50% 100%, #f9bcc6 0%, transparent 70%);
+  background: radial-gradient(120% 100% at 50% 100%, #fcc7c8 0%, transparent 70%);
   opacity: .35;
 }
 .cover-photo {
@@ -563,6 +563,10 @@ html, body {
   position: absolute; top: 10px; right: 12px; width: 30px; height: 30px;
   border: none; border-radius: 50%; background: #f0e3e8; color: #8a4d63;
   font-size: .9rem; line-height: 1; cursor: pointer;
+}
+.notice-preview {
+  display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+  border-radius: var(--radius-sm); margin: 0 0 14px; box-shadow: var(--shadow-sm);
 }
 .notice-eyebrow {
   font-family: var(--font-head); letter-spacing: .15em;
