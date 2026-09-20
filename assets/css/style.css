@@ -87,6 +87,15 @@ html, body {
   overflow: hidden;
   box-shadow: 0 0 60px rgba(176, 107, 134, .18);
 }
+/* 갤럭시 폴드 등 펼쳤을 때(가로로 넓어지는 폰) 카드가 너무 작아 보이지 않도록 폭 확장 */
+@media (min-width: 700px) {
+  .paper { max-width: 620px; }
+  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 294px)); }
+}
+@media (min-width: 900px) {
+  .paper { max-width: 680px; }
+  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 324px)); }
+}
 
 /* ---- 공통 섹션 ---- */
 .section {
