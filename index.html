@@ -72,11 +72,13 @@
 
     <!-- 모바일 예식장 입장 (신부 2차 피드백 6번 — 티켓 디자인) -->
     <section class="section enter-venue reveal">
-      <p class="ticket-title">Mobile Wedding</p>
-      <p class="ticket-subtitle">3D 모바일 예식장에서 저희를 축하해주세요</p>
-      <div class="ticket-card">
-        <img class="ticket-svg" src="assets/images/mobile-wedding-ticket.svg" alt="티켓을 누르면 모바일 예식장 입장 안내가 열립니다">
-        <a class="enter-btn ticket-hit" href="venue.html" aria-label="모바일 예식장 입장하기"></a>
+      <div class="ticket-band">
+        <p class="ticket-title">Mobile Wedding</p>
+        <p class="ticket-subtitle">3D 모바일 예식장에서 저희를 축하해주세요</p>
+        <div class="ticket-card">
+          <img class="ticket-svg" src="assets/images/mobile-wedding-ticket.svg" width="360" height="177" alt="티켓을 누르면 모바일 예식장 입장 안내가 열립니다">
+          <a class="enter-btn ticket-hit" href="venue.html" aria-label="모바일 예식장 입장하기"></a>
+        </div>
       </div>
       <p class="ticket-note">숨겨진 이벤트도 포함되어있으니 놓치지 마세요!</p>
     </section>
@@ -198,19 +200,7 @@
   <!-- 떠다니는 예식장 입장 버튼 — 스크롤과 무관하게 좌측 하단 고정 (href 는 main.js 가 venueUrl 로 교체) -->
   <a class="venue-fab" href="venue.html" aria-label="모바일 예식장 입장">
     <svg class="fab-heart" viewBox="0 0 100 90" aria-hidden="true">
-      <defs>
-        <linearGradient id="heartGrad" x1="18%" y1="0%" x2="82%" y2="100%">
-          <stop offset="0%" stop-color="#F8DEDC"/>
-          <stop offset="50%" stop-color="#F2C0BF"/>
-          <stop offset="100%" stop-color="#D3928F"/>
-        </linearGradient>
-        <radialGradient id="heartShine" cx="24%" cy="18%" r="26%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity=".6"/>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
       <path class="heart-base" d="M50 88 C 20 65, 0 45, 0 25 C 0 8, 14 -2, 30 3 C 40 6, 47 14, 50 22 C 53 14, 60 6, 70 3 C 86 -2, 100 8, 100 25 C 100 45, 80 65, 50 88 Z"/>
-      <path class="heart-shine" d="M50 88 C 20 65, 0 45, 0 25 C 0 8, 14 -2, 30 3 C 40 6, 47 14, 50 22 C 53 14, 60 6, 70 3 C 86 -2, 100 8, 100 25 C 100 45, 80 65, 50 88 Z"/>
     </svg>
     <span class="fab-text">
       <span class="fab-sub">모바일 예식장</span>
