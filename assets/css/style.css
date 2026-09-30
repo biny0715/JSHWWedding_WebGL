@@ -45,6 +45,13 @@
   font-weight: 400;
   font-display: swap;
 }
+/* ---- 티켓 하단 안내 문구 (전화선체) ---- */
+@font-face {
+  font-family: "PhoneLine";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/JeonHwaseon.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
 /* ---- 날짜/장소 손글씨 (나눔손글씨 신혼부부) ---- */
 @font-face {
   font-family: "NanumSinHonBuBu";
@@ -550,7 +557,6 @@ html, body {
 .ticket-card {
   position: relative;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
 }
 .ticket-svg { display: block; width: 100%; height: auto; border-radius: var(--radius); }
 .ticket-hit {
@@ -558,7 +564,10 @@ html, body {
   left: 72%; top: 68.4%; width: 20%; height: 21.5%;
   border-radius: 10px;
 }
-.ticket-note { font-size: .85rem; color: var(--ink-soft); margin: 20px 0 0; }
+.ticket-note {
+  font-family: "PhoneLine", var(--font-body);
+  font-size: .85rem; color: #F8F5F2; margin: 18px 0 0;
+}
 
 /* ---- 떠다니는 입장 버튼 (FAB) — 스크롤해도 좌측 하단 고정 ---- */
 .venue-fab {
