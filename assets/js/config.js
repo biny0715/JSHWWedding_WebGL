@@ -118,6 +118,11 @@ window.WEDDING = {
     { src: "", alt: "웨딩 사진 3", ratio: "3 / 4" },
     { src: "", alt: "웨딩 사진 4", ratio: "3 / 4" },
     { src: "", alt: "웨딩 사진 5", ratio: "3 / 4" },
+    { src: "", alt: "웨딩 사진 6", ratio: "3 / 4" },
+    { src: "", alt: "웨딩 사진 7", ratio: "3 / 4" },
+    { src: "", alt: "웨딩 사진 8", ratio: "3 / 4" },
+    { src: "", alt: "웨딩 사진 9", ratio: "3 / 4" },
+    { src: "", alt: "웨딩 사진 10", ratio: "3 / 4" },
   ],
 
   /* ---- 모바일 예식장(Unity) 외부 호스트 주소 ----
