@@ -193,8 +193,9 @@
     box.innerHTML = groups.map(function (g) {
       var rows = g.list.map(function (a) {
         var full = a.bank + " " + a.number;
+        var who = a.label.indexOf(a.holder) !== -1 ? a.label : a.label + " · " + a.holder;
         return '<div class="acc-row">' +
-          '<div><div class="who">' + esc(a.label) + " · " + esc(a.holder) + '</div>' +
+          '<div><div class="who">' + esc(who) + '</div>' +
           '<div class="num">' + esc(full) + '</div></div>' +
           '<button class="acc-copy" data-acc="' + esc(full) + '">복사</button>' +
           '</div>';
@@ -263,6 +264,13 @@
       if (Math.abs(dx) > track.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
       else go(idx);
     });
+    // 화면 회전·알림 당김 등으로 제스처가 중간에 끊기면 touchend 없이 dragging=true 가
+    // 남아 다음 터치가 엉뚱한 위치로 튀는 문제 방지
+    track.addEventListener("touchcancel", function () {
+      dragging = false; x0 = null; go(idx);
+    });
+    // 화면 회전 등으로 트랙 폭이 바뀌면 드래그 중 남아있던 px 오프셋을 지우고 현재 슬라이드로 재정렬
+    window.addEventListener("resize", function () { setTrack(0, false); });
   })();
 
   /* ---- 모바일 예식장 입장 버튼 (섹션 버튼 + 떠다니는 FAB, 외부 호스트 URL) ---- */
