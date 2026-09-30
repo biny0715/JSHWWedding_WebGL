@@ -74,6 +74,7 @@
   }
   var photoMap = { main: pickMain(W.mainPhoto), groom: W.groomPhoto, bride: W.bridePhoto };
   (W.whenPhotos || []).forEach(function (p, i) { photoMap["when" + (i + 1)] = p; });
+  (W.life4cutPhotos || []).forEach(function (p, i) { photoMap["life" + (i + 1)] = p; });
   $all("[data-photo]").forEach(function (el) {
     var key = el.getAttribute("data-photo");
     if (photoMap[key]) fillPhoto(el, photoMap[key]);

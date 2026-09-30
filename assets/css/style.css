@@ -355,6 +355,94 @@ html, body {
 */
 
 /* =========================================================
+   5-1. 인생네컷 — 혼주 정보 빈 자리에 추가한 3컷 세로 포토 스트립
+   하트: #F9E7E7 / #F2C0BF, 폭죽: #583120 / #F9E7E7 / #F2C0BF
+   ========================================================= */
+.life4cut .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
+.life4cut-frame {
+  position: relative;
+  max-width: 260px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.life4cut-strip {
+  position: relative; z-index: 2;
+  display: grid; gap: 6px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.life4cut-photo { border-radius: 0; }
+
+/* 하트 · 폭죽 장식 — 프레임 바깥으로 살짝 흘러나오게 배치, 클릭 방해 없도록 pointer-events 끔 */
+.life4cut-fx { position: absolute; inset: -22px -16px; z-index: 1; pointer-events: none; }
+
+.l4c-heart {
+  position: absolute;
+  width: 13px; height: 13px;
+  background: #F2C0BF;
+  transform: rotate(-45deg);
+  animation: l4cHeart 4.2s ease-in-out infinite;
+}
+.l4c-heart::before, .l4c-heart::after {
+  content: ""; position: absolute; width: 13px; height: 13px; border-radius: 50%; background: inherit;
+}
+.l4c-heart::before { top: -6.5px; left: 0; }
+.l4c-heart::after { top: 0; left: 6.5px; }
+.l4c-h2, .l4c-h4, .l4c-h6 { background: #F9E7E7; }
+.l4c-h5, .l4c-h6 { width: 9px; height: 9px; }
+.l4c-h5::before, .l4c-h5::after, .l4c-h6::before, .l4c-h6::after { width: 9px; height: 9px; }
+.l4c-h5::before, .l4c-h6::before { top: -4.5px; }
+.l4c-h5::after, .l4c-h6::after { left: 4.5px; }
+
+.l4c-h1 { left: -4%;  top: 6%;  animation-delay: 0s; }
+.l4c-h2 { right: -6%; top: 22%; animation-delay: .7s; }
+.l4c-h3 { left: -8%;  top: 48%; animation-delay: 1.4s; }
+.l4c-h4 { right: -4%; top: 62%; animation-delay: 2.1s; }
+.l4c-h5 { left: 8%;   top: 90%; animation-delay: 2.8s; }
+.l4c-h6 { right: 12%; top: 94%; animation-delay: 3.5s; }
+
+@keyframes l4cHeart {
+  0%   { opacity: 0; transform: rotate(-45deg) translateY(0) scale(.85); }
+  15%  { opacity: .95; }
+  55%  { opacity: .95; transform: rotate(-45deg) translateY(-22px) scale(1); }
+  100% { opacity: 0; transform: rotate(-45deg) translateY(-46px) scale(.9); }
+}
+
+.l4c-spark {
+  position: absolute;
+  width: 3px; height: 11px;
+  border-radius: 2px;
+  background: #583120;
+  transform: rotate(var(--r)) scaleY(.3);
+  opacity: 0;
+  animation: l4cSpark 2.8s ease-out infinite;
+}
+.l4c-s1, .l4c-s2, .l4c-s3 { top: -6px; left: 6%; }
+.l4c-s4, .l4c-s5, .l4c-s6 { top: -6px; right: 6%; }
+.l4c-s2, .l4c-s5 { background: #F9E7E7; }
+.l4c-s3, .l4c-s6 { background: #F2C0BF; }
+.l4c-s1 { animation-delay: .2s; }
+.l4c-s2 { animation-delay: .8s; }
+.l4c-s3 { animation-delay: 1.4s; }
+.l4c-s4 { animation-delay: .5s; }
+.l4c-s5 { animation-delay: 1.1s; }
+.l4c-s6 { animation-delay: 1.7s; }
+
+@keyframes l4cSpark {
+  0%   { opacity: 0; transform: rotate(var(--r)) scaleY(.3) translateY(0); }
+  25%  { opacity: 1; transform: rotate(var(--r)) scaleY(1) translateY(0); }
+  60%  { opacity: 1; transform: rotate(var(--r)) scaleY(1) translateY(-6px); }
+  100% { opacity: 0; transform: rotate(var(--r)) scaleY(1) translateY(-16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l4c-heart, .l4c-spark { animation: none; opacity: 0; }
+}
+
+/* =========================================================
    6. 마음 전하기 (아코디언)
    ========================================================= */
 .gift .title { color: #583120; font-family: "HS활공명조", var(--font-head); }

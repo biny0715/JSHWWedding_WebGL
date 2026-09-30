@@ -133,6 +133,13 @@ window.WEDDING = {
     { src: "", alt: "예식 안내 사진 4" },
   ],
 
+  /* ---- 인생네컷(3컷 세로 스트립) — 실제 사진 준비되면 src만 교체 ---- */
+  life4cutPhotos: [
+    { src: "assets/images/life4cut-1.jpg", alt: "인생네컷 사진 1", ratio: "474 / 305" },
+    { src: "assets/images/life4cut-2.jpg", alt: "인생네컷 사진 2", ratio: "474 / 305" },
+    { src: "assets/images/life4cut-3.jpg", alt: "인생네컷 사진 3", ratio: "474 / 306" },
+  ],
+
   /* ---- 모바일 예식장(Unity) 외부 호스트 주소 ----
    * 무거운 WebGL 빌드는 GitHub Pages(100MB 제한) 대신 외부 호스트(Netlify 등)에 올립니다.
    * 배포 후 받은 주소로 교체하세요. (비워두면 같은 사이트의 venue.html 로 이동)
