@@ -38,13 +38,6 @@
   font-weight: 400;
   font-display: swap;
 }
-/* ---- CAST 문구 손글씨 (나눔손글씨 암스테르담) ---- */
-@font-face {
-  font-family: "NanumAmsterdam";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_01@1.0/Amsterdam.woff") format("woff");
-  font-weight: 400;
-  font-display: swap;
-}
 /* ---- 날짜/장소 손글씨 (나눔손글씨 신혼부부) ---- */
 @font-face {
   font-family: "NanumSinHonBuBu";
@@ -134,11 +127,11 @@ html, body {
   background: var(--coral);
 }
 .ko-sub {
-  font-family: var(--font-head);
+  font-family: "HS활공명조", var(--font-head);
   font-size: .8rem;
   letter-spacing: .25em;
   text-transform: uppercase;
-  color: var(--sea);
+  color: #F2C0BF;
   margin: 0 0 18px;
 }
 
@@ -260,19 +253,12 @@ html, body {
 .greeting { background: var(--paper); }
 .greeting-text {
   white-space: pre-line;
-  font-family: "Nanum Pen Script", var(--font-body);
+  font-family: "HS활공명조", var(--font-body);
   font-size: 1.35rem;
   line-height: 1.6;
-  color: var(--ink);
+  color: #000;
   margin: 0 0 26px;
 }
-.couple-line {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  font-family: "NanumAmsterdam", var(--font-head); font-weight: 400; font-size: 1.3rem;
-}
-.couple-line i { font-style: normal; color: var(--ink-soft); font-size: .85rem; }
-.couple-cast { color: var(--ink-soft); font-size: 1rem; }
-
 /* =========================================================
    2. 신랑 & 신부
    ========================================================= */
