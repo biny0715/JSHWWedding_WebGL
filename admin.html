@@ -19,7 +19,7 @@
   <!-- 폰트: HS활공명조(본문·제목, style.css 자체 호스팅) + Allura(영문 필기체 폴백) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Reenie+Beanie&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -47,18 +47,18 @@
     <!-- 1. 메인 표지 -->
     <section class="cover reveal" id="cover">
       <div class="cover-sky"></div>
-      <p class="cover-eng-title">Wedding Day</p>
       <div class="cover-photo" data-photo="main">
         <span class="ph-label">웨딩 사진 자리</span>
-      </div>
-      <div class="cover-caption">
+        <p class="cover-eng-title"><span>AND SO</span><span>IT BEGINS</span></p>
         <h1 class="cover-names">
           <span data-bind="groom.eng">Hyungwon</span>
-          <em>♥</em>
+          <em>&amp;</em>
           <span data-bind="bride.eng">Jisoo</span>
         </h1>
+      </div>
+      <div class="cover-caption">
         <p class="cover-date"><span data-bind="date.text">2026년 11월 8일 일요일</span> <span data-bind="date.timeText">오후 1시</span></p>
-        <p class="cover-place" data-bind="venue.name">운림제</p>
+        <p class="cover-place">전남광주 <span data-bind="venue.name">운림제</span></p>
       </div>
       <div class="scroll-hint" aria-hidden="true"><span></span></div>
     </section>
@@ -67,47 +67,42 @@
     <section class="section greeting reveal">
       <p class="ko-sub">invitation</p>
       <p class="greeting-text" data-bind="greeting"></p>
-      <div class="couple-line">
-        <span class="couple-cast">CAST.</span>
-        <span data-bind="groom.name">김형원</span>
-        <i>그리고</i>
-        <span data-bind="bride.name">박지수</span>
-      </div>
     </section>
 
     <!-- 2. 신랑 & 신부 소개 -->
     <section class="section profile reveal">
-      <h2 class="title">신랑 &amp; 신부</h2>
       <div class="profile-grid">
         <article class="profile-card">
           <div class="profile-photo" data-photo="groom"><span class="ph-label">사진</span></div>
           <p class="profile-role" data-bind="groom.role">신랑</p>
-          <p class="profile-desc" data-bind="groom.desc"></p>
           <p class="profile-name" data-bind="groom.name">김형원</p>
           <a class="profile-call" data-call="groom.phone" href="#">전화하기</a>
         </article>
         <article class="profile-card">
           <div class="profile-photo" data-photo="bride"><span class="ph-label">사진</span></div>
           <p class="profile-role" data-bind="bride.role">신부</p>
-          <p class="profile-desc" data-bind="bride.desc"></p>
           <p class="profile-name" data-bind="bride.name">박지수</p>
           <a class="profile-call" data-call="bride.phone" href="#">전화하기</a>
         </article>
       </div>
     </section>
 
-    <!-- 모바일 예식장 입장 -->
+    <!-- 모바일 예식장 입장 (신부 2차 피드백 6번 — 티켓 디자인) -->
     <section class="section enter-venue reveal">
-      <div class="enter-card">
-        <h2 class="enter-title">'모바일 예식장'에서<br>축하해주세요</h2>
-        <p class="enter-desc">운림제를 옮겨 담은 작은 섬<br>3D 예식장에서 우리의 결혼식장을 만나보세요.<br><br>나만의 캐릭터로 예식장, 웨딩사진, 방명록을<br>다른 하객들과 만날 수 있습니다.<br><br>숨겨진 이벤트까지 놓치지 마세요!</p>
-        <a class="enter-btn" href="venue.html">모바일 예식장 입장 →</a>
+      <div class="ticket-band">
+        <p class="ticket-title">Mobile Wedding</p>
+        <p class="ticket-subtitle">3D 모바일 예식장에서 저희를 축하해주세요</p>
+        <div class="ticket-card">
+          <img class="ticket-svg" src="assets/images/mobile-wedding-ticket.svg" width="360" height="177" alt="티켓을 누르면 모바일 예식장 입장 안내가 열립니다">
+          <a class="enter-btn ticket-hit" href="venue.html" aria-label="모바일 예식장 입장하기"></a>
+        </div>
+        <p class="ticket-note">숨겨진 이벤트도 포함되어있으니 놓치지 마세요!</p>
       </div>
     </section>
 
     <!-- 웨딩 갤러리 -->
     <section class="section gallery reveal">
-      <h2 class="title">웨딩 갤러리</h2>
+      <h2 class="title">Wedding Gallery</h2>
       <div class="slider" id="gallery-slider">
         <div class="slides" id="gallery-track"><!-- main.js --></div>
         <button class="slider-nav prev" id="g-prev" aria-label="이전 사진"></button>
@@ -116,15 +111,14 @@
       <div class="dots" id="gallery-dots"></div>
     </section>
 
-    <!-- 3. 예식 일시 · 장소 -->
+    <!-- 3. 예식 일시 · 장소 (신부 2차 피드백 5번 — 사진 4칸 + 디데이) -->
     <section class="section when reveal">
       <h2 class="title">예식 안내</h2>
-      <div class="when-card">
-        <p class="when-date" data-bind="date.text">2026년 11월 8일 일요일</p>
-        <p class="when-time" data-bind="date.timeText">오후 1시</p>
-        <hr>
-        <p class="when-venue" data-bind="venue.name">운림제</p>
-        <p class="when-detail" data-bind="venue.detail"></p>
+      <div class="when-grid">
+        <div class="when-photo" data-photo="when1"><span class="ph-label">사진</span><span class="when-num">26</span></div>
+        <div class="when-photo" data-photo="when2"><span class="ph-label">사진</span><span class="when-num">11</span></div>
+        <div class="when-photo" data-photo="when3"><span class="ph-label">사진</span><span class="when-num">08</span></div>
+        <div class="when-photo" data-photo="when4"><span class="ph-label">사진</span><span class="when-num">13시</span></div>
       </div>
       <div class="countdown" id="countdown" aria-live="polite"></div>
     </section>
@@ -132,6 +126,7 @@
     <!-- 4. 오시는 길 -->
     <section class="section direction reveal">
       <h2 class="title">오시는 길</h2>
+      <p class="direction-address">전남광주통합특별시 운림제 야외 한옥 예식장</p>
       <div class="map-box" id="map-box">
         <span class="ph-label">지도<br><small>네이버 지도 연동 예정</small></span>
       </div>
@@ -157,16 +152,17 @@
       </div>
     </section>
 
-    <!-- 5. 혼주 정보 -->
+    <!-- 5. 혼주 정보 — 신부 2차 피드백(마음 전하기와 정보 중복이라 삭제 고려)에 따라 일단 주석 처리
     <section class="section family reveal">
       <h2 class="title">혼주 정보</h2>
-      <div class="family-grid" id="family-grid"><!-- main.js --></div>
+      <div class="family-grid" id="family-grid"></div>
     </section>
+    -->
 
-    <!-- 6. 마음 전하기 -->
+    <!-- 6. 마음 전하실 곳 -->
     <section class="section gift reveal">
-      <h2 class="title">마음 전하기</h2>
-      <p class="gift-lead">참석이 어려우신 분들을 위해 계좌번호를 안내드립니다.</p>
+      <h2 class="title">마음 전하실 곳</h2>
+      <p class="gift-lead">참석이 어려운 분들을 위해<br>마음 전하실 곳을 함께 안내드립니다.<br><br>저희의 시작을 축하해 주시는<br>따뜻한 마음에 진심으로 감사드립니다.</p>
       <div class="accordion" id="accounts"><!-- main.js --></div>
     </section>
 
@@ -228,8 +224,13 @@
 
   <!-- 떠다니는 예식장 입장 버튼 — 스크롤과 무관하게 좌측 하단 고정 (href 는 main.js 가 venueUrl 로 교체) -->
   <a class="venue-fab" href="venue.html" aria-label="모바일 예식장 입장">
-    <span class="fab-sub">모바일 예식장</span>
-    <span class="fab-main">입장</span>
+    <svg class="fab-heart" viewBox="0 0 100 90" aria-hidden="true">
+      <path class="heart-base" d="M50 88 C 20 65, 0 45, 0 25 C 0 8, 14 -2, 30 3 C 40 6, 47 14, 50 22 C 53 14, 60 6, 70 3 C 86 -2, 100 8, 100 25 C 100 45, 80 65, 50 88 Z"/>
+    </svg>
+    <span class="fab-text">
+      <span class="fab-sub">모바일 예식장</span>
+      <span class="fab-main">입장</span>
+    </span>
   </a>
 
   <!-- 모바일 예식장 입장 안내 모달 — 입장 버튼(섹션/FAB) 클릭 시 표시, "입장하기"를 눌러야 이동 -->
@@ -265,15 +266,6 @@
   <div class="photo-modal" id="photo-modal" hidden>
     <button type="button" class="photo-modal-close" id="photo-modal-close" aria-label="닫기">✕</button>
     <div class="photo-modal-img-wrap" id="photo-modal-wrap"></div>
-  </div>
-
-  <!-- 갤러리 라이트박스 모달 -->
-  <div class="gallery-modal" id="gallery-modal" hidden>
-    <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="닫기">✕</button>
-    <button type="button" class="gallery-modal-nav prev" id="gallery-modal-prev" aria-label="이전 사진"></button>
-    <div class="gallery-modal-wrap" id="gallery-modal-wrap"></div>
-    <button type="button" class="gallery-modal-nav next" id="gallery-modal-next" aria-label="다음 사진"></button>
-    <div class="gallery-modal-dots" id="gallery-modal-dots"></div>
   </div>
 
   <!-- 복사 알림 토스트 -->

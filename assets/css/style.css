@@ -317,8 +317,8 @@ html, body {
 }
 .map-apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .map-app {
-  text-decoration: none; text-align: center; font-family: "HS활공명조", var(--font-head); font-size: .88rem; font-weight: 600;
-  padding: 12px 0; border-radius: var(--radius-sm); color: var(--ink);
+  text-decoration: none; text-align: center; font-family: "HS활공명조", var(--font-head); font-size: .88rem; font-weight: 700;
+  padding: 12px 0; border-radius: var(--radius-sm); color: #F2C0BF;
   background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
 }
 .transit-info {
