@@ -246,31 +246,51 @@
     dotsEl.addEventListener("click", function (e) {
       var d = e.target.closest(".dot"); if (d) go(Number(d.getAttribute("data-i")));
     });
-    // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅
-    var x0 = null, dragging = false;
+    // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅.
+    // 가로 의도가 확정되면 preventDefault 로 iOS 사파리의 뒤로가기 스와이프/스크롤
+    // 제스처가 가져가지 못하게 막는다(touch-action 만으로는 일부 기기에서 불충분).
+    var x0 = null, y0 = null, dragging = false, horizLock = false;
     track.addEventListener("touchstart", function (e) {
       x0 = e.touches[0].clientX;
+      y0 = e.touches[0].clientY;
       dragging = true;
+      horizLock = false;
     }, { passive: true });
     track.addEventListener("touchmove", function (e) {
       if (!dragging) return;
-      setTrack(e.touches[0].clientX - x0, false);
-    }, { passive: true });
+      var dx = e.touches[0].clientX - x0;
+      var dy = e.touches[0].clientY - y0;
+      if (!horizLock) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;   // 방향 판단 전
+        if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }   // 세로 스크롤로 판단 → 페이지에 양보
+        horizLock = true;
+      }
+      e.preventDefault();
+      setTrack(dx, false);
+    }, { passive: false });
     track.addEventListener("touchend", function (e) {
-      if (!dragging) return;
+      if (!dragging) { x0 = null; y0 = null; return; }
       dragging = false;
       var dx = e.changedTouches[0].clientX - x0;
-      x0 = null;
-      if (Math.abs(dx) > track.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
+      x0 = null; y0 = null;
+      if (horizLock && Math.abs(dx) > track.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
       else go(idx);
     });
     // 화면 회전·알림 당김 등으로 제스처가 중간에 끊기면 touchend 없이 dragging=true 가
     // 남아 다음 터치가 엉뚱한 위치로 튀는 문제 방지
     track.addEventListener("touchcancel", function () {
-      dragging = false; x0 = null; go(idx);
+      dragging = false; x0 = null; y0 = null; go(idx);
     });
-    // 화면 회전 등으로 트랙 폭이 바뀌면 드래그 중 남아있던 px 오프셋을 지우고 현재 슬라이드로 재정렬
-    window.addEventListener("resize", function () { setTrack(0, false); });
+    // 화면 회전 시 사파리에서 flex 자식(.slide) 폭 계산이 깨져 두 칸이 겹쳐 보이는
+    // 문제 대응 — 강제로 리플로우시킨 뒤 현재 슬라이드로 재정렬
+    function relayout() {
+      track.style.display = "none";
+      void track.offsetHeight;   // 강제 리플로우
+      track.style.display = "";
+      setTrack(0, false);
+    }
+    window.addEventListener("resize", relayout);
+    window.addEventListener("orientationchange", relayout);
   })();
 
   /* ---- 모바일 예식장 입장 버튼 (섹션 버튼 + 떠다니는 FAB, 외부 호스트 URL) ---- */
