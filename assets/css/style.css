@@ -24,6 +24,20 @@
   font-weight: 400;
   font-display: swap;
 }
+/* ---- 표지 영문 타이틀 (Continuous) ---- */
+@font-face {
+  font-family: "Continuous";
+  src: url("../fonts/Continuous.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+/* ---- 표지 이름(Hyungwon & Jisoo) 세리프 (HS활공명조) ---- */
+@font-face {
+  font-family: "HS활공명조";
+  src: url("../fonts/HSHwalkongSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
 /* ---- CAST 문구 손글씨 (나눔손글씨 암스테르담) ---- */
 @font-face {
   font-family: "NanumAmsterdam";
