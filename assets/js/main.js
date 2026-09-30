@@ -440,7 +440,11 @@
     var target = new Date(W.date.iso).getTime();
     function tick() {
       var diff = target - Date.now();
-      if (diff <= 0) { el.textContent = "오늘은 두 사람의 결혼식입니다 🎉"; return; }
+      if (diff <= 0) {
+        var past = Math.floor(-diff / 864e5);
+        el.textContent = past <= 0 ? "오늘은 두 사람의 결혼식입니다 🎉" : "D+" + past;
+        return;
+      }
       var d = Math.floor(diff / 864e5);
       el.textContent = "D-" + d;
     }
