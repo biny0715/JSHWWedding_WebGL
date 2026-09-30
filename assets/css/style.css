@@ -72,6 +72,8 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* 버튼/입력창은 브라우저가 폰트를 상속하지 않고 시스템 기본(Arial 등)을 쓰므로 명시적으로 상속 */
+button, input, select, textarea { font-family: inherit; }
 
 html, body {
   margin: 0;
@@ -599,7 +601,7 @@ html, body {
 .venue-fab .fab-heart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
 .venue-fab .fab-heart .heart-base { fill: #F2C0BF; }
 .venue-fab .fab-text {
-  position: relative; z-index: 1; transform: translateY(-7px);
+  position: relative; z-index: 1; transform: translateY(4px);
   display: flex; flex-direction: column; align-items: center; gap: 1px;
   font-family: "HS활공명조", var(--font-head); color: #fff;
 }
@@ -649,6 +651,7 @@ html, body {
 /* =========================================================
    7. 축하화환 보내기
    ========================================================= */
+.wreath .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
 .wreath-card {
   display: flex; align-items: center; gap: 14px;
   text-decoration: none; color: var(--ink);
@@ -662,6 +665,7 @@ html, body {
 /* =========================================================
    8. 참석 여부 확인
    ========================================================= */
+.rsvp .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
 .rsvp-lead { color: var(--ink-soft); font-size: .92rem; margin: -10px 0 22px; }
 .rsvp-form { display: grid; gap: 18px; text-align: left; }
 .rsvp-field { display: grid; gap: 8px; }
