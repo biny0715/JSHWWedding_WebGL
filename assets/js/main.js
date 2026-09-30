@@ -54,7 +54,14 @@
     if (photo.src) {
       var img = new Image();
       img.src = photo.src; img.alt = photo.alt || "";
-      img.onload = function () { el.innerHTML = ""; el.appendChild(img); el.classList.add("has-img"); };
+      img.onload = function () {
+        // 플레이스홀더 라벨만 제거하고 이미지를 첫 자식으로 삽입 — 커버 사진처럼
+        // 다른 오버레이 요소(문구 등)가 형제로 함께 있는 경우를 보존한다.
+        var ph = el.querySelector(".ph-label");
+        if (ph) ph.remove();
+        el.insertBefore(img, el.firstChild);
+        el.classList.add("has-img");
+      };
     }
   }
   // 메인 표지 사진: srcs 배열이 있으면 그중 하나를 랜덤으로 선택
