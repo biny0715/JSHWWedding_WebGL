@@ -318,6 +318,7 @@ html, body {
   border-radius: var(--radius-sm);
   box-shadow: 0 4px 16px rgba(0, 0, 0, .14);
   font-family: "HS활공명조", var(--font-head); font-size: 0.965rem; color: var(--ink);
+  cursor: pointer;
 }
 .map-address span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .map-tel { margin: 0 0 16px; font-family: "HS활공명조", var(--font-head); font-size: 1.025rem; color: var(--ink-soft); }

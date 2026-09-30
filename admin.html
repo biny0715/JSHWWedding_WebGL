@@ -131,9 +131,9 @@
         <div class="map-box" id="map-box">
           <span class="ph-label">지도<br><small>네이버 지도 연동 예정</small></span>
         </div>
-        <p class="map-address">
+        <p class="map-address" data-copy-bind="venue.address">
           <span data-bind="venue.address"></span>
-          <button class="mini-copy" data-copy-bind="venue.address" aria-label="주소 복사">
+          <button class="mini-copy" aria-label="주소 복사">
             <svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true">
               <rect x="7.5" y="7.5" width="9" height="9" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
               <rect x="3.5" y="3.5" width="9" height="9" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
