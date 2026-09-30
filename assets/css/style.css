@@ -349,17 +349,21 @@ html, body {
 .transit-line b { font-weight: 700; color: #F2C0BF; }
 
 /* =========================================================
-   5. 혼주 정보
-   ========================================================= */
+   5. 혼주 정보 — 신부 2차 피드백(마음 전하기와 중복 정보라 삭제 고려)에 따라
+   일단 주석 처리. 재사용할 경우를 대비해 다른 섹션과 통일된 폰트/컬러만
+   먼저 반영해둠(HS활공명조 + 포인트컬러 #F2C0BF, 타이틀 #583120).
+   ========================================================= *//*
+.family .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
 .family-grid { display: grid; gap: 12px; }
 .family-card {
   background: #fff; border-radius: var(--radius-sm); padding: 16px 18px;
   box-shadow: var(--shadow-sm); text-align: left;
 }
-.family-side { font-size: .8rem; color: var(--sea-dk); font-weight: 600; margin: 0 0 6px; }
-.family-people { margin: 0; font-size: .98rem; }
-.family-people b { font-family: var(--font-head); font-weight: 500; }
+.family-side { font-family: "HS활공명조", var(--font-head); font-size: .8rem; color: #F2C0BF; font-weight: 700; margin: 0 0 6px; }
+.family-people { margin: 0; font-family: "HS활공명조", var(--font-body); font-size: .98rem; }
+.family-people b { font-family: "HS활공명조", var(--font-head); font-weight: 700; color: #F2C0BF; }
 .family-people .rel { color: var(--ink-soft); font-size: .82rem; margin-right: 6px; }
+*/
 
 /* =========================================================
    6. 마음 전하기 (아코디언)
