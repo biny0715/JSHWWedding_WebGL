@@ -669,7 +669,7 @@ html, body {
 @media (prefers-reduced-motion: reduce) { .ticket-hit { animation: none; } }
 .ticket-note {
   font-family: "PhoneLine", var(--font-body);
-  font-size: 0.975rem; color: #F8F5F2; margin: 18px 0 0;
+  font-size: 1.25rem; color: #F8F5F2; margin: 18px 0 0;
 }
 
 /* ---- 떠다니는 입장 버튼 (FAB) — 스크롤해도 좌측 하단 고정 ---- */
