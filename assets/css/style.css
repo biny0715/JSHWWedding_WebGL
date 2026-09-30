@@ -350,6 +350,8 @@ html, body {
   vertical-align: middle;
 }
 .transit-line b { font-weight: 700; color: #F2C0BF; }
+/* iOS Safari가 가운데점(·)·괄호 뒤를 줄바꿈 지점으로 잡아 어색하게 끊는 것 방지 */
+.nobreak { white-space: nowrap; }
 
 /* =========================================================
    5. 혼주 정보 — 신부 2차 피드백(마음 전하기와 중복 정보라 삭제 고려)에 따라
