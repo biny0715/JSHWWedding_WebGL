@@ -127,13 +127,20 @@
     <section class="section direction reveal">
       <h2 class="title">오시는 길</h2>
       <p class="direction-address">전남광주통합특별시 운림제 야외 한옥 예식장</p>
-      <div class="map-box" id="map-box">
-        <span class="ph-label">지도<br><small>네이버 지도 연동 예정</small></span>
+      <div class="map-wrap">
+        <div class="map-box" id="map-box">
+          <span class="ph-label">지도<br><small>네이버 지도 연동 예정</small></span>
+        </div>
+        <p class="map-address">
+          <span data-bind="venue.address"></span>
+          <button class="mini-copy" data-copy-bind="venue.address" aria-label="주소 복사">
+            <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true">
+              <rect x="7.5" y="7.5" width="9" height="9" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="3.5" y="3.5" width="9" height="9" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+        </p>
       </div>
-      <p class="map-address">
-        <span data-bind="venue.address"></span>
-        <button class="mini-copy" data-copy-bind="venue.address">복사</button>
-      </p>
       <p class="map-tel"><a id="venue-tel-link" data-call="venue.tel" href="#">TEL <span data-bind="venue.tel">062-226-5900</span></a></p>
       <div class="map-apps">
         <a class="map-app" data-map="kakao" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">카카오맵</a>
@@ -161,7 +168,6 @@
 
     <!-- 5-1. 인생네컷 — 혼주 정보가 빠진 자리에 신부 피드백(10p, 인생네컷 레퍼런스)에 따라 추가 -->
     <section class="section life4cut reveal">
-      <h2 class="title">우리의 순간</h2>
       <div class="life4cut-frame">
         <div class="life4cut-fx" aria-hidden="true">
           <span class="l4c-heart l4c-h1"></span>
