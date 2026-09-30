@@ -552,19 +552,26 @@ html, body {
   bottom: 16px;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
   z-index: 90;
-  width: 84px; height: 84px; border-radius: 50%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  width: 92px; height: 84px;
+  display: flex; align-items: center; justify-content: center;
   text-decoration: none; text-align: center;
-  font-family: var(--font-head); color: #fff;
-  background: linear-gradient(165deg, var(--sea) 0%, var(--sea-dk) 75%);
-  box-shadow: 0 8px 22px rgba(176, 107, 134, .38);
+  filter: drop-shadow(0 10px 18px rgba(88, 49, 32, .38));
   animation: fabFloat 3s ease-in-out infinite;
   /* 기본은 숨김 — 표지(스크롤 아이콘)가 화면에서 벗어나면 main.js 가 .is-visible 로 노출 */
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity .3s ease, visibility .3s ease;
 }
 .venue-fab.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
-.venue-fab .fab-sub { font-size: .64rem; font-weight: 500; line-height: 1.2; opacity: .92; }
+.venue-fab .fab-heart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.venue-fab .fab-heart .heart-base { fill: url(#heartGrad); stroke: #C97F7C; stroke-width: .6; }
+.venue-fab .fab-heart .heart-shine { fill: url(#heartShine); }
+.venue-fab .fab-text {
+  position: relative; z-index: 1; transform: translateY(-7px);
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  font-family: "HS활공명조", var(--font-head); color: #fff;
+  text-shadow: 0 1px 3px rgba(88, 49, 32, .35);
+}
+.venue-fab .fab-sub { font-size: .64rem; font-weight: 500; line-height: 1.2; opacity: .95; }
 .venue-fab .fab-main { font-size: 1.05rem; font-weight: 700; line-height: 1.15; }
 @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @media (prefers-reduced-motion: reduce) { .venue-fab { animation: none; } }
