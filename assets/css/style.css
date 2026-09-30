@@ -169,6 +169,7 @@ html, body {
   align-items: center;
   justify-content: flex-start;
   padding: 64px 28px;
+  margin-bottom: -132px;   /* min-height:100vh 로 인해 스크롤 아이콘 아래 남는 여백을 절반으로 */
   text-align: center;
   overflow: hidden;
 }
