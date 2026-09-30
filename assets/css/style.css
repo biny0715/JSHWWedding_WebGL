@@ -97,11 +97,9 @@ html, body {
 /* 갤럭시 폴드 등 펼쳤을 때(가로로 넓어지는 폰) 카드가 너무 작아 보이지 않도록 폭 확장 */
 @media (min-width: 700px) {
   .paper { max-width: 620px; }
-  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 294px)); }
 }
 @media (min-width: 900px) {
   .paper { max-width: 680px; }
-  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 324px)); }
 }
 
 /* ---- 공통 섹션 ---- */
@@ -562,6 +560,14 @@ html, body {
   transition: opacity .3s ease, visibility .3s ease;
 }
 .venue-fab.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
+/* .paper 폭이 늘어나는 갤럭시 폴드 등 대응 — 이 두 규칙은 위 기본 규칙보다 소스 순서상
+   뒤에 있어야 실제로 적용됨(동일 특이도라 나중에 나온 선언이 이김). */
+@media (min-width: 700px) {
+  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 294px)); }
+}
+@media (min-width: 900px) {
+  .venue-fab { left: max(calc(env(safe-area-inset-left, 0px) + 16px), calc(50vw - 324px)); }
+}
 .venue-fab .fab-heart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
 .venue-fab .fab-heart .heart-base { fill: url(#heartGrad); stroke: #C97F7C; stroke-width: .6; }
 .venue-fab .fab-heart .heart-shine { fill: url(#heartShine); }
