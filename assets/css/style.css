@@ -607,6 +607,10 @@ html, body {
 }
 .wa-del:hover { background: #e0bccb; }
 .wa-del:disabled { opacity: .5; cursor: default; }
+.wa-locked {
+  display: inline-block; border-radius: 999px; background: var(--sand); color: var(--ink-soft);
+  font-size: 0.885rem; font-weight: 600; padding: 5px 11px; white-space: nowrap;
+}
 .wa-empty td { text-align: center; color: var(--ink-soft); padding: 22px 8px; }
 
 /* =========================================================

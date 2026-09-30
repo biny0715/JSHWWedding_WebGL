@@ -35,7 +35,7 @@
   <main class="paper wreath-admin">
     <section class="section">
       <h2 class="title">모바일 화환 관리</h2>
-      <p class="wa-lead">예식장에는 작성순으로 앞의 15개만 세워집니다.<br>삭제하면 뒤의 화환이 한 칸씩 앞으로 당겨져요.</p>
+      <p class="wa-lead">예식장에는 작성순으로 앞의 16개만 세워집니다(1번은 예시로 미리 채워둔 화환, 삭제 불가).<br>삭제하면 뒤의 화환이 한 칸씩 앞으로 당겨져요.</p>
       <p class="wa-count" id="wa-count">불러오는 중…</p>
       <div class="wa-table-wrap">
         <table class="wa-table">
@@ -75,18 +75,22 @@
 
     function render(list) {
       wreaths = list;
-      countEl.textContent = "총 " + list.length + "개 · 예식장 표시 " + Math.min(list.length, 15) + " / 15";
+      countEl.textContent = "총 " + list.length + "개 · 예식장 표시 " + Math.min(list.length, 16) + " / 16";
       if (!list.length) {
         bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">아직 등록된 화환이 없어요 💐</td></tr>';
         return;
       }
+      // i === 0: 관리자가 미리 채워둔 예시 화환 — 삭제 버튼 대신 "고정" 표시(삭제 불가)
       bodyEl.innerHTML = list.map((w, i) =>
         "<tr>" +
-          '<td class="wa-slot' + (i < 15 ? "" : " wa-slot--wait") + '">' + (i < 15 ? (i + 1) + "번" : "대기") + "</td>" +
+          '<td class="wa-slot' + (i < 16 ? "" : " wa-slot--wait") + '">' + (i < 16 ? (i + 1) + "번" : "대기") + "</td>" +
           '<td class="wa-who">' + esc(w.author) + "</td>" +
           '<td class="wa-msg">' + esc(w.message) + "</td>" +
           '<td class="wa-when">' + fmt(w.at) + "</td>" +
-          '<td><button type="button" class="wa-del" data-del="' + w.id + '">삭제</button></td>' +
+          '<td>' + (i === 0
+            ? '<span class="wa-locked" title="예시로 미리 채워둔 화환은 삭제할 수 없어요">고정</span>'
+            : '<button type="button" class="wa-del" data-del="' + w.id + '">삭제</button>') +
+          "</td>" +
         "</tr>").join("");
     }
 
@@ -95,6 +99,7 @@
       const btn = e.target.closest(".wa-del");
       if (!btn) return;
       const id = btn.getAttribute("data-del");
+      if (wreaths.length && wreaths[0].id === id) return;   // 방어: 예시 화환(슬롯 1번)은 항상 삭제 거부
       const w = wreaths.find((x) => x.id === id);
       if (!confirm("'" + ((w && w.author) || "하객") + "'님의 화환을 삭제하시겠습니까?\n뒤의 화환이 한 칸씩 앞으로 당겨집니다.")) return;
       btn.disabled = true;
