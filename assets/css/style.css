@@ -310,7 +310,7 @@ html, body {
 .map-address {
   position: absolute; left: 10px; right: 10px; bottom: 19px; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  margin: 0; padding: 6px 6px 6px 16px;
+  margin: 0; padding: 4px 4px 4px 16px; line-height: 1.3;
   background: rgba(255, 255, 255, .28);
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
@@ -323,7 +323,7 @@ html, body {
 .map-tel { margin: 0 0 16px; font-family: "HS활공명조", var(--font-head); font-size: 1.025rem; color: var(--ink-soft); }
 .map-tel a { color: #F2C0BF; font-weight: 700; text-decoration: none; }
 .mini-copy {
-  flex: none; width: 24px; height: 24px; padding: 0;
+  flex: none; width: 22px; height: 22px; padding: 0;
   display: flex; align-items: center; justify-content: center;
   border: none; background: rgba(255, 255, 255, .55);
   border-radius: 50%; color: var(--ink-soft); cursor: pointer;
