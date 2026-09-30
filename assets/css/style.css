@@ -254,8 +254,8 @@ html, body {
 .greeting-text {
   white-space: pre-line;
   font-family: "HS활공명조", var(--font-body);
-  font-size: 1.35rem;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  line-height: 1.7;
   color: #000;
   margin: 0 0 26px;
 }
