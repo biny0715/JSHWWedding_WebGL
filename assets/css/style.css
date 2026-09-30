@@ -308,14 +308,14 @@ html, body {
 .map-box { width: 100%; aspect-ratio: 4 / 3; box-shadow: var(--shadow-sm); }
 /* 주소 표시줄 — 지도 안쪽 하단에 겹쳐 띄우는 반투명 리퀴드 글래스 필 */
 .map-address {
-  position: absolute; left: 10px; right: 10px; bottom: 13px; z-index: 2;
+  position: absolute; left: 10px; right: 10px; bottom: 16px; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   margin: 0; padding: 6px 6px 6px 16px;
   background: rgba(255, 255, 255, .28);
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, .45);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 4px 16px rgba(0, 0, 0, .14);
   font-family: "HS활공명조", var(--font-head); font-size: 0.965rem; color: var(--ink);
 }
