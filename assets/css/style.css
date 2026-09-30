@@ -285,18 +285,20 @@ html, body {
    3. 예식 안내
    ========================================================= */
 .when { background: var(--paper); }
-.when-card {
-  border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 26px 20px; background: var(--sand);
+.when .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
+.when-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  border-radius: var(--radius); overflow: hidden;
 }
-.when-date { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; margin: 0; }
-.when-time { margin: 6px 0 0; color: var(--ink-soft); }
-.when-card hr { border: none; border-top: 1px dashed #e3c6d2; margin: 18px 0; }
-.when-venue { font-family: var(--font-head); font-weight: 500; font-size: 1.05rem; margin: 0; }
-.when-detail { margin: 6px 0 0; color: var(--ink-soft); font-size: .9rem; }
+.when-photo { position: relative; aspect-ratio: 3 / 4; }
+.when-num {
+  position: absolute; left: 0; right: 0; bottom: 8px;
+  font-family: "Continuous", "Allura", cursive; color: #fff; font-size: 1.5rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+}
 .countdown {
-  margin-top: 20px; font-family: var(--font-head); font-size: .95rem;
-  color: var(--sea-dk); letter-spacing: .02em;
+  margin-top: 20px; font-family: "Continuous", "Allura", cursive; font-size: 1.6rem;
+  color: #F2C0BF; letter-spacing: .02em;
 }
 
 /* =========================================================
