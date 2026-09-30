@@ -38,6 +38,13 @@
   font-weight: 400;
   font-display: swap;
 }
+/* ---- 모바일 청첩장 티켓 부제(KCC-Jeongbeom) — 실제 쓰인 글자만 서브셋(10KB) ---- */
+@font-face {
+  font-family: "KCC-Jeongbeom";
+  src: url("../fonts/KCC-Jeongbeom-subset.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
 /* ---- 날짜/장소 손글씨 (나눔손글씨 신혼부부) ---- */
 @font-face {
   font-family: "NanumSinHonBuBu";
@@ -520,27 +527,28 @@ html, body {
    9. 모바일 예식장 입장
    ========================================================= */
 .enter-venue { padding-top: 30px; }
-.enter-card {
-  position: relative; overflow: hidden;
+.ticket-title {
+  font-family: "Reenie Beanie", "Continuous", cursive;
+  font-size: 1.7rem; color: #583120; margin: 0 0 2px;
+}
+.ticket-subtitle {
+  font-family: "KCC-Jeongbeom", var(--font-body);
+  font-size: .95rem; color: #8a6a5c; margin: 0 0 20px;
+}
+.ticket-card {
+  position: relative;
   border-radius: var(--radius);
-  padding: 40px 26px;
-  color: #fff;
-  background: linear-gradient(165deg, var(--sea) 0%, var(--sea-dk) 55%, #8a4f68 100%);
+  padding: 14px;
+  background: #583120;
   box-shadow: var(--shadow);
 }
-.enter-card::before { /* 섬/모래 느낌 */
-  content: ""; position: absolute; left: -10%; right: -10%; bottom: -40%; height: 80%;
-  background: radial-gradient(60% 100% at 50% 100%, var(--sand) 0%, transparent 70%);
-  opacity: .5;
+.ticket-svg { display: block; width: 100%; height: auto; border-radius: 10px; }
+.ticket-hit {
+  position: absolute;
+  left: 72%; top: 68.4%; width: 20%; height: 21.5%;
+  border-radius: 10px;
 }
-.enter-eyebrow { position: relative; font-family: var(--font-head); letter-spacing: .15em; font-size: .78rem; margin: 0 0 8px; opacity: .9; }
-.enter-title { position: relative; font-family: var(--font-head); font-weight: 700; font-size: 1.5rem; margin: 0 0 10px; }
-.enter-desc { position: relative; font-size: .95rem; margin: 0 0 24px; opacity: .95; }
-.enter-btn {
-  position: relative; display: inline-block; text-decoration: none;
-  background: #fff; color: var(--sea-dk); font-family: var(--font-head); font-weight: 500;
-  padding: 14px 28px; border-radius: 999px; box-shadow: var(--shadow-sm);
-}
+.ticket-note { font-size: .85rem; color: var(--ink-soft); margin: 16px 0 0; }
 
 /* ---- 떠다니는 입장 버튼 (FAB) — 스크롤해도 좌측 하단 고정 ---- */
 .venue-fab {
