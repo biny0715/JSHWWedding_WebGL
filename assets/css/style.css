@@ -308,13 +308,13 @@ html, body {
 .map-box { width: 100%; aspect-ratio: 4 / 3; box-shadow: var(--shadow-sm); }
 /* 주소 표시줄 — 지도 안쪽 하단에 겹쳐 띄우는 반투명 리퀴드 글래스 필 */
 .map-address {
-  position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 2;
+  position: absolute; left: 10px; right: 10px; bottom: 13px; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  margin: 0; padding: 9px 9px 9px 16px;
-  background: rgba(255, 255, 255, .55);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, .6);
+  margin: 0; padding: 6px 6px 6px 16px;
+  background: rgba(255, 255, 255, .28);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .45);
   border-radius: 999px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, .14);
   font-family: "HS활공명조", var(--font-head); font-size: 0.965rem; color: var(--ink);
@@ -323,9 +323,9 @@ html, body {
 .map-tel { margin: 0 0 16px; font-family: "HS활공명조", var(--font-head); font-size: 1.025rem; color: var(--ink-soft); }
 .map-tel a { color: #F2C0BF; font-weight: 700; text-decoration: none; }
 .mini-copy {
-  flex: none; width: 28px; height: 28px; padding: 0;
+  flex: none; width: 24px; height: 24px; padding: 0;
   display: flex; align-items: center; justify-content: center;
-  border: none; background: rgba(255, 255, 255, .85);
+  border: none; background: rgba(255, 255, 255, .55);
   border-radius: 50%; color: var(--ink-soft); cursor: pointer;
 }
 .map-apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
