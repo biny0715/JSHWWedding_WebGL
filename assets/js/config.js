@@ -127,10 +127,10 @@ window.WEDDING = {
 
   /* ---- 예식 안내 사진 4칸(26/11/08/13시 문구가 각 사진 위에 겹쳐 표시됨) ---- */
   whenPhotos: [
-    { src: "", alt: "예식 안내 사진 1" },
-    { src: "", alt: "예식 안내 사진 2" },
-    { src: "", alt: "예식 안내 사진 3" },
-    { src: "", alt: "예식 안내 사진 4" },
+    { src: "assets/images/when-1.jpg", alt: "예식 안내 사진 1" },
+    { src: "assets/images/when-2.jpg", alt: "예식 안내 사진 2" },
+    { src: "assets/images/when-3.jpg", alt: "예식 안내 사진 3" },
+    { src: "assets/images/when-4.jpg", alt: "예식 안내 사진 4" },
   ],
 
   /* ---- 인생네컷(3컷 세로 스트립) — 실제 사진 준비되면 src만 교체 ---- */
