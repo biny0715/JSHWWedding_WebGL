@@ -264,14 +264,18 @@
     // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅.
     // 가로 의도가 확정되면 preventDefault 로 iOS 사파리의 뒤로가기 스와이프/스크롤
     // 제스처가 가져가지 못하게 막는다(touch-action 만으로는 일부 기기에서 불충분).
+    // 리스너는 움직이는 track 이 아니라 고정된 바깥 틀(.slider)에 건다 — iOS 사파리는
+    // transform 으로 밀린 요소의 터치 영역을 원래 위치로 계산해서, track 에 걸면
+    // 첫 번째 사진에서만 드래그가 잡히고 2번째부터는 사파리가 제스처를 가져간다.
+    var area = $("#gallery-slider") || track;
     var x0 = null, y0 = null, dragging = false, horizLock = false;
-    track.addEventListener("touchstart", function (e) {
+    area.addEventListener("touchstart", function (e) {
       x0 = e.touches[0].clientX;
       y0 = e.touches[0].clientY;
       dragging = true;
       horizLock = false;
     }, { passive: true });
-    track.addEventListener("touchmove", function (e) {
+    area.addEventListener("touchmove", function (e) {
       if (!dragging) return;
       var dx = e.touches[0].clientX - x0;
       var dy = e.touches[0].clientY - y0;
@@ -283,17 +287,17 @@
       e.preventDefault();
       setTrack(dx, false);
     }, { passive: false });
-    track.addEventListener("touchend", function (e) {
+    area.addEventListener("touchend", function (e) {
       if (!dragging) { x0 = null; y0 = null; return; }
       dragging = false;
       var dx = e.changedTouches[0].clientX - x0;
       x0 = null; y0 = null;
-      if (horizLock && Math.abs(dx) > track.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
+      if (horizLock && Math.abs(dx) > area.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
       else go(idx);
     });
     // 화면 회전·알림 당김 등으로 제스처가 중간에 끊기면 touchend 없이 dragging=true 가
     // 남아 다음 터치가 엉뚱한 위치로 튀는 문제 방지
-    track.addEventListener("touchcancel", function () {
+    area.addEventListener("touchcancel", function () {
       dragging = false; x0 = null; y0 = null; go(idx);
     });
     // 화면 회전 시 사파리에서 flex 자식(.slide) 폭 계산이 깨져 두 칸이 겹쳐 보이는

@@ -628,7 +628,7 @@ html, body {
    ========================================================= */
 .gallery .title { color: #F2C0BF; font-family: "HS활공명조", var(--font-head); }
 .gallery .title::after { background: #F2C0BF; }
-.slider { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+.slider { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); touch-action: pan-y; }
 .slides { display: flex; transition: transform .4s ease; touch-action: pan-y; }
 .slide { flex: 0 0 100%; aspect-ratio: 3 / 4; }
 .slide [data-photo] { width: 100%; height: 100%; border-radius: 0; }
