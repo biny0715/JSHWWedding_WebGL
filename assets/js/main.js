@@ -72,12 +72,23 @@
     }
     return photo;
   }
+  // 화면에 가까워졌을 때(600px 전) 한 번만 실행 — 아래쪽 사진이 메인 사진과 대역폭을 다투지 않게
+  function whenNear(el, fn) {
+    if (!("IntersectionObserver" in window)) { fn(); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (en) { return en.isIntersecting; })) { io.disconnect(); fn(); }
+    }, { rootMargin: "600px 0px" });
+    io.observe(el);
+  }
   var photoMap = { main: pickMain(W.mainPhoto), groom: W.groomPhoto, bride: W.bridePhoto };
   (W.whenPhotos || []).forEach(function (p, i) { photoMap["when" + (i + 1)] = p; });
   (W.life4cutPhotos || []).forEach(function (p, i) { photoMap["life" + (i + 1)] = p; });
   $all("[data-photo]").forEach(function (el) {
     var key = el.getAttribute("data-photo");
-    if (photoMap[key]) fillPhoto(el, photoMap[key]);
+    var photo = photoMap[key];
+    if (!photo) return;
+    if (key === "main") fillPhoto(el, photo);   // 메인은 즉시
+    else whenNear(el, function () { fillPhoto(el, photo); });
   });
 
   /* ---- 전화 버튼 ---- */
@@ -224,8 +235,11 @@
       return '<div class="slide"><div data-photo style="aspect-ratio:' + (p.ratio || "3 / 4") +
         '"><span class="ph-label">웨딩 사진 자리</span></div></div>';
     }).join("");
-    // 이미지가 있으면 채우기
-    $all(".slide [data-photo]", track).forEach(function (el, i) { fillPhoto(el, items[i]); });
+    // 이미지가 있으면 채우기 — 갤러리 영역이 화면에 가까워지면 슬라이드 전체를 한 번에 로드
+    // (가로로 밀린 슬라이드는 개별 감지가 안 되므로 슬라이더 단위로 감지)
+    whenNear($("#gallery-slider") || track, function () {
+      $all(".slide [data-photo]", track).forEach(function (el, i) { fillPhoto(el, items[i]); });
+    });
 
     var idx = 0, n = items.length;
     dotsEl.innerHTML = items.map(function (_, i) {
