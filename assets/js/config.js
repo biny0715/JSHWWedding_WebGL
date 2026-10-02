@@ -105,7 +105,7 @@ window.WEDDING = {
    * 예: src: "assets/images/main.jpg"
    */
   mainPhoto: {
-    srcs: ["assets/images/main-1.jpg", "assets/images/main-2.jpg"], // 랜덤으로 하나 표시 (main.js)
+    src: "assets/images/main.jpg",
     alt: "메인 웨딩 사진",
     ratio: "3 / 4",
   },
@@ -113,8 +113,8 @@ window.WEDDING = {
   bridePhoto: { src: "", alt: "신부 프로필", ratio: "1 / 1", fullSrc: "", fullAlt: "신부 전체 사진" },
 
   gallery: [
-    { src: "", alt: "웨딩 사진 1", ratio: "3 / 4" },
-    { src: "", alt: "웨딩 사진 2", ratio: "3 / 4" },
+    { src: "assets/images/gallery-1.jpg", alt: "웨딩 사진 1", ratio: "3 / 4" },
+    { src: "assets/images/gallery-2.jpg", alt: "웨딩 사진 2", ratio: "3 / 4" },
     { src: "", alt: "웨딩 사진 3", ratio: "3 / 4" },
     { src: "", alt: "웨딩 사진 4", ratio: "3 / 4" },
     { src: "", alt: "웨딩 사진 5", ratio: "3 / 4" },
