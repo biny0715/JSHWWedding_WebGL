@@ -289,7 +289,7 @@ html, body {
 .when-photo { position: relative; aspect-ratio: 3 / 4; }
 .when-photo[data-photo="when1"] img { object-position: 42.5% center; }
 .when-photo[data-photo="when3"] img { object-position: 37.5% center; }
-.when-photo[data-photo="when4"] img { object-position: 25% center; }
+.when-photo[data-photo="when4"] img { object-position: 43.5% center; }
 /* 밝은 사진에서도 흰 숫자가 보이도록 하단에 옅은 어두운 그라데이션 */
 .when-photo::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
