@@ -16,6 +16,9 @@
 
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 
+  <!-- 메인 표지 사진은 스크립트 실행을 기다리지 않고 가장 먼저 받기 시작 -->
+  <link rel="preload" as="image" href="assets/images/main.jpg" fetchpriority="high">
+
   <!-- 폰트: HS활공명조(본문·제목, style.css 자체 호스팅) + Allura(영문 필기체 폴백) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,13 +53,13 @@
       <div class="cover-photo" data-photo="main">
         <span class="ph-label">웨딩 사진 자리</span>
         <p class="cover-eng-title"><span>AND SO</span><span>IT BEGINS</span></p>
+      </div>
+      <div class="cover-caption">
         <h1 class="cover-names">
           <span data-bind="groom.eng">Hyungwon</span>
           <em>&amp;</em>
           <span data-bind="bride.eng">Jisoo</span>
         </h1>
-      </div>
-      <div class="cover-caption">
         <p class="cover-date"><span data-bind="date.text">2026년 11월 8일 일요일</span> <span data-bind="date.timeText">오후 1시</span></p>
         <p class="cover-place">전남광주 <span data-bind="venue.name">운림제</span></p>
       </div>
