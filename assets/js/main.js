@@ -230,7 +230,10 @@
   (function () {
     var track = $("#gallery-track"), dotsEl = $("#gallery-dots");
     if (!track) return;
-    var items = W.gallery || [];
+    // 첫 번째 등록 사진은 제외하고 실제 사진이 있는 항목만 표시
+    var items = (W.gallery || []).filter(function (p) {
+      return p.src && p.src !== "assets/images/gallery-1.jpg";
+    });
     track.innerHTML = items.map(function (p) {
       return '<div class="slide"><div data-photo style="aspect-ratio:' + (p.ratio || "3 / 4") +
         '"><span class="ph-label">웨딩 사진 자리</span></div></div>';
@@ -242,6 +245,11 @@
     });
 
     var idx = 0, n = items.length;
+    if (n <= 1) {
+      $("#g-prev").style.display = "none";
+      $("#g-next").style.display = "none";
+      dotsEl.style.display = "none";
+    }
     dotsEl.innerHTML = items.map(function (_, i) {
       return '<button class="dot' + (i === 0 ? " active" : "") + '" data-i="' + i + '"></button>';
     }).join("");
