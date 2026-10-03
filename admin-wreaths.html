@@ -35,7 +35,7 @@
   <main class="paper wreath-admin">
     <section class="section">
       <h2 class="title">모바일 화환 관리</h2>
-      <p class="wa-lead">예식장에는 작성순으로 앞의 16개만 세워집니다(1번은 예시로 미리 채워둔 화환, 삭제 불가).<br>삭제하면 뒤의 화환이 한 칸씩 앞으로 당겨져요.</p>
+      <p class="wa-lead">예식장에는 작성순으로 앞의 31개(예시 1개 + 하객 선착순 30개)만 세워집니다(1번은 예시로 미리 채워둔 화환, 삭제 불가).<br>32번째부터는 예식장에 세워지지 않고 축하 메시지만 여기서 확인할 수 있어요.<br>삭제하면 뒤의 화환이 한 칸씩 앞으로 당겨져요.</p>
       <p class="wa-count" id="wa-count">불러오는 중…</p>
       <div class="wa-table-wrap">
         <table class="wa-table">
@@ -63,6 +63,7 @@
     const countEl = document.getElementById("wa-count");
     let started = false;
     let wreaths = [];
+    const SLOTS = 31;   // 예식장 화환 자리: 예시 1 + 하객 선착순 30 (WebHost index.html WREATH_SLOTS 와 동일)
 
     function esc(s) {
       return (s || "").replace(/[&<>"']/g, (c) =>
@@ -75,7 +76,8 @@
 
     function render(list) {
       wreaths = list;
-      countEl.textContent = "총 " + list.length + "개 · 예식장 표시 " + Math.min(list.length, 16) + " / 16";
+      countEl.textContent = "총 " + list.length + "개 · 예식장 표시 " + Math.min(list.length, SLOTS) + " / " + SLOTS +
+        (list.length > SLOTS ? " · 메시지만 " + (list.length - SLOTS) + "개" : "");
       if (!list.length) {
         bodyEl.innerHTML = '<tr class="wa-empty"><td colspan="5">아직 등록된 화환이 없어요 💐</td></tr>';
         return;
@@ -83,7 +85,7 @@
       // i === 0: 관리자가 미리 채워둔 예시 화환 — 삭제 버튼 대신 "고정" 표시(삭제 불가)
       bodyEl.innerHTML = list.map((w, i) =>
         "<tr>" +
-          '<td class="wa-slot' + (i < 16 ? "" : " wa-slot--wait") + '">' + (i < 16 ? (i + 1) + "번" : "대기") + "</td>" +
+          '<td class="wa-slot' + (i < SLOTS ? "" : " wa-slot--wait") + '">' + (i < SLOTS ? (i + 1) + "번" : "메시지만") + "</td>" +
           '<td class="wa-who">' + esc(w.author) + "</td>" +
           '<td class="wa-msg">' + esc(w.message) + "</td>" +
           '<td class="wa-when">' + fmt(w.at) + "</td>" +
