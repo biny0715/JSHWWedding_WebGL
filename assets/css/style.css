@@ -756,6 +756,7 @@ html, body {
   font-size: 0.875rem; color: var(--sea-dk); margin: 0 0 12px;
 }
 .notice-text { font-size: 1.055rem; line-height: 1.8; color: var(--ink); margin: 0 0 14px; }
+.notice-warn { font-size: 0.885rem; line-height: 1.65; color: #d64545; margin: -6px 0 14px; }   /* 발열 안내(빨간 글씨, 위 문단보다 작게) */
 .notice-small { font-size: 0.885rem; line-height: 1.65; color: var(--ink-soft); margin: 0 0 20px; }
 .notice-enter {
   display: block; text-decoration: none;
