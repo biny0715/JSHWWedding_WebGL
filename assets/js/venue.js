@@ -41,6 +41,7 @@
   var step2 = document.getElementById("lobby-step2");
   var playUI = document.getElementById("play-ui");
   var menuBtn = document.getElementById("venue-menu-btn");
+  var guideBtn = document.getElementById("venue-guide-btn");
 
   var nameInput = document.getElementById("visitor-name");
   var nextBtn = document.getElementById("lobby-next-btn");
@@ -55,6 +56,7 @@
   // 우상단 햄버거 메뉴 버튼: 예식장 입장(playing) 후에만 노출. 로비/로딩 복귀 시 닫고 숨김.
   function setMenuVisible(v) {
     if (menuBtn) menuBtn.hidden = !v;
+    if (guideBtn) guideBtn.hidden = !v;   // 길 안내 토글도 입장 후에만 노출
     if (!v) {
       var m = document.getElementById("venue-menu");
       var b = document.getElementById("venue-menu-backdrop");
@@ -108,10 +110,22 @@
     if (curtain) curtain.classList.add("curtain--hidden");
     playUI.classList.remove("play-ui--hidden");
     setMenuVisible(true);   // 입장 완료 → 우상단 메뉴 노출
+    if (window.__syncGuide) window.__syncGuide();   // 길 안내(화살표) On/Off 상태를 유니티에 동기화
   }
 
   /* ===== 유니티 → 웹 콜백 ===== */
-  window.OnWeddingLobbyReady = function () { console.log("[venue] Unity 로비 준비 완료"); showLobby(); };
+  window.OnWeddingLobbyReady = function () {
+    console.log("[venue] Unity 로비 준비 완료");
+    // 유니티가 로비 준비 신호를 페이지 내에서 중복 발화하는 경우가 있다(자동입장 1회 제한도 그래서 둠).
+    // 이미 로비를 띄운 상태(입장 전 + 끊김 안내 없음 + 대기 중인 자동입장 없음)에서 신호가 또 오면 무시한다.
+    // → 꾸미기(step2) 도중 입력칸(step1)으로 튕기지 않게 한다. (첫 진입/자동입장/끊김 복귀는 정상 처리)
+    if (lobbyReady && !state.entered && !pendingNotice &&
+        !(autoEnter && state.name.trim() && !hasAttemptedAuto)) {
+      console.log("[venue] 로비 준비 신호 중복 — 무시(꾸미기 화면 유지)");
+      return;
+    }
+    showLobby();
+  };
   window.OnWeddingEntering = function () { console.log("[venue] Unity 입장(접속) 시작"); };
   window.OnWeddingSceneReady = function () { console.log("[venue] Wedding 씬 로드 완료"); reveal(); };
   window.OnWeddingDisconnected = function (cause) {

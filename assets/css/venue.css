@@ -303,6 +303,77 @@ html, body {
 .venue-menu-btn.open span:nth-child(2) { opacity: 0; }
 .venue-menu-btn.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
+/* 좌상단 길 안내(화살표) On/Off 토글 — 햄버거 버튼 아래. 메뉴 열리면 backdrop(29)/menu(31)에 덮임 */
+.venue-guide-btn {
+  position: fixed; top: 66px; left: 14px; z-index: 28;
+  width: 44px; min-height: 44px; padding: 6px 2px; pointer-events: auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  background: rgba(255,255,255,.92); border: none; border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18); cursor: pointer;
+  font-family: "GmarketSans", sans-serif; line-height: 1.1;
+}
+.venue-guide-btn[hidden] { display: none; }
+.venue-guide-title { font-size: 10px; font-weight: 500; color: var(--ink); }
+.venue-guide-state { font-size: 12px; font-weight: 700; color: var(--sea-dk); }
+.venue-guide-btn.off .venue-guide-state { color: #b3b3b3; }
+
+/* =========================================================
+   NPC 대화창 (동물의 숲 스타일) — 하단 말풍선 + 이름표 + 수락/거절
+   ========================================================= */
+.npc-dialog {
+  position: fixed; inset: 0; z-index: 40; pointer-events: none;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 12px calc(20px + env(safe-area-inset-bottom));
+}
+.npc-dialog[hidden] { display: none; }
+.npc-box {
+  position: relative; pointer-events: auto; cursor: pointer;
+  width: min(680px, 94vw);
+  background: rgba(251,247,239,.98); border: 3px solid var(--sea-dk);
+  border-radius: 22px; box-shadow: 0 14px 40px rgba(0,0,0,.32);
+  padding: 26px 24px 22px; -webkit-tap-highlight-color: transparent;
+  animation: npcIn .18s ease;
+}
+@keyframes npcIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.npc-name {
+  position: absolute; top: -18px; left: 22px;
+  font-family: "GmarketSans", sans-serif; font-weight: 700; font-size: 1rem; color: #fff;
+  background: var(--sea-dk); padding: 6px 16px; border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+.npc-end {
+  position: absolute; top: -14px; right: 18px; pointer-events: auto; cursor: pointer;
+  font-family: "GmarketSans", sans-serif; font-weight: 600; font-size: .8rem; color: var(--sea-dk);
+  background: #fff; border: 1.5px solid var(--sea-dk); padding: 5px 12px; border-radius: 999px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.15);
+}
+.npc-text {
+  margin: 6px 0 0; min-height: 3.2em;
+  font-family: "GmarketSans", sans-serif; font-size: 1.08rem; line-height: 1.6;
+  color: var(--ink); white-space: pre-wrap;
+}
+.npc-next {
+  position: absolute; right: 18px; bottom: 12px;
+  color: var(--sea-dk); font-size: .9rem; animation: npcBlink 1s steps(2) infinite;
+}
+.npc-next[hidden] { display: none; }
+@keyframes npcBlink { 50% { opacity: .2; } }
+.npc-choices { display: flex; gap: 12px; margin-top: 16px; }
+.npc-choices[hidden] { display: none; }
+.npc-choice {
+  flex: 1; pointer-events: auto; cursor: pointer;
+  font-family: "GmarketSans", sans-serif; font-weight: 700; font-size: 1rem;
+  padding: 13px 0; border: none; border-radius: 14px; color: #fff;
+}
+.npc-accept { background: var(--sea-dk); }
+.npc-reject { background: #c9a3a0; }
+.npc-gb-btn {
+  width: 100%; margin-top: 16px; pointer-events: auto; cursor: pointer;
+  font-family: "GmarketSans", sans-serif; font-weight: 700; font-size: 1rem;
+  padding: 13px 0; border: none; border-radius: 14px; color: #fff; background: var(--sea-dk);
+}
+.npc-gb-btn[hidden] { display: none; }
+
 /* 메뉴 열렸을 때 바깥 탭으로 닫기 (탭이 Unity로 새어가 캐릭터가 움직이지 않게 가림) */
 .venue-menu-backdrop { position: fixed; inset: 0; z-index: 29; pointer-events: auto; background: transparent; }
 .venue-menu-backdrop[hidden] { display: none; }
