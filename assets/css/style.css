@@ -662,11 +662,11 @@ html, body {
 }
 .ticket-title {
   font-family: "Reenie Beanie", "Continuous", cursive;
-  font-size: 1.825rem; color: #F6E4D8; margin: 0 0 2px;
+  font-size: 2.7375rem; color: #F6E4D8; margin: 0 0 2px;   /* 1.825rem x1.5 */
 }
 .ticket-subtitle {
   font-family: "KCC-Jeongbeom", var(--font-body);
-  font-size: 1.075rem; color: #D9BBA9; margin: 0 0 20px;
+  font-size: 1.6125rem; color: #D9BBA9; margin: 0 0 20px;   /* 1.075rem x1.5 */
 }
 .ticket-card {
   position: relative;
