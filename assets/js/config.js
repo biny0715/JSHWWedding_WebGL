@@ -147,7 +147,7 @@ window.WEDDING = {
   venueUrl: "https://pub-e2f0473c1db44b0ea4d9059179c8ff75.r2.dev/index.html", // Cloudflare R2 (무료 무제한 트래픽)
 
   /* ---- 축하화환 업체 주문 링크 ---- */
-  wreathUrl: "", // TODO: 화환 업체 링크 확정되면 채우기
+  wreathUrl: "https://xn--wh1br48ap0ao51bua.com/w/6Z6sMXsWSw/order", // 모바일 화환 주문 링크
 
   /* ---- 제작자 ---- */
   makers: [

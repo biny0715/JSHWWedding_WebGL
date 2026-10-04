@@ -656,17 +656,17 @@ html, body {
    ========================================================= */
 .enter-venue { padding-top: 30px; }
 .ticket-band {
-  margin: 0 -28px;      /* .section 좌우 padding(28px)을 상쇄해 브라운을 가장자리까지 채움 */
+  margin: 0 -28px;      /* .section 좌우 padding(28px)을 상쇄해 배경을 가장자리까지 채움 */
   padding: 36px 28px 32px;
-  background: #583120;
+  background: #E6D8CB;
 }
 .ticket-title {
   font-family: "Reenie Beanie", "Continuous", cursive;
-  font-size: 2.7375rem; color: #F6E4D8; margin: 0 0 2px;   /* 1.825rem x1.5 */
+  font-size: 2.7375rem; color: #583120; margin: 0 0 2px;   /* 1.825rem x1.5 */
 }
 .ticket-subtitle {
   font-family: "KCC-Jeongbeom", var(--font-body);
-  font-size: 1.6125rem; color: #D9BBA9; margin: 0 0 20px;   /* 1.075rem x1.5 */
+  font-size: 1.6125rem; color: #583120; margin: 0 0 20px;   /* 1.075rem x1.5 */
 }
 .ticket-card {
   position: relative;
@@ -687,7 +687,7 @@ html, body {
 @media (prefers-reduced-motion: reduce) { .ticket-hit { animation: none; } }
 .ticket-note {
   font-family: "PhoneLine", var(--font-body);
-  font-size: 1.25rem; color: #F8F5F2; margin: 18px 0 0;
+  font-size: 1.25rem; color: #583120; margin: 18px 0 0;
 }
 
 /* ---- 떠다니는 입장 버튼 (FAB) — 스크롤해도 좌측 하단 고정 ---- */
