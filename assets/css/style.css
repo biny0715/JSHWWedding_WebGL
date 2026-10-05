@@ -314,7 +314,7 @@ html, body {
    ========================================================= */
 .direction { padding-top: 29px; }
 .direction .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
-.direction-address { font-family: "HS활공명조", var(--font-head); color: #F2C0BF; font-weight: 700; font-size: 1.045rem; margin: 0 0 16px; }
+.direction-address { font-family: "HS활공명조", var(--font-head); color: #eb9f9d; font-weight: 700; font-size: 1.045rem; margin: 0 0 16px; }
 .map-wrap { position: relative; margin-bottom: 14px; }
 .map-box { width: 100%; aspect-ratio: 4 / 3; box-shadow: var(--shadow-sm); }
 /* 주소 표시줄 — 지도 안쪽 하단에 겹쳐 띄우는 반투명 리퀴드 글래스 필 */
@@ -333,7 +333,7 @@ html, body {
 }
 .map-address span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .map-tel { margin: 0 0 16px; font-family: "HS활공명조", var(--font-head); font-size: 1.025rem; color: var(--ink-soft); }
-.map-tel a { color: #F2C0BF; font-weight: 700; text-decoration: none; }
+.map-tel a { color: #eb9f9d; font-weight: 700; text-decoration: none; }
 .mini-copy {
   flex: none; width: 22px; height: 22px; padding: 0;
   display: flex; align-items: center; justify-content: center;
