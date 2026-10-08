@@ -109,18 +109,18 @@ window.WEDDING = {
     alt: "메인 웨딩 사진",
     ratio: "3 / 4",
   },
-  groomPhoto: { src: "", alt: "신랑 프로필", ratio: "1 / 1", fullSrc: "", fullAlt: "신랑 전체 사진" },
-  bridePhoto: { src: "", alt: "신부 프로필", ratio: "1 / 1", fullSrc: "", fullAlt: "신부 전체 사진" },
+  // 프로필: 얼굴을 정사각으로 크롭(원형 틀에 맞춤), 누르면 같은 원본의 전체 사진(fullSrc)
+  groomPhoto: { src: "assets/images/profile-groom.jpg", alt: "신랑 프로필", ratio: "1 / 1", fullSrc: "assets/images/gallery-9905.jpg", fullAlt: "신랑 전체 사진" },
+  bridePhoto: { src: "assets/images/profile-bride.jpg", alt: "신부 프로필", ratio: "1 / 1", fullSrc: "assets/images/gallery-10043.jpg", fullAlt: "신부 전체 사진" },
 
   gallery: [
-    { src: "assets/images/gallery-2.jpg", alt: "웨딩 사진 1", ratio: "2 / 3" },
-    { src: "assets/images/gallery-9732.jpg", alt: "웨딩 사진 2", ratio: "2 / 3" },
-    { src: "assets/images/gallery-9905.jpg", alt: "웨딩 사진 3", ratio: "2 / 3" },
-    { src: "assets/images/gallery-10043.jpg", alt: "웨딩 사진 4", ratio: "2 / 3" },
-    { src: "assets/images/gallery-10833.jpg", alt: "웨딩 사진 5", ratio: "2 / 3" },
-    { src: "assets/images/gallery-11382.jpg", alt: "웨딩 사진 6", ratio: "2 / 3" },
-    { src: "assets/images/gallery-11636.jpg", alt: "웨딩 사진 7", ratio: "2 / 3" },
-    { src: "assets/images/gallery-11755.jpg", alt: "웨딩 사진 8", ratio: "2 / 3" },
+    { src: "assets/images/gallery-9732.jpg", alt: "웨딩 사진 1", ratio: "2 / 3" },
+    { src: "assets/images/gallery-9905.jpg", alt: "웨딩 사진 2", ratio: "2 / 3" },
+    { src: "assets/images/gallery-10043.jpg", alt: "웨딩 사진 3", ratio: "2 / 3" },
+    { src: "assets/images/gallery-10833.jpg", alt: "웨딩 사진 4", ratio: "2 / 3" },
+    { src: "assets/images/gallery-11382.jpg", alt: "웨딩 사진 5", ratio: "2 / 3" },
+    { src: "assets/images/gallery-11636.jpg", alt: "웨딩 사진 6", ratio: "2 / 3" },
+    { src: "assets/images/gallery-11755.jpg", alt: "웨딩 사진 7", ratio: "2 / 3" },
   ],
 
   /* ---- 예식 안내 사진 4칸(26/11/08/13시 문구가 각 사진 위에 겹쳐 표시됨) ---- */
