@@ -285,7 +285,12 @@
     var slider = $("#gallery-slider") || track, navTimer = null;
     function showNav() { slider.classList.add("nav-on"); clearTimeout(navTimer); }
     function hideNavLater() { clearTimeout(navTimer); navTimer = setTimeout(function () { slider.classList.remove("nav-on"); }, 2000); }
-    slider.addEventListener("mousemove", function () { showNav(); hideNavLater(); });
+    // 컴퓨터(마우스): 사진의 왼쪽/오른쪽 끝(각 25%)에 포인터를 올리면 화살표 표시, 벗어나면 2초 후 숨김(드래그와 동일)
+    slider.addEventListener("mousemove", function (e) {
+      var r = slider.getBoundingClientRect(), x = e.clientX - r.left, zone = r.width * 0.25;
+      if (x < zone || x > r.width - zone || e.target.closest("button")) showNav(); else hideNavLater();
+    });
+    slider.addEventListener("mouseleave", hideNavLater);
 
     $("#g-prev").addEventListener("click", function () { step(-1); showNav(); hideNavLater(); });
     $("#g-next").addEventListener("click", function () { step(1); showNav(); hideNavLater(); });
