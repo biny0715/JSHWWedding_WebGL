@@ -647,6 +647,9 @@ html, body {
 .slider-nav.prev::before { transform: rotate(135deg); margin-left: 3px; }
 .slider-nav.next::before { transform: rotate(-45deg); margin-right: 3px; }
 .slider-nav.prev { left: 10px; } .slider-nav.next { right: 10px; }
+/* 화살표: 평소엔 숨김(누를 수도 없음) → 터치/드래그 중 .nav-on 이 붙으면 보임, 손 뗀 뒤 2초 후 사라짐(main.js) */
+.slider-nav { opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+.slider.nav-on .slider-nav { opacity: 1; pointer-events: auto; }
 .dots { display: flex; gap: 7px; justify-content: center; margin-top: 14px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); border: none; padding: 0; cursor: pointer; }
 .dot.active { background: var(--sea); width: 20px; border-radius: 4px; }

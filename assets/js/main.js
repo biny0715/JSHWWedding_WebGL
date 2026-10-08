@@ -234,17 +234,22 @@
     var items = (W.gallery || []).filter(function (p) {
       return p.src && p.src !== "assets/images/gallery-1.jpg";
     });
-    track.innerHTML = items.map(function (p) {
+    var n = items.length;
+    // 무한 루프: [마지막 복제, 1..n, 첫 사진 복제] — 마지막에서 다음으로 넘기면 1번이 오른쪽에서,
+    // 1번에서 이전으로 넘기면 마지막 사진이 왼쪽에서 자연스럽게 들어온다(되감기 애니메이션 없음).
+    var loop = n > 1;
+    var slidesData = loop ? [items[n - 1]].concat(items, [items[0]]) : items;
+    track.innerHTML = slidesData.map(function (p) {
       return '<div class="slide"><div data-photo style="aspect-ratio:' + (p.ratio || "3 / 4") +
         '"><span class="ph-label">웨딩 사진 자리</span></div></div>';
     }).join("");
     // 이미지가 있으면 채우기 — 갤러리 영역이 화면에 가까워지면 슬라이드 전체를 한 번에 로드
     // (가로로 밀린 슬라이드는 개별 감지가 안 되므로 슬라이더 단위로 감지)
     whenNear($("#gallery-slider") || track, function () {
-      $all(".slide [data-photo]", track).forEach(function (el, i) { fillPhoto(el, items[i]); });
+      $all(".slide [data-photo]", track).forEach(function (el, i) { fillPhoto(el, slidesData[i]); });
     });
 
-    var idx = 0, n = items.length;
+    var pos = loop ? 1 : 0;   // track 상의 위치(복제 칸 포함)
     if (n <= 1) {
       $("#g-prev").style.display = "none";
       $("#g-next").style.display = "none";
@@ -257,17 +262,35 @@
 
     function setTrack(px, withTransition) {
       track.style.transition = withTransition ? "transform .35s ease" : "none";
-      track.style.transform = "translateX(calc(" + (-idx * 100) + "% + " + px + "px))";
+      track.style.transform = "translateX(calc(" + (-pos * 100) + "% + " + px + "px))";
     }
-    function go(i) {
-      idx = (i + n) % n;
+    // 복제 칸에 서 있으면 같은 사진의 실제 칸으로 애니메이션 없이 옮긴다(눈에 보이는 변화 없음)
+    function snap() {
+      if (!loop) return;
+      if (pos === 0) pos = n; else if (pos === n + 1) pos = 1; else return;
+      setTrack(0, false);
+      void track.offsetWidth;   // 강제 리플로우 — 다음 이동이 애니메이션되도록
+    }
+    function moveTo(p) {
+      pos = Math.max(0, Math.min(slidesData.length - 1, p));
       setTrack(0, true);
-      dots.forEach(function (d, di) { d.classList.toggle("active", di === idx); });
+      var real = loop ? (pos - 1 + n) % n : pos;
+      dots.forEach(function (d, di) { d.classList.toggle("active", di === real); });
     }
-    $("#g-prev").addEventListener("click", function () { go(idx - 1); });
-    $("#g-next").addEventListener("click", function () { go(idx + 1); });
+    function step(d) { snap(); moveTo(pos + d); }
+    track.addEventListener("transitionend", function (e) { if (e.target === track) snap(); });
+    setTrack(0, false);
+
+    // 좌우 화살표: 평소엔 숨김 → 터치/드래그하면 나타나고, 손을 뗀 뒤 2초 지나면 사라짐
+    var slider = $("#gallery-slider") || track, navTimer = null;
+    function showNav() { slider.classList.add("nav-on"); clearTimeout(navTimer); }
+    function hideNavLater() { clearTimeout(navTimer); navTimer = setTimeout(function () { slider.classList.remove("nav-on"); }, 2000); }
+    slider.addEventListener("mousemove", function () { showNav(); hideNavLater(); });
+
+    $("#g-prev").addEventListener("click", function () { step(-1); showNav(); hideNavLater(); });
+    $("#g-next").addEventListener("click", function () { step(1); showNav(); hideNavLater(); });
     dotsEl.addEventListener("click", function (e) {
-      var d = e.target.closest(".dot"); if (d) go(Number(d.getAttribute("data-i")));
+      var d = e.target.closest(".dot"); if (d) { snap(); moveTo(Number(d.getAttribute("data-i")) + (loop ? 1 : 0)); }
     });
     // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅.
     // 가로 의도가 확정되면 preventDefault 로 iOS 사파리의 뒤로가기 스와이프/스크롤
@@ -282,6 +305,8 @@
       y0 = e.touches[0].clientY;
       dragging = true;
       horizLock = false;
+      snap();
+      showNav();
     }, { passive: true });
     area.addEventListener("touchmove", function (e) {
       if (!dragging) return;
@@ -296,17 +321,18 @@
       setTrack(dx, false);
     }, { passive: false });
     area.addEventListener("touchend", function (e) {
+      hideNavLater();
       if (!dragging) { x0 = null; y0 = null; return; }
       dragging = false;
       var dx = e.changedTouches[0].clientX - x0;
       x0 = null; y0 = null;
-      if (horizLock && Math.abs(dx) > area.clientWidth * 0.15) go(idx + (dx < 0 ? 1 : -1));
-      else go(idx);
+      if (horizLock && Math.abs(dx) > area.clientWidth * 0.15) moveTo(pos + (dx < 0 ? 1 : -1));
+      else moveTo(pos);
     });
     // 화면 회전·알림 당김 등으로 제스처가 중간에 끊기면 touchend 없이 dragging=true 가
     // 남아 다음 터치가 엉뚱한 위치로 튀는 문제 방지
     area.addEventListener("touchcancel", function () {
-      dragging = false; x0 = null; y0 = null; go(idx);
+      dragging = false; x0 = null; y0 = null; moveTo(pos); hideNavLater();
     });
     // 화면 회전 시 사파리에서 flex 자식(.slide) 폭 계산이 깨져 두 칸이 겹쳐 보이는
     // 문제 대응 — 강제로 리플로우시킨 뒤 현재 슬라이드로 재정렬
