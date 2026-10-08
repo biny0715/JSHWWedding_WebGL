@@ -472,7 +472,7 @@ html, body {
    6. 마음 전하기 (아코디언)
    ========================================================= */
 .gift .title { color: #583120; font-family: "HS활공명조", var(--font-head); }
-.gift .gift-lead { color: #000; font-family: "HS활공명조", var(--font-body); }
+.gift .gift-lead { color: #000; font-family: "HS활공명조", var(--font-body); margin-bottom: 116px; }   /* 안내문~신랑측 버튼 간격 = 위 자가용 패널~제목 간격(섹션 여백 58+58) */
 .accordion { display: grid; gap: 12px; }
 .acc-item { border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; overflow: hidden; }
 .acc-head {
