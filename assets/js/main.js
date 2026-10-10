@@ -259,10 +259,18 @@
       return '<button class="dot' + (i === 0 ? " active" : "") + '" data-i="' + i + '"></button>';
     }).join("");
     var dots = $all(".dot", dotsEl);
+    var slides = $all(".slide", track);
+    var area = $("#gallery-slider") || track;
+    var animating = false, settleTimer = null;
+    var touchId = null, x0 = null, y0 = null, horizLock = false;
+    var suppressClickUntil = 0;
 
     function setTrack(px, withTransition) {
+      // 퍼센트 기준 폭 대신 실제 슬라이드 간격 사용(소수점 폭도 유지).
+      var offset = slides[pos] ? slides[pos].getBoundingClientRect().left -
+        slides[0].getBoundingClientRect().left : 0;
       track.style.transition = withTransition ? "transform .35s ease" : "none";
-      track.style.transform = "translateX(calc(" + (-pos * 100) + "% + " + px + "px))";
+      track.style.transform = "translateX(" + (-offset + px) + "px)";
     }
     // 복제 칸에 서 있으면 같은 사진의 실제 칸으로 애니메이션 없이 옮긴다(눈에 보이는 변화 없음)
     function snap() {
@@ -272,13 +280,31 @@
       void track.offsetWidth;   // 강제 리플로우 — 다음 이동이 애니메이션되도록
     }
     function moveTo(p) {
+      clearTimeout(settleTimer);
       pos = Math.max(0, Math.min(slidesData.length - 1, p));
+      animating = true;
       setTrack(0, true);
       var real = loop ? (pos - 1 + n) % n : pos;
       dots.forEach(function (d, di) { d.classList.toggle("active", di === real); });
+      // 이동량이 0이거나 transitionend가 누락되어도 복제 칸에서 멈추지 않는다.
+      settleTimer = setTimeout(finishMove, 450);
     }
-    function step(d) { snap(); moveTo(pos + d); }
-    track.addEventListener("transitionend", function (e) { if (e.target === track) snap(); });
+    function finishMove() {
+      clearTimeout(settleTimer);
+      animating = false;
+      snap();
+      setTrack(0, false);
+    }
+    function prepareMove() {
+      // 연속 입력은 이전 목적지에 먼저 정렬한 뒤 새 제스처를 시작한다.
+      touchId = null; x0 = null; y0 = null; horizLock = false;
+      finishMove();
+      void track.offsetWidth;
+    }
+    function step(d) { prepareMove(); moveTo(pos + d); }
+    track.addEventListener("transitionend", function (e) {
+      if (e.target === track && e.propertyName === "transform" && animating) finishMove();
+    });
     setTrack(0, false);
 
     // 좌우 화살표: 평소엔 숨김 → 터치/드래그하면 나타나고, 손을 뗀 뒤 2초 지나면 사라짐
@@ -295,7 +321,7 @@
     $("#g-prev").addEventListener("click", function () { step(-1); showNav(); hideNavLater(); });
     $("#g-next").addEventListener("click", function () { step(1); showNav(); hideNavLater(); });
     dotsEl.addEventListener("click", function (e) {
-      var d = e.target.closest(".dot"); if (d) { snap(); moveTo(Number(d.getAttribute("data-i")) + (loop ? 1 : 0)); }
+      var d = e.target.closest(".dot"); if (d) { prepareMove(); moveTo(Number(d.getAttribute("data-i")) + (loop ? 1 : 0)); }
     });
     // 터치 드래그: 손가락 움직임에 실시간으로 따라오다가 놓으면 스냅.
     // 가로 의도가 확정되면 preventDefault 로 iOS 사파리의 뒤로가기 스와이프/스크롤
@@ -303,52 +329,75 @@
     // 리스너는 움직이는 track 이 아니라 고정된 바깥 틀(.slider)에 건다 — iOS 사파리는
     // transform 으로 밀린 요소의 터치 영역을 원래 위치로 계산해서, track 에 걸면
     // 첫 번째 사진에서만 드래그가 잡히고 2번째부터는 사파리가 제스처를 가져간다.
-    var area = $("#gallery-slider") || track;
-    var x0 = null, y0 = null, dragging = false, horizLock = false;
+    function findTouch(list) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].identifier === touchId) return list[i];
+      }
+      return null;
+    }
     area.addEventListener("touchstart", function (e) {
-      x0 = e.touches[0].clientX;
-      y0 = e.touches[0].clientY;
-      dragging = true;
-      horizLock = false;
-      snap();
+      // 추가 손가락으로 시작 좌표를 덮어쓰지 않는다. 버튼은 click으로만 처리.
+      if (touchId !== null || e.touches.length !== 1 || e.target.closest("button")) return;
+      prepareMove();
+      var touch = e.changedTouches[0];
+      touchId = touch.identifier;
+      x0 = touch.clientX;
+      y0 = touch.clientY;
       showNav();
     }, { passive: true });
     area.addEventListener("touchmove", function (e) {
-      if (!dragging) return;
-      var dx = e.touches[0].clientX - x0;
-      var dy = e.touches[0].clientY - y0;
+      if (touchId === null) return;
+      var touch = findTouch(e.touches);
+      if (!touch) return;
+      var dx = touch.clientX - x0;
+      var dy = touch.clientY - y0;
       if (!horizLock) {
         if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;   // 방향 판단 전
-        if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }   // 세로 스크롤로 판단 → 페이지에 양보
+        if (Math.abs(dy) > Math.abs(dx)) { prepareMove(); hideNavLater(); return; }   // 세로 스크롤로 판단 → 페이지에 양보
         horizLock = true;
       }
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
+      suppressClickUntil = Date.now() + 500;
       setTrack(dx, false);
     }, { passive: false });
     area.addEventListener("touchend", function (e) {
+      if (touchId === null) return;
+      var touch = findTouch(e.changedTouches);
+      if (!touch) return;   // 다른 손가락만 떼었으면 드래그 유지
+      var dx = touch.clientX - x0;
+      var next = pos;
+      if (loop && horizLock && Math.abs(dx) > area.clientWidth * 0.15) next += dx < 0 ? 1 : -1;
+      touchId = null; x0 = null; y0 = null; horizLock = false;
+      moveTo(next);
       hideNavLater();
-      if (!dragging) { x0 = null; y0 = null; return; }
-      dragging = false;
-      var dx = e.changedTouches[0].clientX - x0;
-      x0 = null; y0 = null;
-      if (horizLock && Math.abs(dx) > area.clientWidth * 0.15) moveTo(pos + (dx < 0 ? 1 : -1));
-      else moveTo(pos);
     });
     // 화면 회전·알림 당김 등으로 제스처가 중간에 끊기면 touchend 없이 dragging=true 가
     // 남아 다음 터치가 엉뚱한 위치로 튀는 문제 방지
-    area.addEventListener("touchcancel", function () {
-      dragging = false; x0 = null; y0 = null; moveTo(pos); hideNavLater();
+    area.addEventListener("touchcancel", function (e) {
+      if (touchId !== null && !findTouch(e.changedTouches)) return;
+      prepareMove(); hideNavLater();
     });
-    // 화면 회전 시 사파리에서 flex 자식(.slide) 폭 계산이 깨져 두 칸이 겹쳐 보이는
-    // 문제 대응 — 강제로 리플로우시킨 뒤 현재 슬라이드로 재정렬
+    // 스와이프 후 생성되는 click이 화살표를 다시 누르는 것 방지.
+    area.addEventListener("click", function (e) {
+      if (Date.now() < suppressClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); }
+    }, true);
+    // 크기 변경/복귀 시 드래그 상태와 이동을 함께 정리한다.
     function relayout() {
-      track.style.display = "none";
-      void track.offsetHeight;   // 강제 리플로우
-      track.style.display = "";
-      setTrack(0, false);
+      prepareMove();
     }
     window.addEventListener("resize", relayout);
     window.addEventListener("orientationchange", relayout);
+    window.addEventListener("pageshow", relayout);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) relayout();
+    });
+    if ("ResizeObserver" in window) {
+      var lastWidth = area.getBoundingClientRect().width;
+      new ResizeObserver(function () {
+        var width = area.getBoundingClientRect().width;
+        if (width !== lastWidth) { lastWidth = width; relayout(); }
+      }).observe(area);
+    }
   })();
 
   /* ---- 모바일 예식장 입장 버튼 (섹션 버튼 + 떠다니는 FAB, 외부 호스트 URL) ---- */
@@ -520,3 +569,4 @@
     els.forEach(function (e) { io.observe(e); });
   })();
 })();
+
